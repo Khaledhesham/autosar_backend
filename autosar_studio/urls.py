@@ -20,4 +20,5 @@ from files import views
 urlpatterns = [
     url(r'^files/storage/(.*?)/(?P<file_id>[0-9]+)$', views.access_file),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ]

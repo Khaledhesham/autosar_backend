@@ -127,6 +127,9 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
+# registration
+ACCOUNT_ACTIVATION_DAYS = 7
+
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
