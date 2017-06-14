@@ -8,6 +8,7 @@ from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 import os
+from arxml.wrapper import arxml
 
 #from projects.cf.models import Project
 
@@ -60,22 +61,13 @@ def file_post_save_handler(sender, **kwargs):
         os.rename(old_name, new_name)
         file_model.saved_file.name = file_model.name + '.' + file_model.file_type
     else:
-        def_string = """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
-            <TOP-LEVEL-PACKAGES>
-            </TOP-LEVEL-PACKAGES>
-            <ADMIN-DATA>
-                <SDGS>
-                <SDG GID="Arccore::AutosarOptions">
-                    <SD GID="GENDIR">/multiplier/config</SD>
-                </SDG>
-                </SDGS>
-            </ADMIN-DATA>
-        </AUTOSAR>"""
+        def_str = ''
+
+        if file_model.file_type == "arxml":
+            def_str = arxml.CreateDefaultARXML()
 
         file_model.saved_file.storage = FileSystemStorage(location='files/storage/' + file_model.directory.name)
-        file_model.saved_file.save(file_model.name + '.' + file_model.file_type, ContentFile(def_string), save=False)
+        file_model.saved_file.save(file_model.name + '.' + file_model.file_type, ContentFile(def_str), save=False)
 
 @receiver(post_save, sender=Directory)
 def directory_post_save_handler(sender, **kwargs):
