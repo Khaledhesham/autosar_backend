@@ -4,6 +4,7 @@ from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.db import models
+from django.contrib.auth.models import User
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -18,7 +19,8 @@ class Directory(models.Model):
     #project = models.ForeignKey(projects.Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField('Date Created', default=timezone.now)
-  
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
+
     class Meta:
         verbose_name_plural = "Directories"
 
@@ -45,8 +47,22 @@ class File(models.Model):
         f = open('files/storage/' + self.directory.name + '/' + self.name + '.' + self.file_type)
         return f.read()
 
+class Project(models.Model):
+    name = models.CharField(max_length=100, default='Autosar')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Date Created', default=timezone.now)
+
+    class Meta:
+        verbose_name_plural = "Projects"
+
+    def __str__(self):
+        return self.name
+
 @receiver(post_delete, sender=File)
-def file_post_delete_handler(sender, **kwargs):
+def file_post_delete_handler(sender,
+
+                             **kwargs):
     file_model = kwargs['instance']
     path = 'files/storage/' + file_model.directory.name + '/' + file_model.name + '.' + file_model.file_type
     os.remove(path)

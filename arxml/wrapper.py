@@ -33,7 +33,7 @@ class arxml:
         return sub
 
     def CreateSoftwareComponent(self, name):
-        sub = CreateArPackage(self)
+        sub = self.CreateArPackage()
 
         swc = ET.SubElement(sub, swc_type, uuid=sub.get('uuid'))
         ET.SubElement(swc, "SHORT_NAME").text = name
