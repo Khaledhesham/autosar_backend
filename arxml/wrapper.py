@@ -13,7 +13,7 @@ class arxml:
     def __init__(self, file):
         self.tree = ET.parse(file)
 
-    def CreateDefaultARXML(name):
+    def CreateDefaultARXML(dir):
         root = ET.Element("AUTOSAR", { "xmlns":autosar_org, "xmlns:xsi":autosar_schema_instance, "xsi:schemaLocation":autosar_schema_location })
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
@@ -21,7 +21,7 @@ class arxml:
 
         sdgs = ET.SubElement(admin_data, "SDGS")
         sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::AutosarOptions")
-        ET.SubElement(sdg, "SD", GID="GENDIR").text = name
+        ET.SubElement(sdg, "SD", GID="GENDIR").text = dir
 
         return ET.tostring(root, encoding='utf8', method='xml')
 
@@ -33,7 +33,7 @@ class arxml:
         return sub
 
     def CreateSoftwareComponent(self, name):
-        sub = CreateArPackage(self)
+        sub = self.CreateArPackage()
 
         swc = ET.SubElement(sub, swc_type, uuid=sub.get('uuid'))
         ET.SubElement(swc, "SHORT_NAME").text = name
