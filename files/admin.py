@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Directory, File
+from .models import Directory, File, Project
 
 class FileAdmin(admin.ModelAdmin):
     list_display = ['name', 'url']
@@ -20,5 +20,9 @@ class FileAdmin(admin.ModelAdmin):
 
     url.allow_tags = True
 
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ['name', 'user']
+
 admin.site.register(Directory)
 admin.site.register(File, FileAdmin)
+admin.site.register(Project, ProjectAdmin)

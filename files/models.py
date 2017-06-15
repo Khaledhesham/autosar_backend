@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_delete, post_save, pre_save
+from django.db.models.signals import post_delete, pre_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 import os
@@ -15,8 +15,16 @@ from arxml.wrapper import arxml
 
 # Create your models here.
 
+class Project(models.Model):
+    name = models.CharField(max_length=100, default='Autosar')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Date Created', default=timezone.now)
+
+    def __str__(self):
+        return self.name
+
 class Directory(models.Model):
-    #project = models.ForeignKey(projects.Project, on_delete=models.CASCADE)
+    project = models.OneToOneField(Project, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField('Date Created', default=timezone.now)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
@@ -28,10 +36,10 @@ class Directory(models.Model):
         return self.name
 
     def GetPath(self):
-        if self.parent is None:
-            return "files/storage/" + self.name
-        else:
+        if self.parent:
             return self.parent.GetPath() + "/" + self.name
+        else:
+            return "files/storage/" + self.name
 
 class File(models.Model):
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
@@ -53,24 +61,10 @@ class File(models.Model):
         f = open(self.directory.GetPath() + '/' + self.name + '.' + self.file_type)
         return f.read()
 
-class Project(models.Model):
-    name = models.CharField(max_length=100, default='Autosar')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
-    created_at = models.DateTimeField('Date Created', default=timezone.now)
-
-    class Meta:
-        verbose_name_plural = "Projects"
-
-    def __str__(self):
-        return self.name
-
-@receiver(post_delete, sender=File)
-def file_post_delete_handler(sender,
-
-                             **kwargs):
+@receiver(pre_delete, sender=File)
+def file_post_delete_handler(sender, **kwargs):
     file_model = kwargs['instance']
-    path = file_modelf.directory.GetPath() + '/' + file_model.name + '.' + file_model.file_type
+    path = file_model.directory.GetPath() + '/' + file_model.name + '.' + file_model.file_type
     os.remove(path)
 
 @receiver(pre_save, sender=File)
@@ -101,6 +95,6 @@ def directory_post_save_handler(sender, **kwargs):
 @receiver(post_delete, sender=Directory)
 def directory_post_delete_handler(sender, **kwargs):
     directory = kwargs['instance']
-    path = directory.GetPath
+    path = directory.GetPath()
     if os.path.isdir(path) is True:
         os.rmdir(path)
