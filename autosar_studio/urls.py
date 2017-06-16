@@ -38,21 +38,47 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return user
 
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+class FileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = File
+        fields = ('name', 'id', 'file_type')
+
+class DirectorySerializer(serializers.HyperlinkedModelSerializer):
+    directory_set = RecursiveField(many=True,required=False)
+
+    class Meta:
+        model = Directory
+        fields = ('name', 'id', 'file_set' , 'directory_set')
+
+    file_set = FileSerializer(many=True, read_only=True)
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ('name', 'id')
+        fields = ('name', 'id', 'directory', 'user')
+    directory = DirectorySerializer()
+    user = UserSerializer()
 
-    def create(self, validated_data):
-        user = User.objects.get(
-            id=validated_data['id']
-        )
-
-        project = Project.objects.create(
-            name=validated_data['name']
-        )
-
+    def create(self,validated_data):
+        req_user = User.objects.get(id=validated_data['id'])
+        project = Project(name=validated_data['name'], user=req_user)
+        project.save()
+        directory_name = validated_data['name'] + str("-") + str(round(time.time() * 1000))
+        main_directory = Directory(name=directory_name, project=project)
+        main_directory.save()
+        arxml_file = File(name=validated_data['name'], file_type="arxml", directory=main_directory)
+        arxml_file.save()
+        sub_directory = Directory(name=validated_data['name'], parent=main_directory)
+        sub_directory.save()
+        c_file = File(name="components", file_type="c", directory=sub_directory)
+        c_file.save()
+        h_file = File(name="components", file_type="h", directory=sub_directory)
+        h_file.save()
         return project
 
 

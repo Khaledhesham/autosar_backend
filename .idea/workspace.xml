@@ -111,8 +111,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/autosar_studio/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="55" column="22" lean-forward="false" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+            <state relative-caret-position="444">
+              <caret line="62" column="52" lean-forward="true" selection-start-line="62" selection-start-column="52" selection-end-line="64" selection-end-column="27" />
               <folding>
                 <element signature="e#648#689#0" expanded="true" />
               </folding>
@@ -693,8 +693,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/autosar_studio/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="55" column="22" lean-forward="false" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+        <state relative-caret-position="444">
+          <caret line="62" column="52" lean-forward="true" selection-start-line="62" selection-start-column="52" selection-end-line="64" selection-end-column="27" />
           <folding>
             <element signature="e#648#689#0" expanded="true" />
           </folding>
