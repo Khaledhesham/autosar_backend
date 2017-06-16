@@ -41,6 +41,12 @@ class Directory(models.Model):
         else:
             return "files/storage/" + self.name
 
+    def GetProject(self):
+        if self.parent:
+            return self.parent.project
+        else:
+            return self.project
+
 class File(models.Model):
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
     file_type = models.CharField(max_length=20)
@@ -54,8 +60,8 @@ class File(models.Model):
     def __str__(self):
         return self.name
 
-    def getPath(self):
-        return '../../../' + self.directory.GetPath() + '/' + str(self.id)
+    def GetAccessPath(self):
+        return '../../../' + "files/storage/" + str(self.id)
 
     def get_str(self):
         f = open(self.directory.GetPath() + '/' + self.name + '.' + self.file_type)
