@@ -58,25 +58,21 @@ class DirectorySerializer(serializers.HyperlinkedModelSerializer):
     file_set = FileSerializer(many=True, read_only=True)
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    directory = DirectorySerializer()
+    user = UserSerializer()
     class Meta:
         model = Project
-        fields = ('name', 'id')
-        
+        fields = ('name', 'id', 'directory', 'user')
+
     def create(self,validated_data):
-        req_user = User.objects.get(id=validated_data['id'])
-        project = Project(name=validated_data['name'], user=req_user)
+        user = User.objects.get(
+            id=validated_data['id']
+        )
+        project = Project.objects.create(
+            name=validated_data['name'],
+            user=user
+        )
         project.save()
-        directory_name = validated_data['name'] + str("-") + str(round(time.time() * 1000))
-        main_directory = Directory(name=directory_name, project=project)
-        main_directory.save()
-        arxml_file = File(name=validated_data['name'], file_type="arxml", directory=main_directory)
-        arxml_file.save()
-        sub_directory = Directory(name=validated_data['name'], parent=main_directory)
-        sub_directory.save()
-        c_file = File(name="components", file_type="c", directory=sub_directory)
-        c_file.save()
-        h_file = File(name="components", file_type="h", directory=sub_directory)
-        h_file.save()
         return project
 
 
