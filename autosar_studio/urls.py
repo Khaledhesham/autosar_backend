@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from files import views
+from files.models import Project,Directory,File
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets, routers
 
@@ -36,11 +37,43 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return user
 
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+class FileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = File
+        fields = ('name', 'id', 'file_type')
+
+class DirectorySerializer(serializers.HyperlinkedModelSerializer):
+    directory_set = RecursiveField(many=True,required=False)
+
+    class Meta:
+        model = Directory
+        fields = ('name', 'id', 'file_set' , 'directory_set')
+
+    file_set = FileSerializer(many=True, read_only=True)
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('name', 'id', 'directory', 'user')
+    directory = DirectorySerializer()
+    user = UserSerializer()
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+router = routers.DefaultRouter()
+router.register(r'projects', ProjectViewSet)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
 urlpatterns = [
