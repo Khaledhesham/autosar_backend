@@ -18,6 +18,7 @@ from django.contrib import admin
 from files import views
 from files.models import Project,Directory,File
 from django.contrib.auth.models import User
+import time
 from rest_framework import serializers, viewsets, routers
 
 # Serializers define the API representation.
@@ -63,6 +64,24 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     directory = DirectorySerializer()
     user = UserSerializer()
 
+    def create(self,validated_data):
+        req_user = User.objects.get(id=validated_data['id'])
+        project = Project(name=validated_data['name'], user=req_user)
+        project.save()
+        directory_name = validated_data['name'] + str("-") + str(round(time.time() * 1000))
+        main_directory = Directory(name=directory_name, project=project)
+        main_directory.save()
+        arxml_file = File(name=validated_data['name'], file_type="arxml", directory=main_directory)
+        arxml_file.save()
+        sub_directory = Directory(name=validated_data['name'], parent=main_directory)
+        sub_directory.save()
+        c_file = File(name="components", file_type="c", directory=sub_directory)
+        c_file.save()
+        h_file = File(name="components", file_type="h", directory=sub_directory)
+        h_file.save()
+        return project
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -82,5 +101,4 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/$',views.generate_project),
-    url(r'^sakr/(?P<project_name>[A-Za-z0-9_-]+)$',views.index),
 ]
