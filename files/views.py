@@ -4,9 +4,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import loader
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.request import Request
+from rest_framework.test import APIRequestFactory
+from .serializers import ProjectSerializer
 import time
-
-# Create your views here.
 
 def access_file(request, file_id):
     if request.user.is_authenticated:
@@ -17,8 +20,9 @@ def access_file(request, file_id):
            raise PermissionDenied
     else:
         raise PermissionDenied
-        
-def generate_project(request, project_name, user_id):
+
+@api_view(['GET', 'POST', ])
+def generate_project(APIView, project_name, user_id):
     req_user = User.objects.get(id=user_id)
     project = Project(name=project_name , user=req_user)
     project.save()
@@ -33,7 +37,14 @@ def generate_project(request, project_name, user_id):
     c_file.save()
     h_file = File(name="components", file_type="h", directory=sub_directory)
     h_file.save()
-    return HttpResponse("hello 2amr")
+    factory = APIRequestFactory()
+    request = factory.get('/')
+    serializer_context = {
+        'request': Request(request),
+    }
+    ser = ProjectSerializer(instance=project, context=serializer_context)
+    print(ser.data)
+    return Response(ser.data)
 
 def index(request):
     template = loader.get_template('index.html')
