@@ -3,3 +3,5 @@ venv
 staticfiles
 .env
 .idea
+files/storage/
+*.sqlite3
