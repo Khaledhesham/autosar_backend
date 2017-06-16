@@ -61,7 +61,6 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
         fields = ('name', 'id', 'user', 'user_id')
-    directory = DirectorySerializer()
     user = UserSerializer()
 
     def create(self,validated_data):
