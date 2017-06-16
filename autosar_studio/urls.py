@@ -60,12 +60,12 @@ class DirectorySerializer(serializers.HyperlinkedModelSerializer):
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ('name', 'id', 'directory', 'user')
+        fields = ('name', 'id', 'user', 'user_id')
     directory = DirectorySerializer()
     user = UserSerializer()
 
     def create(self,validated_data):
-        req_user = User.objects.get(id=validated_data['id'])
+        req_user = User.objects.get(id=validated_data['user_id'])
         project = Project(name=validated_data['name'], user=req_user)
         project.save()
         directory_name = validated_data['name'] + str("-") + str(round(time.time() * 1000))
