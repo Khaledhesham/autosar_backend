@@ -16,7 +16,9 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from files import views
+from files.models import Project,Directory,File
 from django.contrib.auth.models import User
+import time
 from rest_framework import serializers, viewsets, routers
 
 # Serializers define the API representation.
@@ -36,11 +38,47 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return user
 
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+class FileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = File
+        fields = ('name', 'id', 'file_type')
+
+class DirectorySerializer(serializers.HyperlinkedModelSerializer):
+    directory_set = RecursiveField(many=True,required=False)
+
+    class Meta:
+        model = Directory
+        fields = ('name', 'id', 'file_set' , 'directory_set')
+
+    file_set = FileSerializer(many=True, read_only=True)
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('name', 'id', 'directory', 'user')
+    directory = DirectorySerializer()
+    user = UserSerializer()
+
+    def create(self,validated_data):
+        return validated_data
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+router = routers.DefaultRouter()
+router.register(r'projects', ProjectViewSet)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
 urlpatterns = [
@@ -49,5 +87,4 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/$',views.generate_project),
-    url(r'^sakr/(?P<project_name>[A-Za-z0-9_-]+)$',views.index),
 ]
