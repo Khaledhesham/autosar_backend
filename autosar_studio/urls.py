@@ -65,7 +65,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer()
 
     def create(self,validated_data):
-        return validated_data['name']
+        return validated_data
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
