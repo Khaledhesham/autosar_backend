@@ -16,56 +16,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from files import views
-from files.models import Project,Directory,File
+from files.models import Project
 from django.contrib.auth.models import User
-import time
-from rest_framework import serializers, viewsets, routers
-
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'password', 'email')
-    
-    def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data['username'],
-            email=validated_data['email']
-        )
-
-        user.set_password(validated_data['password'])
-        user.save()
-
-        return user
-
-class RecursiveField(serializers.Serializer):
-    def to_representation(self, value):
-        serializer = self.parent.parent.__class__(value, context=self.context)
-        return serializer.data
-
-class FileSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = File
-        fields = ('name', 'id', 'file_type')
-
-class DirectorySerializer(serializers.HyperlinkedModelSerializer):
-    directory_set = RecursiveField(many=True,required=False)
-
-    class Meta:
-        model = Directory
-        fields = ('name', 'id', 'file_set' , 'directory_set')
-
-    file_set = FileSerializer(many=True, read_only=True)
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Project
-        fields = ('name', 'id', 'directory', 'user')
-    directory = DirectorySerializer()
-    user = UserSerializer()
-
-    def create(self,validated_data):
-        return validated_data
+from rest_framework import viewsets,routers
+from files.serializers import ProjectSerializer
+from registration_system.serializers import UserSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
