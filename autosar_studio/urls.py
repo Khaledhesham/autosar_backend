@@ -38,41 +38,21 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return user
 
-class RecursiveField(serializers.Serializer):
-    def to_representation(self, value):
-        serializer = self.parent.parent.__class__(value, context=self.context)
-        return serializer.data
-
-class FileSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = File
-        fields = ('name', 'id', 'file_type')
-
-class DirectorySerializer(serializers.HyperlinkedModelSerializer):
-    directory_set = RecursiveField(many=True,required=False)
-
-    class Meta:
-        model = Directory
-        fields = ('name', 'id', 'file_set' , 'directory_set')
-
-    file_set = FileSerializer(many=True, read_only=True)
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    directory = DirectorySerializer()
-    user = UserSerializer()
     class Meta:
         model = Project
-        fields = ('name', 'id', 'directory', 'user')
+        fields = ('name', 'id')
 
-    def create(self,validated_data):
+    def create(self, validated_data):
         user = User.objects.get(
             id=validated_data['id']
         )
+
         project = Project.objects.create(
-            name=validated_data['name'],
-            user=user
+            name=validated_data['name']
         )
-        project.save()
+
         return project
 
 
