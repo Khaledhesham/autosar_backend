@@ -9,7 +9,7 @@ from django.db.models.signals import post_delete, pre_delete, post_save, pre_sav
 from django.dispatch import receiver
 from django.utils import timezone
 import os
-from arxml.wrapper import arxml
+from arxml.wrapper import Arxml
 
 #from projects.cf.models import Project
 
@@ -61,13 +61,18 @@ class File(models.Model):
         f = open(self.directory.GetPath() + '/' + self.name + '.' + self.file_type)
         return f.read()
 
-@receiver(pre_delete, sender=File)
+@receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
     file_model = kwargs['instance']
-    path = file_model.directory.GetPath() + '/' + file_model.name + '.' + file_model.file_type
-    os.remove(path)
+    try:
+        path = file_model.directory.GetPath()
+        if os.path.isdir(path) is True:
+            path = path + '/' + file_model.name + '.' + file_model.file_type
+            os.remove(path)
+    except Directory.DoesNotExist:
+        return
 
-@receiver(pre_save, sender=File)
+@receiver(post_save, sender=File)
 def file_post_save_handler(sender, **kwargs):
     file_model = kwargs['instance']
     if file_model.saved_file:
@@ -80,7 +85,7 @@ def file_post_save_handler(sender, **kwargs):
         def_str = ''
 
         if file_model.file_type == "arxml":
-            def_str = arxml.CreateDefaultARXML(file_model.directory.name)
+            def_str = Arxml.CreateDefaultARXML(file_model.directory.name)
 
         file_model.saved_file.storage = FileSystemStorage(location=file_model.directory.GetPath() + '/')
         file_model.saved_file.save(file_model.name + '.' + file_model.file_type, ContentFile(def_str), save=False)
@@ -92,9 +97,16 @@ def directory_post_save_handler(sender, **kwargs):
     if os.path.isdir(path) is not True:
         os.makedirs(path)
 
-@receiver(post_delete, sender=Directory)
-def directory_post_delete_handler(sender, **kwargs):
+@receiver(pre_delete, sender=Directory)
+def directory_pre_delete_handler(sender, **kwargs):
     directory = kwargs['instance']
+
+    for direc in directory.directory_set.all():
+        direc.delete()
+
+    for file in directory.file_set.all():
+        file.delete()
+
     path = directory.GetPath()
     if os.path.isdir(path) is True:
         os.rmdir(path)

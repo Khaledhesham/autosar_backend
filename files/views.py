@@ -22,7 +22,7 @@ def generate_project(request, project_name, user_id):
     req_user = User.objects.get(id=user_id)
     project = Project(name=project_name , user=req_user)
     project.save()
-    directory_name = project_name + str("-") + str(round(time.time() * 1000))
+    directory_name = project_name + str("-") + str(project.id)
     main_directory = Directory(name=directory_name, project=project)
     main_directory.save()
     arxml_file = File(name=project_name, file_type = "arxml", directory= main_directory )

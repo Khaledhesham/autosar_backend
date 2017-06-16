@@ -7,13 +7,14 @@ autosar_schema_location = "http://autosar.org/3.2.1 autosar_3-2-1.xsd"
 
 swc_type = "APPLICATION-SOFTWARE-COMPONENT-TYPE"
 
-class arxml:
+class Arxml:
     tree = ET.ElementTree()
 
     def __init__(self, file):
         self.tree = ET.parse(file)
 
-    def CreateDefaultARXML(dir):
+    @staticmethod
+    def CreateDefaultARXML(directory):
         root = ET.Element("AUTOSAR", { "xmlns":autosar_org, "xmlns:xsi":autosar_schema_instance, "xsi:schemaLocation":autosar_schema_location })
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
@@ -21,7 +22,7 @@ class arxml:
 
         sdgs = ET.SubElement(admin_data, "SDGS")
         sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::AutosarOptions")
-        ET.SubElement(sdg, "SD", GID="GENDIR").text = dir
+        ET.SubElement(sdg, "SD", GID="GENDIR").text = directory
 
         return ET.tostring(root, encoding='utf8', method='xml')
 
