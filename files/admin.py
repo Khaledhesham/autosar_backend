@@ -16,7 +16,7 @@ class FileAdmin(admin.ModelAdmin):
         return super(FileAdmin, self).change_view(*args, **kwargs)
 
     def url(self, obj):
-        return '<a href="%s">%s</a>' % (obj.getPath(), obj.name)
+        return '<a href="%s">%s</a>' % (obj.GetAccessPath(), obj.name)
 
     url.allow_tags = True
 
