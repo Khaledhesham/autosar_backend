@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import File,Directory,Project
+from files.models import File,Directory,Project
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
@@ -8,22 +8,27 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, UUIDSerializer
 import time
+from arxml.wrapper import Arxml
+from django.views.decorators.csrf import csrf_exempt
 
-def access_file(request, file_id):
-    if request.user.is_authenticated:
-        file = File.objects.get(id=file_id)
+def OwnsFile(file, user):
+    if user and user.is_authenticated:
         if file is None or file.directory.GetProject() is None:
             raise Http404("File doesn't exist")
-        else:
-            owner = file.directory.GetProject().user
-            if request.user.is_staff or owner.id == request.user.id:
-                return HttpResponse(file.get_str())
-            else:
-                raise PermissionDenied
     else:
-        raise PermissionDenied
+        owner = file.directory.GetProject().user
+        if user.is_staff or owner.id == user.id:
+            return True
+        else:
+            raise PermissionDenied
+
+def access_file(request, file_id):
+    file = File.objects.get(id=file_id)
+    if OwnsFile(file, request.user) is True:
+        return HttpResponse(file.Read())
+    return False
 
 @api_view(['GET', 'POST', ])
 def generate_project(APIView, project_name, user_id):
@@ -48,6 +53,19 @@ def generate_project(APIView, project_name, user_id):
     }
     ser = ProjectSerializer(instance=project, context=serializer_context)
     return Response(ser.data)
+
+@csrf_exempt
+def add_software_component(request):
+    if request.method == 'POST':
+        file = File.objects.get(id=request.POST['file_id'])
+        if True:
+            arxml = Arxml(file)
+            uuid = arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])
+            arxml.Save()
+            return HttpResponse(uuid)
+        return False
+    else:
+        raise Http404("Method not supported.")
 
 def index(request):
     template = loader.get_template('index.html')
