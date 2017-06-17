@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from files import views
+from registration_system import views as morad
 from files.models import Project
 from django.contrib.auth.models import User
 from rest_framework import viewsets,routers
@@ -42,4 +43,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/$',views.generate_project),
+    url(r'^check/(?P<username>[A-Za-z0-9_-]+)/(?P<password>[A-Za-z0-9_-]+)/$',morad.check),
 ]

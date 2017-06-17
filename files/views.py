@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from .models import File,Directory,Project
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -9,7 +8,6 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
-import time
 
 def access_file(request, file_id):
     if request.user.is_authenticated:
@@ -26,7 +24,7 @@ def access_file(request, file_id):
         raise PermissionDenied
 
 @api_view(['GET', 'POST', ])
-def generate_project(APIView, project_name, user_id):
+def generate_project(project_name, user_id):
     req_user = User.objects.get(id=user_id)
     project = Project(name=project_name , user=req_user)
     project.save()
