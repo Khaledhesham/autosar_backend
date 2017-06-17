@@ -12,7 +12,7 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = File
-        fields = ('name', 'id', 'file_type', 'type')
+        fields = ('name', 'id', 'type')
 
     def get_type(self,obj):
         return obj.file_type
