@@ -43,7 +43,6 @@ def generate_project(APIView, project_name, user_id):
         'request': Request(request),
     }
     ser = ProjectSerializer(instance=project, context=serializer_context)
-    print(ser.data)
     return Response(ser.data)
 
 def index(request):
