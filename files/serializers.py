@@ -9,10 +9,14 @@ class RecursiveField(serializers.Serializer):
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
     type = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = File
         fields = ('name', 'id', 'type')
+
+    def get_name(self,obj):
+        return obj.name + "." + obj.file_type
 
     def get_type(self,obj):
         return obj.file_type

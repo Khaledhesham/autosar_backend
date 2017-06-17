@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
-from .serializers import ProjectSerializer, UUIDSerializer
+from .serializers import ProjectSerializer
 import time
 from arxml.wrapper import Arxml
 from django.views.decorators.csrf import csrf_exempt
@@ -23,7 +23,6 @@ def OwnsFile(file, user):
             return True
         else:
             raise PermissionDenied
-
 def access_file(request, file_id):
     file = File.objects.get(id=file_id)
     if OwnsFile(file, request.user) is True:
