@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="695e9892-4fb3-4ed0-bb7c-be0afdf419f6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/autosar_studio/urls.py" afterPath="$PROJECT_DIR$/autosar_studio/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/autosar_studio/settings.py" afterPath="$PROJECT_DIR$/autosar_studio/settings.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -70,20 +71,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/autosar_studio/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="53" column="58" lean-forward="false" selection-start-line="53" selection-start-column="58" selection-end-line="53" selection-end-column="58" />
+            <state relative-caret-position="391">
+              <caret line="56" column="28" lean-forward="false" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/autosar_studio/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
+            <state relative-caret-position="417">
               <caret line="45" column="16" lean-forward="false" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="16" />
               <folding>
                 <element signature="e#648#689#0" expanded="true" />
@@ -128,10 +129,10 @@
         <option value="$PROJECT_DIR$/registration_system/serializers.py" />
         <option value="$PROJECT_DIR$/files/serializers.py" />
         <option value="$PROJECT_DIR$/files/models.py" />
-        <option value="$PROJECT_DIR$/autosar_studio/settings.py" />
         <option value="$PROJECT_DIR$/registration_system/views.py" />
         <option value="$PROJECT_DIR$/files/views.py" />
         <option value="$PROJECT_DIR$/autosar_studio/urls.py" />
+        <option value="$PROJECT_DIR$/autosar_studio/settings.py" />
       </list>
     </option>
   </component>
@@ -689,14 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/autosar_studio/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="53" column="58" lean-forward="false" selection-start-line="53" selection-start-column="58" selection-end-line="53" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/registration_system/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -717,11 +710,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/autosar_studio/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
+        <state relative-caret-position="417">
           <caret line="45" column="16" lean-forward="false" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="16" />
           <folding>
             <element signature="e#648#689#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/autosar_studio/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="56" column="28" lean-forward="false" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>

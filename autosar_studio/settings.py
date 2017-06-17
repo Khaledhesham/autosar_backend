@@ -54,6 +54,8 @@ MIDDLEWARE = [
     'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'autosar_studio.urls'
 
 TEMPLATES = [
