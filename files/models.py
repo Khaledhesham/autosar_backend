@@ -5,13 +5,11 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_delete, pre_delete, post_save, pre_save
+from django.db.models.signals import post_delete, pre_delete, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 import os
 from arxml.wrapper import Arxml
-
-#from projects.cf.models import Project
 
 # Create your models here.
 
@@ -50,7 +48,6 @@ class Directory(models.Model):
 class File(models.Model):
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
     file_type = models.CharField(max_length=20)
-    #saved_file = models.FileField(blank=True)
     name = models.CharField(max_length=100, default='File')
     created_at = models.DateTimeField('Date Created', default=timezone.now)
 
@@ -77,6 +74,18 @@ class File(models.Model):
     def Read(self):
         return self.Open().read()
 
+class ArxmlFile(models.Model):
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    swc_uid = models.CharField(max_length=20, blank=True)
+
+    def CreateSoftwareComponent(self, name, pos_x, pos_y):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.CreateSoftwareComponent(name, pos_x, pos_y)
+        self.file.Write(str(wrapper))
+        self.swc_uid = uuid
+        self.save()
+        return uuid
+
 @receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
     file_model = kwargs['instance']
@@ -89,7 +98,7 @@ def file_post_delete_handler(sender, **kwargs):
         return
 
 @receiver(post_save, sender=File)
-def file_pre_save_handler(sender, **kwargs):
+def file_post_save_handler(sender, **kwargs):
     file_model = kwargs['instance']
     old_model = File.objects.get(pk=file_model.id)
     if old_model and os.path.isfile(old_model.GetPath()):
@@ -99,12 +108,7 @@ def file_pre_save_handler(sender, **kwargs):
         if old_name != new_name:
             os.rename(old_name, new_name)
     else:
-        def_str = ''
-
-        if file_model.file_type == "arxml":
-            def_str = Arxml.CreateDefaultARXML(file_model.directory.name)
-
-        file_model.Write(def_str)
+        file_model.Write('')
 
 @receiver(post_save, sender=Directory)
 def directory_post_save_handler(sender, **kwargs):

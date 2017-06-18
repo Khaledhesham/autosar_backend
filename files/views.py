@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from files.models import File,Directory,Project
+from files.models import File,Directory,Project,ArxmlFile
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
@@ -10,7 +10,6 @@ from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
 import time
-from arxml.wrapper import Arxml
 from django.views.decorators.csrf import csrf_exempt
 
 def OwnsFile(file, user):
@@ -23,6 +22,7 @@ def OwnsFile(file, user):
             return True
         else:
             raise PermissionDenied
+
 def access_file(request, file_id):
     file = File.objects.get(id=file_id)
     if OwnsFile(file, request.user) is True:
@@ -37,32 +37,25 @@ def generate_project(APIView, project_name, user_id):
     directory_name = project_name + str("-") + str(project.id)
     main_directory = Directory(name=directory_name, project=project)
     main_directory.save()
-    arxml_file = File(name=project_name, file_type = "arxml", directory= main_directory )
-    arxml_file.save()
-    sub_directory = Directory(name=project_name, parent=main_directory)
-    sub_directory.save()
-    c_file = File(name="components", file_type="c", directory=sub_directory)
-    c_file.save()
-    h_file = File(name="components", file_type="h", directory=sub_directory)
-    h_file.save()
     factory = APIRequestFactory()
     request = factory.get('/')
-    serializer_context = {
-        'request': Request(request),
-    }
-    ser = ProjectSerializer(instance=project, context=serializer_context)
+    ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
     return Response(ser.data)
 
 @csrf_exempt
 def add_software_component(request):
     if request.method == 'POST':
-        file = File.objects.get(id=request.POST['file_id'])
+        project = Project.objects.get(id=request.POST['project_id'])
         if True:
-            arxml = Arxml(file)
-            uuid = arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])
-            arxml.Save()
-            return HttpResponse(uuid)
-        return False
+            sub_directory = Directory(name=project.name, parent=project.directory)
+            sub_directory.save()
+            File(name="components", file_type="c", directory=sub_directory).save()
+            File(name="components", file_type="h", directory=sub_directory).save()
+            file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
+            file.save()
+            arxml = ArxmlFile(file=file,swc_uid='')
+            return HttpResponse(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y']))
+        raise PermissionDenied
     else:
         raise Http404("Method not supported.")
 

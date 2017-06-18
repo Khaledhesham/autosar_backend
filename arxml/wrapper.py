@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import uuid as guid
-from files.models import File
 from django.core.files.base import ContentFile
 
 autosar_org = "http://autosar.org/3.2.1"
@@ -9,14 +8,19 @@ autosar_schema_location = "http://autosar.org/3.2.1 autosar_3-2-1.xsd"
 
 swc_type = "APPLICATION-SOFTWARE-COMPONENT-TYPE"
 
-class Arxml:
-    file = File
-    tree = ET.ElementTree
+swc_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/APPLICATION-SOFTWARE-COMPONENT-TYPE"
 
-    def __init__(self, file):
+class Arxml:
+    tree = ET.ElementTree
+    directory = ''
+
+    def __init__(self, s, directory):
         ET.register_namespace("", autosar_schema_instance)
-        self.tree = ET.ElementTree(ET.fromstring(file.Read()))
-        self.file = file
+
+        if s != '':
+            self.tree = ET.ElementTree(ET.fromstring(s))
+
+        self.directory = directory
 
     @staticmethod
     def Indent(elem, level=0):
@@ -36,8 +40,7 @@ class Arxml:
                 elem.tail = j
         return elem
 
-    @staticmethod
-    def CreateDefaultARXML(directory):
+    def CreateDefaultARXML(self):
         ET.register_namespace("", autosar_schema_instance)
         root = ET.Element("AUTOSAR", { "xmlns":autosar_org, "xmlns:xsi":autosar_schema_instance, "xsi:schemaLocation":autosar_schema_location })
 
@@ -45,47 +48,47 @@ class Arxml:
 
         sdgs = ET.SubElement(admin_data, "SDGS")
         sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::AutosarOptions")
-        ET.SubElement(sdg, "SD", GID="GENDIR").text = directory
+        ET.SubElement(sdg, "SD", GID="GENDIR").text = self.directory
 
-        indented = Arxml.Indent(root)
-        return ET.tostring(indented)
-
-    def CreateArPackage(self):
-        root = self.tree.getroot()
-        packages = root.find("TOP-LEVEL-PACKAGES")
-        if packages is None:
-            packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
-        uid = str(guid.uuid1())
-        package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
-        ET.SubElement(package, "SHORT_NAME").text = "Package"
-        sub = ET.SubElement(package, "SUB-PACKAGES")
         self.tree = ET.ElementTree(root)
-        return uid
 
     def CreateSoftwareComponent(self, name, pos_x, pos_y):
-        uid = self.CreateArPackage()
+        self.CreateDefaultARXML()
+
         root = self.tree.getroot()
 
-        packages = root.find("TOP-LEVEL-PACKAGES")
-        for package in packages.findall("AR-PACKAGE"):
-            if str(package.get("uuid")) == uid:
-                sub = package.find("SUB-PACKAGES")
-                swc = ET.SubElement(sub, swc_type, uuid=str(package.get('uuid')), x=str(pos_x), y=str(pos_y))
-                ET.SubElement(swc, "SHORT_NAME").text = name
+        packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
+        uid = str(guid.uuid1())
+        package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
+        ET.SubElement(package, "SHORT_NAME").text = "name" + "_pkg"
+        sub = ET.SubElement(package, "SUB-PACKAGES")
 
-                admin_data = ET.SubElement(swc, "ADMIN-DATA")
-                sdgs = ET.SubElement(admin_data, "SDGS")
-                sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
+        uid = str(guid.uuid1())
+        package = ET.SubElement(sub, "AR-PACKAGE", uuid=uid)
+        ET.SubElement(package, "SHORT_NAME").text = "name" + "_swc"
 
-                port = ET.SubElement(swc, "PORTS")
-                self.tree = ET.ElementTree(root)
-                return swc.get('uuid')
-        return False
+        elements = ET.SubElement(package, "ELEMENTS")
+        
+        uid = str(guid.uuid1())
+        swc = ET.SubElement(elements, swc_type, uuid=uid, x=str(pos_x), y=str(pos_y))
+        ET.SubElement(swc, "SHORT_NAME").text = name
 
+        admin_data = ET.SubElement(swc, "ADMIN-DATA")
+        sdgs = ET.SubElement(admin_data, "SDGS")
+        sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
+
+        port = ET.SubElement(swc, "PORTS")
+
+        uid = swc.get('uuid')
+        
+        return uid
+    
+    #def AddDatatype(self, type):
+        
     def AddPort(self, swc_uuid, port_type, name, interface):
         root = self.tree.getroot()
 
-        for swc in root.findall(swc_type):
+        for swc in root.findall(swc_path):
             if swc.get('uuid') == swc_uuid:
                 port = ET.SubElement(swc, port_type, uuid=str(guid.uuid1()))
                 ET.SubElement(port, "SHORT_NAME").text = name
@@ -96,18 +99,6 @@ class Arxml:
 
                 ET.SubElement(port, "REQUIRED_INTERFACE-TREF", dest=interface)
                 self.tree = ET.ElementTree(root)
-
-    def Save(self):
-        indented = Arxml.Indent(self.tree.getroot())
-        s = ET.tostring(indented)
-        self.file.Write(s)
-
-    def RemoveSoftwareComponent(self, uuid):
-        root = self.tree.getroot()
-        for arpkg in root.findall('AR-PACKAGE'):
-            for swc in arpkg.findall(swc_type):
-                if swc.get('uuid') == uuid:
-                    root.remove(arpkg)
 
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
