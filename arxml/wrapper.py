@@ -82,9 +82,12 @@ class Arxml:
         port = ET.SubElement(swc, "PORTS")
 
         behavior = ET.SubElement(elements, "INTERNAL-BEHAVIOR", UUID=str(guid.uuid1()))
-        ET.SubElement(behavior, "INTERNAL-BEHAVIOR").text = name + "Behavior"
+        ET.SubElement(behavior, "SHORT-NAME").text = name + "Behavior"
 
         self.AddAdminData(behavior)
+
+        ET.SubElement(behavior, "EVENTS")
+        ET.SubElement(behavior, "RUNNABLES")
 
         ET.SubElement(behavior, "COMPONTENT-REF", DEST=swc_type).text = "/" + name + "_pkg/" + name + "_swc/" + name
 
@@ -95,17 +98,70 @@ class Arxml:
 
         ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + name + "_pkg/" + name + "_swc/" + name + "Behavior"
 
-        uid = swc.get('uuid')
+        uid = swc.get('UUID')
         
         return uid
-    
+
+    def AddTimingEvent(self, name, runnable, period, swc_name):
+        root = self.tree.getroot()
+
+        events = root.find(behavior_path + "/EVENTS")
+
+        timing_event = ET.SubElement(events, "TIMING-EVENT", UUID=str(guid.uuid1()))
+        ET.SubElement(timing_event, "SHORT-NAME").text = name
+
+        self.AddAdminData(timing_event)
+
+        ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "Behavior/" + runnable
+        ET.SubElement(timing_event, "PERIOD").text = str(period)
+
+        return timing_event.get('UUID')
+
+    def AddRunnable(self, name, data_access, swc_name, concurrent):
+        root = self.tree.getroot()
+
+        runnables = root.find(behavior_path + "/RUNNABLES")
+
+        runnable = ET.SubElement(runnables, "RUNNABLE-ENTITY", UUID=str(guid.uuid1()))
+        ET.SubElement(runnable, "SHORT-NAME").text = name
+
+        if concurrent:
+            ET.SubElement(runnable, "CAN-BE-INVOKED-CONCURRENTLY").text = "true"
+        else:
+            ET.SubElement(runnable, "CAN-BE-INVOKED-CONCURRENTLY").text = "false"
+
+        ET.SubElement(runnable, "SYMBOL").text = name
+
+        data_read = ET.SubElement(runnable, "DATA-READ-ACCESSS")
+        data_write = ET.SubElement(runnable, "DATA-WRITE-ACCESSS")
+
+        for access in data_access:
+            node = data_read
+            access_type = "DATA-READ-ACCESSS"
+
+            if access['type'] == "WRITE":
+                node = data_write
+                access_type = "DATA-WRITE-ACCESSS"
+            
+            access_node = ET.SubElement(node, access_type)
+            ET.SubElement(access_node, "SHORT-NAME").text = ""
+
+            data_element = ET.SubElement(access_node, "DATA-ELEMENT-IREF")
+
+            if access["port"]["type"] == "R":
+                ET.SubElement(data_element, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + access["port"]["name"]
+            else:
+                ET.SubElement(data_element, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + access["port"]["name"]
+            
+            ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text =  "/" + swc_name + "_pkg/" + swc_name + "_if/" + access["data"]["interface"] + "/" + access["data"]["name"]
+
     #def AddDatatype(self, type):
         
     def AddPort(self, swc_uuid, port_type, name, interface):
         root = self.tree.getroot()
 
         for swc in root.findall(swc_path):
-            if swc.get('uuid') == swc_uuid:
+            if swc.get('UUID') == swc_uuid:
                 port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
                 ET.SubElement(port, "SHORT_NAME").text = name
                 self.AddAdminData(port)
