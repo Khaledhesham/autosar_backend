@@ -60,12 +60,12 @@ class Arxml:
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
         uid = str(guid.uuid1())
         package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
-        ET.SubElement(package, "SHORT_NAME").text = "name" + "_pkg"
+        ET.SubElement(package, "SHORT_NAME").text = name + "_pkg"
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
         uid = str(guid.uuid1())
         package = ET.SubElement(sub, "AR-PACKAGE", uuid=uid)
-        ET.SubElement(package, "SHORT_NAME").text = "name" + "_swc"
+        ET.SubElement(package, "SHORT_NAME").text = name + "_swc"
 
         elements = ET.SubElement(package, "ELEMENTS")
         
@@ -99,6 +99,28 @@ class Arxml:
 
                 ET.SubElement(port, "REQUIRED_INTERFACE-TREF", dest=interface)
                 self.tree = ET.ElementTree(root)
+
+    def CreateComposition(self,name):
+        self.CreateDefaultARXML()
+        root = self.tree.getroot()
+
+        packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
+        uid = str(guid.uuid1())
+        package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
+        ET.SubElement(package, "SHORT_NAME").text = "CrossControl"
+        sub = ET.SubElement(package, "SUB-PACKAGES")
+
+        uid = str(guid.uuid1())
+        package = ET.SubElement(sub, "AR-PACKAGE", uuid=uid)
+        ET.SubElement(package, "SHORT_NAME").text = "SoftwareComponents"
+
+        elements = ET.SubElement(package, "ELEMENTS")
+
+        composition_type = ET.SubElement(elements, "COMPOSITION-TYPE")
+        ET.SubElement(composition_type, "SHORT_NAME").text = name + "Composition"
+
+        components = ET.SubElement(composition_type, "COMPONENTS")
+        connectors = ET.SubElement(composition_type, "CONNECTORS")
 
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
