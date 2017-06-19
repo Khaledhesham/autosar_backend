@@ -9,6 +9,7 @@ autosar_schema_location = "http://autosar.org/3.2.1 autosar_3-2-1.xsd"
 swc_type = "APPLICATION-SOFTWARE-COMPONENT-TYPE"
 
 swc_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/APPLICATION-SOFTWARE-COMPONENT-TYPE"
+behavior_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/INTERNAL-BEHAVIOR"
 
 class Arxml:
     tree = ET.ElementTree
@@ -52,32 +53,47 @@ class Arxml:
 
         self.tree = ET.ElementTree(root)
 
+    def AddAdminData(self, node):
+        admin_data = ET.SubElement(node, "ADMIN-DATA")
+        sdgs = ET.SubElement(admin_data, "SDGS")
+        ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
+
     def CreateSoftwareComponent(self, name, pos_x, pos_y):
         self.CreateDefaultARXML()
 
         root = self.tree.getroot()
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
-        uid = str(guid.uuid1())
-        package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
+
+        package = ET.SubElement(packages, "AR-PACKAGE", UUID=str(guid.uuid1()))
         ET.SubElement(package, "SHORT_NAME").text = name + "_pkg"
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
-        uid = str(guid.uuid1())
-        package = ET.SubElement(sub, "AR-PACKAGE", uuid=uid)
+        package = ET.SubElement(sub, "AR-PACKAGE", UUID=str(guid.uuid1()))
         ET.SubElement(package, "SHORT_NAME").text = name + "_swc"
 
         elements = ET.SubElement(package, "ELEMENTS")
         
-        uid = str(guid.uuid1())
-        swc = ET.SubElement(elements, swc_type, uuid=uid, x=str(pos_x), y=str(pos_y))
+        swc = ET.SubElement(elements, swc_type, UUID=str(guid.uuid1()), x=str(pos_x), y=str(pos_y))
         ET.SubElement(swc, "SHORT_NAME").text = name
 
-        admin_data = ET.SubElement(swc, "ADMIN-DATA")
-        sdgs = ET.SubElement(admin_data, "SDGS")
-        sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
+        self.AddAdminData(swc)
 
         port = ET.SubElement(swc, "PORTS")
+
+        behavior = ET.SubElement(elements, "INTERNAL-BEHAVIOR", UUID=str(guid.uuid1()))
+        ET.SubElement(behavior, "INTERNAL-BEHAVIOR").text = name + "Behavior"
+
+        self.AddAdminData(behavior)
+
+        ET.SubElement(behavior, "COMPONTENT-REF", DEST=swc_type).text = "/" + name + "_pkg/" + name + "_swc/" + name
+
+        impl = ET.SubElement(elements, "SWC-IMPLEMENTATION", uuid = str(guid.uuid1()))
+        ET.SubElement(impl, "SHORT-NAME").text = name + "Implementation"
+
+        self.AddAdminData(impl)
+
+        ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + name + "_pkg/" + name + "_swc/" + name + "Behavior"
 
         uid = swc.get('uuid')
         
@@ -90,14 +106,10 @@ class Arxml:
 
         for swc in root.findall(swc_path):
             if swc.get('uuid') == swc_uuid:
-                port = ET.SubElement(swc, port_type, uuid=str(guid.uuid1()))
+                port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
                 ET.SubElement(port, "SHORT_NAME").text = name
-
-                admin_data = ET.SubElement(swc, "ADMIN-DATA")
-                sdgs = ET.SubElement(admin_data, "SDGS")
-                sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
-
-                ET.SubElement(port, "REQUIRED_INTERFACE-TREF", dest=interface)
+                self.AddAdminData(port)
+                ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST=interface)
                 self.tree = ET.ElementTree(root)
 
     def CreateComposition(self,name):
@@ -105,13 +117,12 @@ class Arxml:
         root = self.tree.getroot()
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
-        uid = str(guid.uuid1())
-        package = ET.SubElement(packages, "AR-PACKAGE", uuid=uid)
+
+        package = ET.SubElement(packages, "AR-PACKAGE", UUID=str(guid.uuid1()))
         ET.SubElement(package, "SHORT_NAME").text = "CrossControl"
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
-        uid = str(guid.uuid1())
-        package = ET.SubElement(sub, "AR-PACKAGE", uuid=uid)
+        package = ET.SubElement(sub, "AR-PACKAGE", UUID=str(guid.uuid1()))
         ET.SubElement(package, "SHORT_NAME").text = "SoftwareComponents"
 
         elements = ET.SubElement(package, "ELEMENTS")
