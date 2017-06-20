@@ -152,9 +152,8 @@ class Arxml:
 
         for runnable in runnables.findall("RUNNABLE-ENTITY"):
             if runnable.get('UUID') == runnable_uid:
-
-            node = ET.Element
-            access_type = ""
+                node = ET.Element
+                access_type = ""
 
             if type == "WRITE":
                 node = runnable.find("DATA-WRITE-ACCESSS")
@@ -180,7 +179,7 @@ class Arxml:
 
         elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
 
-        for data_type in list(elements)
+        for data_type in list(elements):
             if data_type.find("SHORT-NAME").text == type:
                 return
 
@@ -254,11 +253,11 @@ class Arxml:
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
 
-        package = ET.SubElement(packages, "AR-PACKAGE", UUID=str(guid.uuid1()))
+        package = ET.SubElement(packages, "AR-PACKAGE")
         ET.SubElement(package, "SHORT_NAME").text = "CrossControl"
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
-        package = ET.SubElement(sub, "AR-PACKAGE", UUID=str(guid.uuid1()))
+        package = ET.SubElement(sub, "AR-PACKAGE")
         ET.SubElement(package, "SHORT_NAME").text = "SoftwareComponents"
 
         elements = ET.SubElement(package, "ELEMENTS")
@@ -306,4 +305,4 @@ class Arxml:
 
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
-        return ET.tostring(indented)
+        return ET.tostring(self.tree.getroot()).decode("utf-8")
