@@ -269,6 +269,17 @@ class Arxml:
         components = ET.SubElement(composition_type, "COMPONENTS")
         connectors = ET.SubElement(composition_type, "CONNECTORS")
 
+    def AddComponentToComposition(self,name,path):
+        root = self.tree.getroot()
+        components = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+        component_prototype = ET.SubElement(components, "COMPONENT-PROTOTYPE")
+
+        ET.SubElement(component_prototype, "SHORT_NAME").text = name + "Prototype"
+
+        ET.SubElement(component_prototype, "TYPE-TREF", DEST="swc_type").text = path
+
+
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
         return ET.tostring(indented)
