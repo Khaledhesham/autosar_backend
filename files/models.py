@@ -83,8 +83,57 @@ class ArxmlFile(models.Model):
         uuid = wrapper.CreateSoftwareComponent(name, pos_x, pos_y)
         self.file.Write(str(wrapper))
         self.swc_uid = uuid
+        self.file.save()
         self.save()
         return uuid
+
+    def AddDataType(self, type):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddDataType(type)
+        self.file.Write(str(wrapper))
+        self.file.save()
+
+    def AddDataElement(self, interface_uid, name, type, swc_name):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddDataElement(interface_uid, name, type, self.file.name)
+        self.file.Write(str(wrapper))
+        self.file.save()
+        return uuid
+
+    def AddInterface(self, name):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddInterface(name)
+        self.file.Write(str(wrapper))
+        self.file.save()
+        return uuid
+
+    def AddRunnable(self, name, concurrent):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddRunnable(name, name, concurrent)
+        self.file.Write(str(wrapper))
+        self.file.save()
+        return uuid
+
+    def AddTimingEvent(self, name, runnable, period, swc_name):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddTimingEvent(name, runnable, period, self.file.name)
+        self.file.Write(str(wrapper))
+        self.file.save()
+        return uuid
+
+    def AddDataAccess(self, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddDataAccess(runnable_uid, type, port_type, self.file.name, port_name, interface, data_element)
+        self.file.Write(str(wrapper))
+        self.file.save()
+
+    def AddPort(self, type, swc_name, name, interface):
+        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        uuid = wrapper.AddPort(type, self.file.name, name, interface)
+        self.file.Write(str(wrapper))
+        self.file.save()
+        return uuid
+
 
 @receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
