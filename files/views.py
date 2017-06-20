@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from files.models import File,Directory,Project,ArxmlFile
+from arxml.wrapper import Arxml
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
@@ -37,6 +38,15 @@ def generate_project(APIView, project_name, user_id):
     directory_name = project_name + str("-") + str(project.id)
     main_directory = Directory(name=directory_name, project=project)
     main_directory.save()
+    arxml_file = File(name="composition", file_type="arxml", directory=main_directory)
+    arxml_file.save()
+    wrapper = Arxml("", main_directory.GetPath())
+    wrapper.CreateComposition(project_name)
+    arxml_file.Write(str(wrapper))
+    sub_directory = Directory(name=project_name, parent=main_directory)
+    sub_directory.save()
+    c_file = File(name="components", file_type="c", directory=sub_directory)
+    c_file.save()
     factory = APIRequestFactory()
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })

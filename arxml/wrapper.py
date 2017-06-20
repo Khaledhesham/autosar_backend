@@ -424,11 +424,11 @@ class Arxml:
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
 
-        package = ET.SubElement(packages, "AR-PACKAGE", UUID=str(guid.uuid1()))
+        package = ET.SubElement(packages, "AR-PACKAGE")
         ET.SubElement(package, "SHORT_NAME").text = "CrossControl"
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
-        package = ET.SubElement(sub, "AR-PACKAGE", UUID=str(guid.uuid1()))
+        package = ET.SubElement(sub, "AR-PACKAGE")
         ET.SubElement(package, "SHORT_NAME").text = "SoftwareComponents"
 
         elements = ET.SubElement(package, "ELEMENTS")
@@ -476,4 +476,4 @@ class Arxml:
 
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
-        return ET.tostring(indented)
+        return ET.tostring(self.tree.getroot()).decode("utf-8")
