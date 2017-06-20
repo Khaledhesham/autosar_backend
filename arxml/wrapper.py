@@ -64,6 +64,18 @@ class Arxml:
         sdgs = ET.SubElement(admin_data, "SDGS")
         ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
 
+    def Remove(self, parent_path, child_type, child_uid):
+        root = self.tree.getroot()
+
+        parent = root.find(parent_path)
+
+        for child in parent.findall(child_type):
+            if child.get('UUID') == child_uid:
+                parent.remove(child)
+                return True
+
+        return False
+
     def CreateSoftwareComponent(self, name, pos_x, pos_y):
         self.CreateDefaultARXML()
 
@@ -127,6 +139,9 @@ class Arxml:
 
         return timing_event.get('UUID')
 
+    def RemoveTimingEvent(self, event_uid):
+        return self.Remove(behavior_path + "/EVENTS", "TIMING-EVENT", event_uid)
+
     def AddRunnable(self, concurrent):
         root = self.tree.getroot()
 
@@ -151,6 +166,9 @@ class Arxml:
         
         return runnable.get('UUID')
 
+    def RemoveRunnable(self, runnable_uid):
+        return self.Remove(behavior_path + "/RUNNABLES", "RUNNABLE-ENTITY", runnable_uid)
+
     def AddDataAccess(self, name, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
         root = self.tree.getroot()
 
@@ -174,16 +192,21 @@ class Arxml:
                 ### Validation
                 for a in list(node):
                     if port_type == "R":
-                        if node.find("DATA-ELEMENT-IREF/R-PORT-PROTOTYPE-REF").text == prototype_ref:
+                        if a.find("DATA-ELEMENT-IREF/R-PORT-PROTOTYPE-REF").text == prototype_ref:
                             return False
                     else:
-                        if node.find("DATA-ELEMENT-IREF/P-PORT-PROTOTYPE-REF").text == prototype_ref:
+                        if a.find("DATA-ELEMENT-IREF/P-PORT-PROTOTYPE-REF").text == prototype_ref:
                             return False
                     
-                    if node.find("DATA-ELEMENT-IREF/DATA-ELEMENT-PROTOTYPE-REF").text == data_element_ref:
+                    if a.find("DATA-ELEMENT-IREF/DATA-ELEMENT-PROTOTYPE-REF").text == data_element_ref:
                         return False
 
-                    if node.find("SHORT-NAME").text == name:
+                for a in list(runnable.find("DATA-WRITE-ACCESSS")):
+                    if a.find("SHORT-NAME").text == name:
+                        return False
+
+                for a in list(runnable.find("DATA-READ-ACCESSS")):
+                    if a.find("SHORT-NAME").text == name:
                         return False
                 ###
 
@@ -203,6 +226,29 @@ class Arxml:
 
         return False
 
+    def RemoveDataAccess(self, runnable_uid, name):
+        root = self.tree.getroot()
+
+        runnables = root.find(behavior_path + "/RUNNABLES")
+
+        for runnable in runnables.findall("RUNNABLE-ENTITY"):
+            if runnable.get('UUID') == runnable_uid:
+                access = runnable.find("DATA-WRITE-ACCESSS")
+
+                for a in list(access):
+                    if a.find("SHORT-NAME").text == name:
+                        access.remove(a)
+                        return True
+
+                access = runnable.find("DATA-READ-ACCESSS")
+
+                for a in list(access):
+                    if a.find("SHORT-NAME").text == name:
+                        access.remove(a)
+                        return True
+                
+        return False
+    
     def AddDatatype(self, type):
         root = self.tree.getroot()
 
@@ -228,6 +274,28 @@ class Arxml:
             ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["lower"]
             ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["upper"]
 
+    def RemoveDataType(self, type):
+        child_type = ''
+
+        if type == "Bolean":
+            child_type = "BOOLEAN-TYPE"
+        elif type == "Float":
+            child_type = "REAL-TYPE"
+        else:
+            child_type = "INTEGER-TYPE"
+
+        root = self.tree.getroot()
+
+        parent = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+        for child in parent.findall(child_type):
+            if child.text == type:
+                parent.remove(child)
+                return True
+
+        return False
+
+
     def AddInterface(self, name):
         root = self.tree.getroot()
 
@@ -243,13 +311,20 @@ class Arxml:
 
         self.AddAdminData(interface)
 
+        ET.SubElement(interface, "DATA-ELEMENTS")
+
         return interface.get('UUID')
+
+    def RemoveInterface(self, interface_uid):
+        return self.Remove("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS", "SENDER-RECEIVER-INTERFACE", interface_uid)
 
     def AddDataElement(self, interface_uid, name, type, swc_name):
         root = self.tree.getroot()
         
         for interface in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/SENDER-RECEIVER-INTERFACE"):
             if interface.get('UUID') == str(interface_uid):
+                elements = interface.find("DATA-ELEMENTS")
+
                 for element in elements.findall("DATA-ELEMENT-PROTOTYPE"):
                     if element.find("SHORT-NAME").text == name:
                         return ''
@@ -281,6 +356,20 @@ class Arxml:
                 return element.get('UUID')
         
         return ''
+
+    def RemoveDataElement(self, interface_uid, element_uid):
+        root = self.tree.getroot()
+        
+        for interface in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/SENDER-RECEIVER-INTERFACE"):
+            if interface.get('UUID') == str(interface_uid):
+                elements = interface.find("DATA-ELEMENTS")
+                
+                for element in elements.findall("DATA-ELEMENT-PROTOTYPE"):
+                    if element.find("SHORT-NAME").text == name:
+                        elements.remove(element)
+                        return True
+
+        return False
 
     def AddPort(self, port_type, swc_name, name, interface):
         root = self.tree.getroot()
@@ -316,6 +405,18 @@ class Arxml:
             ET.SubElement(port, "PROVIDED-INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
 
         return port.get('UUID')
+
+    def RemovePort(self, port_uid):
+        root = self.tree.getroot()
+
+        ports = root.find(swc_path + "/PORTS")
+
+        for port in list(ports):
+            if port.get('UUID') == port_uid:
+                ports.remove(port)
+                return True
+
+        return False
 
     def CreateComposition(self,name):
         self.CreateDefaultARXML()
