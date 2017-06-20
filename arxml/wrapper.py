@@ -11,6 +11,14 @@ swc_type = "APPLICATION-SOFTWARE-COMPONENT-TYPE"
 swc_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/APPLICATION-SOFTWARE-COMPONENT-TYPE"
 behavior_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/INTERNAL-BEHAVIOR"
 
+integer_types = {
+    "SInt8": { "lower": "-128", "upper": "127" },
+    "UInt8": { "lower": "0", "upper": "255" },
+    "SInt16": { "lower": "-32768", "upper": "32767" },
+    "UInt16": { "lower": "0", "upper": "65535" },
+    "SInt32": { "lower": "-2147483648", "upper": "2147483647" },
+    "UInt32": { "lower": "0", "upper": "4294967295" } }
+
 class Arxml:
     tree = ET.ElementTree
     directory = ''
@@ -134,39 +142,111 @@ class Arxml:
 
         data_read = ET.SubElement(runnable, "DATA-READ-ACCESSS")
         data_write = ET.SubElement(runnable, "DATA-WRITE-ACCESSS")
+        
+        return runnable.get('UUID')
 
-        for access in data_access:
-            node = data_read
-            access_type = "DATA-READ-ACCESSS"
+    def AddDataAccess(self, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
+        root = self.tree.getroot()
 
-            if access['type'] == "WRITE":
-                node = data_write
+        runnables = root.find(behavior_path + "/RUNNABLES")
+
+        for runnable in runnables.findall("RUNNABLE-ENTITY"):
+            if runnable.get('UUID') == runnable_uid:
+
+            node = ET.Element
+            access_type = ""
+
+            if type == "WRITE":
+                node = runnable.find("DATA-WRITE-ACCESSS")
                 access_type = "DATA-WRITE-ACCESSS"
-            
+            else:
+                node = runnable.find("DATA-READ-ACCESSS")
+                access_type = "DATA-READ-ACCESSS"
+
             access_node = ET.SubElement(node, access_type)
             ET.SubElement(access_node, "SHORT-NAME").text = ""
 
             data_element = ET.SubElement(access_node, "DATA-ELEMENT-IREF")
 
-            if access["port"]["type"] == "R":
-                ET.SubElement(data_element, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + access["port"]["name"]
+            if port_type == "R":
+                ET.SubElement(data_element, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name
             else:
-                ET.SubElement(data_element, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + access["port"]["name"]
+                ET.SubElement(data_element, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name
             
-            ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text =  "/" + swc_name + "_pkg/" + swc_name + "_if/" + access["data"]["interface"] + "/" + access["data"]["name"]
+            ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text =  "/" + swc_name + "_pkg/" + swc_name + "_if/" + interface + "/" + data_element
 
-    #def AddDatatype(self, type):
-        
-    def AddPort(self, swc_uuid, port_type, name, interface):
+    def AddDatatype(self, type):
         root = self.tree.getroot()
 
-        for swc in root.findall(swc_path):
-            if swc.get('UUID') == swc_uuid:
-                port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
-                ET.SubElement(port, "SHORT_NAME").text = name
-                self.AddAdminData(port)
-                ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST=interface)
-                self.tree = ET.ElementTree(root)
+        elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+        for data_type in list(elements)
+            if data_type.find("SHORT-NAME").text == type:
+                return
+
+        if type == "Boolean":
+            data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
+            ET.SubElement(data_type, "SHORT-NAME").text = type
+        elif type == "Float":
+            data_type = ET.SubElement(elements, "REAL-TYPE")
+            ET.SubElement(data_type, "SHORT-NAME").text = type
+            ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
+            ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
+            ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
+        else:
+            data_type = ET.SubElement(elements, "INTEGER-TYPE")
+            ET.SubElement(data_type, "SHORT-NAME").text = type
+            ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
+            ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["lower"]
+            ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["upper"]
+
+    def AddInterface(self, name):
+        root = self.tree.getroot()
+
+        elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+        interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=str(guid.uuid1()))
+
+        ET.SubElement(interface, "SHORT-NAME").text = name
+
+        self.AddAdminData(interface)
+
+        return interface.get('UUID')
+
+    def AddDataElement(self, interface_uid, name, type, swc_name):
+        root = self.tree.getroot()
+        
+        for interface in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/SENDER-RECEIVER-INTERFACE"):
+            if interface.get('UUID') == str(interface_uid):
+                element = ET.SubElement(interface, "DATA-ELEMENT-PROTOTYPE", UUID=str(guid.uuid1()))
+
+                ET.SubElement(element, "SHORT-NAME").text = name
+
+                self.AddAdminData(element)
+
+                if type == "Boolean":
+                    ET.SubElement(element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + swc_name + "_pkg/" + swc_name + "_swc/" + type
+                elif type == "Float":
+                    ET.SubElement(element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + type
+                else:
+                    ET.SubElement(element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + type
+
+                return element.get('UUID')
+
+    def AddPort(self, type, swc_name, name, interface):
+        root = self.tree.getroot()
+
+        swc = root.find(swc_path):
+
+        port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
+        ET.SubElement(port, "SHORT_NAME").text = name
+
+        self.AddAdminData(port)
+
+        if type == "R":
+            ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
+        else:
+            ET.SubElement(port, "PROVIDED-INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
 
     def CreateComposition(self,name):
         self.CreateDefaultARXML()
