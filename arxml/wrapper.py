@@ -233,10 +233,10 @@ class Arxml:
 
                 return element.get('UUID')
 
-    def AddPort(self, type, swc_name, name, interface):
+    def AddPort(self, port_type, swc_name, name, interface):
         root = self.tree.getroot()
 
-        swc = root.find(swc_path):
+        swc = root.find(swc_path)
 
         port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
         ET.SubElement(port, "SHORT_NAME").text = name
@@ -278,6 +278,30 @@ class Arxml:
         ET.SubElement(component_prototype, "SHORT_NAME").text = name + "Prototype"
 
         ET.SubElement(component_prototype, "TYPE-TREF", DEST="swc_type").text = path
+
+    def AddConnector(self,p_port,p_port_component,r_port,r_port_component):
+        root = self.tree.getroot()
+        project_name = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/SHORT-NAME").text
+        for component_prototype in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/COMPONENTS/COMPONENT-PROTOTYPE"):
+            if component_prototype.find("SHORT-NAME").text == p_port_component + "Prototype":
+                p_component_path = component_prototype.find("TYPE-TREF").text
+            if component_prototype.find("SHORT-NAME").text == r_port_component + "Prototype":
+                r_component_path = component_prototype.find("TYPE-TREF").text
+
+        connectors = root.find(
+            "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS")
+        assembly_connector_prototype = ET.SubElement(connectors, "ASSEMBLY-CONNECTOR-PROTOTYPE")
+
+        ET.SubElement(assembly_connector_prototype, "SHORT_NAME").text = p_port + "Composition"
+
+        provider_iref = ET.SubElement(assembly_connector_prototype, "PROVIDER-IREF")
+        ET.SubElement(provider_iref, "COMPONENT-PROTOTYPE-REF", DEST="COMPONENT-PROTOTYPE").text = "/CrossControl/SoftwareComponents/"+project_name+"/"+p_port_component+"Prototype"
+        ET.SubElement(provider_iref, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text = p_component_path
+
+        requester_iref = ET.SubElement(assembly_connector_prototype, "REQUESTER-IREF")
+        ET.SubElement(requester_iref, "COMPONENT-PROTOTYPE-REF",
+                      DEST="COMPONENT-PROTOTYPE").text = "/CrossControl/SoftwareComponents/" + project_name + "/" + r_port_component + "Prototype"
+        ET.SubElement(requester_iref, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = r_component_path
 
 
     def __str__(self):

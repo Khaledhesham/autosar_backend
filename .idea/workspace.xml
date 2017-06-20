@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="695e9892-4fb3-4ed0-bb7c-be0afdf419f6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/arxml/wrapper.py" afterPath="$PROJECT_DIR$/arxml/wrapper.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,8 +17,8 @@
       <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/arxml/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="279" column="84" lean-forward="false" selection-start-line="279" selection-start-column="84" selection-end-line="279" selection-end-column="84" />
+            <state relative-caret-position="260">
+              <caret line="296" column="70" lean-forward="false" selection-start-line="296" selection-start-column="70" selection-end-line="296" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -635,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/arxml/wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="279" column="84" lean-forward="false" selection-start-line="279" selection-start-column="84" selection-end-line="279" selection-end-column="84" />
+        <state relative-caret-position="260">
+          <caret line="296" column="70" lean-forward="false" selection-start-line="296" selection-start-column="70" selection-end-line="296" selection-end-column="70" />
           <folding />
         </state>
       </provider>
