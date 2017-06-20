@@ -6,8 +6,6 @@ autosar_org = "http://autosar.org/3.2.1"
 autosar_schema_instance = "http://www.w3.org/2001/XMLSchema-instance"
 autosar_schema_location = "http://autosar.org/3.2.1 autosar_3-2-1.xsd"
 
-swc_type = "APPLICATION-SOFTWARE-COMPONENT-TYPE"
-
 swc_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/APPLICATION-SOFTWARE-COMPONENT-TYPE"
 behavior_path = "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/INTERNAL-BEHAVIOR"
 
@@ -82,7 +80,7 @@ class Arxml:
 
         elements = ET.SubElement(package, "ELEMENTS")
         
-        swc = ET.SubElement(elements, swc_type, UUID=str(guid.uuid1()), x=str(pos_x), y=str(pos_y))
+        swc = ET.SubElement(elements, "APPLICATION-SOFTWARE-COMPONENT-TYPE", UUID=str(guid.uuid1()), x=str(pos_x), y=str(pos_y))
         ET.SubElement(swc, "SHORT_NAME").text = name
 
         self.AddAdminData(swc)
@@ -97,7 +95,7 @@ class Arxml:
         ET.SubElement(behavior, "EVENTS")
         ET.SubElement(behavior, "RUNNABLES")
 
-        ET.SubElement(behavior, "COMPONTENT-REF", DEST=swc_type).text = "/" + name + "_pkg/" + name + "_swc/" + name
+        ET.SubElement(behavior, "COMPONTENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + name + "_pkg/" + name + "_swc/" + name
 
         impl = ET.SubElement(elements, "SWC-IMPLEMENTATION", uuid = str(guid.uuid1()))
         ET.SubElement(impl, "SHORT-NAME").text = name + "Implementation"
@@ -115,6 +113,10 @@ class Arxml:
 
         events = root.find(behavior_path + "/EVENTS")
 
+        for event in list(events):
+            if event.find("SHORT-NAME").text == name:
+                return ''
+
         timing_event = ET.SubElement(events, "TIMING-EVENT", UUID=str(guid.uuid1()))
         ET.SubElement(timing_event, "SHORT-NAME").text = name
 
@@ -125,10 +127,14 @@ class Arxml:
 
         return timing_event.get('UUID')
 
-    def AddRunnable(self, name, data_access, swc_name, concurrent):
+    def AddRunnable(self, concurrent):
         root = self.tree.getroot()
 
         runnables = root.find(behavior_path + "/RUNNABLES")
+
+        for event in list(runnables):
+            if event.find("SHORT-NAME").text == name:
+                return ''
 
         runnable = ET.SubElement(runnables, "RUNNABLE-ENTITY", UUID=str(guid.uuid1()))
         ET.SubElement(runnable, "SHORT-NAME").text = name
@@ -145,7 +151,7 @@ class Arxml:
         
         return runnable.get('UUID')
 
-    def AddDataAccess(self, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
+    def AddDataAccess(self, name, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
         root = self.tree.getroot()
 
         runnables = root.find(behavior_path + "/RUNNABLES")
@@ -155,24 +161,47 @@ class Arxml:
                 node = ET.Element
                 access_type = ""
 
-            if type == "WRITE":
-                node = runnable.find("DATA-WRITE-ACCESSS")
-                access_type = "DATA-WRITE-ACCESSS"
-            else:
-                node = runnable.find("DATA-READ-ACCESSS")
-                access_type = "DATA-READ-ACCESSS"
+                if type == "WRITE":
+                    node = runnable.find("DATA-WRITE-ACCESSS")
+                    access_type = "DATA-WRITE-ACCESSS"
+                else:
+                    node = runnable.find("DATA-READ-ACCESSS")
+                    access_type = "DATA-READ-ACCESSS"
 
-            access_node = ET.SubElement(node, access_type)
-            ET.SubElement(access_node, "SHORT-NAME").text = ""
+                prototype_ref =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name
+                data_element_ref =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + interface + "/" + data_element
 
-            data_element = ET.SubElement(access_node, "DATA-ELEMENT-IREF")
+                ### Validation
+                for a in list(node):
+                    if port_type == "R":
+                        if node.find("DATA-ELEMENT-IREF/R-PORT-PROTOTYPE-REF").text == prototype_ref:
+                            return False
+                    else:
+                        if node.find("DATA-ELEMENT-IREF/P-PORT-PROTOTYPE-REF").text == prototype_ref:
+                            return False
+                    
+                    if node.find("DATA-ELEMENT-IREF/DATA-ELEMENT-PROTOTYPE-REF").text == data_element_ref:
+                        return False
 
-            if port_type == "R":
-                ET.SubElement(data_element, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name
-            else:
-                ET.SubElement(data_element, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name
-            
-            ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text =  "/" + swc_name + "_pkg/" + swc_name + "_if/" + interface + "/" + data_element
+                    if node.find("SHORT-NAME").text == name:
+                        return False
+                ###
+
+                access_node = ET.SubElement(node, access_type)
+                ET.SubElement(access_node, "SHORT-NAME").text = name
+
+                data_element = ET.SubElement(access_node, "DATA-ELEMENT-IREF")
+
+                if port_type == "R":
+                    ET.SubElement(data_element, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = prototype_ref
+                else:
+                    ET.SubElement(data_element, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text = prototype_ref
+                
+                ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text = data_element_ref
+
+                return True
+
+        return False
 
     def AddDatatype(self, type):
         root = self.tree.getroot()
@@ -204,6 +233,10 @@ class Arxml:
 
         elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
 
+        for interface in elements.findall("SENDER-RECEIVER-INTERFACE"):
+            if interface.find("SHORT-NAME").text == name:
+                return ''
+
         interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=str(guid.uuid1()))
 
         ET.SubElement(interface, "SHORT-NAME").text = name
@@ -217,6 +250,21 @@ class Arxml:
         
         for interface in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/SENDER-RECEIVER-INTERFACE"):
             if interface.get('UUID') == str(interface_uid):
+                for element in elements.findall("DATA-ELEMENT-PROTOTYPE"):
+                    if element.find("SHORT-NAME").text == name:
+                        return ''
+
+                elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+                found = False
+
+                for data_type in list(elements):
+                    if data_type.find("SHORT-NAME").text == type:
+                        found = True
+
+                if found is False:
+                    return ''
+
                 element = ET.SubElement(interface, "DATA-ELEMENT-PROTOTYPE", UUID=str(guid.uuid1()))
 
                 ET.SubElement(element, "SHORT-NAME").text = name
@@ -231,13 +279,33 @@ class Arxml:
                     ET.SubElement(element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + type
 
                 return element.get('UUID')
+        
+        return ''
 
     def AddPort(self, port_type, swc_name, name, interface):
         root = self.tree.getroot()
 
-        swc = root.find(swc_path)
+        ports = root.find(swc_path + "/PORTS")
 
-        port = ET.SubElement(swc, port_type, UUID=str(guid.uuid1()))
+        for port in list(ports):
+            if port.find("SHORT-NAME").text == name:
+                return ''
+
+        elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+
+        found = False
+        for interface in elements.findall("SENDER-RECEIVER-INTERFACE"):
+            if interface.find("SHORT-NAME").text == name:
+                found = True
+
+        if found is False:
+            return ''
+
+        port = "R-PORT-PROTOTYPE"
+        if port_type == "Provider":
+            port = "P-PORT-PROTOTYPE"
+
+        port = ET.SubElement(swc, port, UUID=str(guid.uuid1()))
         ET.SubElement(port, "SHORT_NAME").text = name
 
         self.AddAdminData(port)
@@ -246,6 +314,8 @@ class Arxml:
             ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
         else:
             ET.SubElement(port, "PROVIDED-INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
+
+        return port.get('UUID')
 
     def CreateComposition(self,name):
         self.CreateDefaultARXML()
@@ -276,7 +346,7 @@ class Arxml:
 
         ET.SubElement(component_prototype, "SHORT_NAME").text = name + "Prototype"
 
-        ET.SubElement(component_prototype, "TYPE-TREF", DEST="swc_type").text = path
+        ET.SubElement(component_prototype, "TYPE-TREF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = path
 
     def AddConnector(self,p_port,p_port_component,r_port,r_port_component):
         root = self.tree.getroot()
