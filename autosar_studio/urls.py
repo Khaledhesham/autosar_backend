@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/$',views.generate_project),
-    url(r'^addswc/$',views.add_software_component),    
+    url(r'^arxml/add_swc/$',views.add_software_component),    
+    url(r'^arxml/add_interface/$',views.add_interface),    
     url(r'^login/$',morad.check),
 ]

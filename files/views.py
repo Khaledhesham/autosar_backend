@@ -69,6 +69,20 @@ def add_software_component(request):
     else:
         raise Http404("Method not supported.")
 
+@csrf_exempt
+def add_interface(request):
+    if request.method == 'POST':
+        project = Project.objects.get(id=request.POST['project_id'])
+        if True:
+            file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+            if file is None:
+                raise Http404("SWC not found.")
+            uid = file.AddInterface(request.POST['name'])
+            return HttpResponse(uid)
+        raise PermissionDenied
+    else:
+        raise Http404("Method not supported.")
+
 def index(request):
     template = loader.get_template('index.html')
     context = {}
