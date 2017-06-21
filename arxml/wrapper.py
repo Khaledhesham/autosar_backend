@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 import uuid as guid
 from files.models import File
 from django.core.files.base import ContentFile
+import re
 
 autosar_org = "http://autosar.org/3.2.1"
 autosar_schema_instance = "http://www.w3.org/2001/XMLSchema-instance"
@@ -26,7 +27,8 @@ class Arxml:
         ET.register_namespace("", autosar_schema_instance)
 
         if s != '':
-            self.tree = ET.ElementTree(ET.fromstring(s))
+            xmlstring = re.sub(' xmlns="[^"]+"', '', s, count=1)
+            self.tree = ET.ElementTree(ET.fromstring(xmlstring))
 
         self.directory = directory
 
@@ -158,8 +160,8 @@ class Arxml:
 
         runnables = root.find(behavior_path + "/RUNNABLES")
 
-        for event in list(runnables):
-            if event.find("SHORT-NAME").text == name:
+        for runnable in list(runnables):
+            if runnable.find("SHORT-NAME").text == name:
                 return ''
 
         runnable = ET.SubElement(runnables, "RUNNABLE-ENTITY", UUID=str(guid.uuid1()))
@@ -511,5 +513,6 @@ class Arxml:
         return self.Remove("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS", "ASSEMBLY-CONNECTOR-PROTOTYPE", uid)
 
     def __str__(self):
+        self.tree.getroot().set("xmlns", autosar_org)
         indented = Arxml.Indent(self.tree.getroot())
         return ET.tostring(self.tree.getroot()).decode("utf-8")
