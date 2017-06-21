@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import uuid as guid
+from files.models import File
 from django.core.files.base import ContentFile
 
 autosar_org = "http://autosar.org/3.2.1"
@@ -117,6 +118,16 @@ class Arxml:
         ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + name + "_pkg/" + name + "_swc/" + name + "Behavior"
 
         uid = swc.get('UUID')
+
+        file = open(self.directory + "/composition.arxml", mode="rb").read()
+
+        compositionWrapper = Arxml(file,self.directory)
+
+        compositionWrapper.AddComponentToComposition(name,"/" + name + "_pkg/" + name + "_swc/" + name)
+
+        f = open(self.directory + "/composition.arxml", mode="w+")
+        f.write(str(compositionWrapper))
+        f.close()
         
         return uid
 
@@ -394,6 +405,8 @@ class Arxml:
         if port_type == "Provider":
             port = "P-PORT-PROTOTYPE"
 
+        swc = elements.find("APPLICATION-SOFTWARE-COMPONENT-TYPE")
+
         port = ET.SubElement(swc, port, UUID=str(guid.uuid1()))
         ET.SubElement(port, "SHORT_NAME").text = name
 
@@ -441,7 +454,7 @@ class Arxml:
 
     def AddComponentToComposition(self,name,path):
         root = self.tree.getroot()
-        components = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
+        components = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/COMPONENTS")
 
         component_prototype = ET.SubElement(components, "COMPONENT-PROTOTYPE")
 
@@ -460,7 +473,8 @@ class Arxml:
 
         connectors = root.find(
             "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS")
-        assembly_connector_prototype = ET.SubElement(connectors, "ASSEMBLY-CONNECTOR-PROTOTYPE")
+        uid = guid.uuid1()
+        assembly_connector_prototype = ET.SubElement(connectors, "ASSEMBLY-CONNECTOR-PROTOTYPE", uuid = str(uid))
 
         ET.SubElement(assembly_connector_prototype, "SHORT_NAME").text = p_port + "Composition"
 
@@ -472,7 +486,29 @@ class Arxml:
         ET.SubElement(requester_iref, "COMPONENT-PROTOTYPE-REF",
                       DEST="COMPONENT-PROTOTYPE").text = "/CrossControl/SoftwareComponents/" + project_name + "/" + r_port_component + "Prototype"
         ET.SubElement(requester_iref, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = r_component_path
+        return uid
 
+    def removeComponentFromComposition(self,name):
+        check = False
+        root = self.tree.getroot()
+        project_name = root.find(
+            "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/SHORT-NAME").text
+        for component_prototype in root.findall(
+            "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/COMPONENTS/COMPONENT-PROTOTYPE"):
+            if component_prototype.find("SHORT-NAME").text == name + "Prototype":
+                root.remove(component_prototype)
+                check = True
+        if check:
+            for connector_prototype in root.findall(
+                    "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS/ASSEMBLY-CONNECTOR-PROTOTYPE"):
+                p = connector_prototype.find("PROVIDER-IREF/COMPONENT-PROTOTYPE-REF").text
+                r = connector_prototype.find("REQUESTER-IREF/COMPONENT-PROTOTYPE-REF").text
+                if p == "/CrossControl/SoftwareComponents/"+project_name+"/"+name+"Prototype" or r == "/CrossControl/SoftwareComponents/"+project_name+"/"+name+"Prototype" :
+                    root.remove(connector_prototype)
+        return check
+
+    def removeConnector(self,uid):
+        return self.Remove("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS", "ASSEMBLY-CONNECTOR-PROTOTYPE", uid)
 
     def __str__(self):
         indented = Arxml.Indent(self.tree.getroot())
