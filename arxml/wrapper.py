@@ -118,20 +118,8 @@ class Arxml:
         self.AddAdminData(impl)
 
         ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + name + "_pkg/" + name + "_swc/" + name + "Behavior"
-
-        uid = swc.get('UUID')
-
-        file = open(self.directory + "/composition.arxml", mode="rb").read()
-
-        compositionWrapper = Arxml(file,self.directory)
-
-        compositionWrapper.AddComponentToComposition(name,"/" + name + "_pkg/" + name + "_swc/" + name)
-
-        f = open(self.directory + "/composition.arxml", mode="w+")
-        f.write(str(compositionWrapper))
-        f.close()
         
-        return uid
+        return swc.get('UUID')
 
     def AddTimingEvent(self, name, runnable, period, swc_name):
         root = self.tree.getroot()
@@ -425,13 +413,15 @@ class Arxml:
         root = self.tree.getroot()
 
         ports = root.find(swc_path + "/PORTS")
+        name = ""
 
         for port in list(ports):
             if port.get('UUID') == port_uid:
+                name = port.find("SHORT-NAME").text
                 ports.remove(port)
-                return True
+                return True, name
 
-        return False
+        return False, name
 
     def CreateComposition(self,name):
         self.CreateDefaultARXML()
@@ -466,12 +456,9 @@ class Arxml:
 
     def AddConnector(self,p_port,p_port_component,r_port,r_port_component):
         root = self.tree.getroot()
-        project_name = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/SHORT-NAME").text
-        for component_prototype in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/COMPONENTS/COMPONENT-PROTOTYPE"):
-            if component_prototype.find("SHORT-NAME").text == p_port_component + "Prototype":
-                p_component_path = component_prototype.find("TYPE-TREF").text
-            if component_prototype.find("SHORT-NAME").text == r_port_component + "Prototype":
-                r_component_path = component_prototype.find("TYPE-TREF").text
+
+        p_component_path =  "/" + p_port_component + "_pkg/" + p_port_component + "_swc/" + p_port_component
+        r_component_path =  "/" + r_port_component + "_pkg/" + r_port_component + "_swc/" + r_port_component
 
         connectors = root.find(
             "TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS")
@@ -482,15 +469,15 @@ class Arxml:
 
         provider_iref = ET.SubElement(assembly_connector_prototype, "PROVIDER-IREF")
         ET.SubElement(provider_iref, "COMPONENT-PROTOTYPE-REF", DEST="COMPONENT-PROTOTYPE").text = "/CrossControl/SoftwareComponents/"+project_name+"/"+p_port_component+"Prototype"
-        ET.SubElement(provider_iref, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text = p_component_path
+        ET.SubElement(provider_iref, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text = p_component_path + "/" + p_port
 
         requester_iref = ET.SubElement(assembly_connector_prototype, "REQUESTER-IREF")
         ET.SubElement(requester_iref, "COMPONENT-PROTOTYPE-REF",
                       DEST="COMPONENT-PROTOTYPE").text = "/CrossControl/SoftwareComponents/" + project_name + "/" + r_port_component + "Prototype"
-        ET.SubElement(requester_iref, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = r_component_path
+        ET.SubElement(requester_iref, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = r_component_path + "/" + r_port
         return uid
 
-    def removeComponentFromComposition(self,name):
+    def RemoveComponentFromComposition(self,name):
         check = False
         root = self.tree.getroot()
         project_name = root.find(
@@ -509,8 +496,25 @@ class Arxml:
                     root.remove(connector_prototype)
         return check
 
-    def removeConnector(self,uid):
+    def RemoveConnector(self,uid):
         return self.Remove("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS", "ASSEMBLY-CONNECTOR-PROTOTYPE", uid)
+
+    def RemoveConnectorByPort(self, port_name, swc_name):
+        root = self.tree.getroot()
+        connectors = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/COMPOSITION-TYPE/CONNECTORS")
+
+        for connector in connectors.findall("ASSEMBLY-CONNECTOR-PROTOTYPE"):
+            for p_iref in connector.findall("PROVIDER-IREF"):s
+                if p_iref.find("P-PORT-PROTOTYPE-REF").text == "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name:
+                    connectors.remove(connector)
+                    return True
+
+            for r_iref in connector.findall("REQUESTER-IREF"):
+                if r_iref.find("R-PORT-PROTOTYPE-REF").text == "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "/" + port_name:
+                    connectors.remove(connector)
+                    return True
+
+        return False
 
     def __str__(self):
         self.tree.getroot().set("xmlns", autosar_org)
