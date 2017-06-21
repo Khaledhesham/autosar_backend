@@ -77,11 +77,15 @@ class File(models.Model):
 class ArxmlFile(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     swc_uid = models.CharField(max_length=20, blank=True)
+    x = models.IntegerField(default=0)
+    y = models.IntegerField(default=0)
 
     def CreateSoftwareComponent(self, name, pos_x, pos_y):
         wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
-        uuid = wrapper.CreateSoftwareComponent(name, pos_x, pos_y)
+        uuid = wrapper.CreateSoftwareComponent(name)
         self.file.Write(str(wrapper))
+        self.x = pos_x
+        self.y = pos_y
         self.swc_uid = uuid
         self.file.save()
         self.save()

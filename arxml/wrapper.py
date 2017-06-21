@@ -79,7 +79,7 @@ class Arxml:
 
         return False
 
-    def CreateSoftwareComponent(self, name, pos_x, pos_y):
+    def CreateSoftwareComponent(self, name):
         self.CreateDefaultARXML()
 
         root = self.tree.getroot()
@@ -95,7 +95,7 @@ class Arxml:
 
         elements = ET.SubElement(package, "ELEMENTS")
         
-        swc = ET.SubElement(elements, "APPLICATION-SOFTWARE-COMPONENT-TYPE", UUID=str(guid.uuid1()), x=str(pos_x), y=str(pos_y))
+        swc = ET.SubElement(elements, "APPLICATION-SOFTWARE-COMPONENT-TYPE", UUID=str(guid.uuid1()))
         ET.SubElement(swc, "SHORT_NAME").text = name
 
         self.AddAdminData(swc)
