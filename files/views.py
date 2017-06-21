@@ -45,8 +45,6 @@ def generate_project(APIView, project_name, user_id):
     arxml_file.Write(str(wrapper))
     sub_directory = Directory(name=project_name, parent=main_directory)
     sub_directory.save()
-    c_file = File(name="components", file_type="c", directory=sub_directory)
-    c_file.save()
     factory = APIRequestFactory()
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
@@ -64,7 +62,7 @@ def add_software_component(request):
             file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
             file.save()
             arxml = ArxmlFile(file=file,swc_uid='')
-            return HttpResponse(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y']))
+            return HttpResponse(str(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])))
         raise PermissionDenied
     else:
         raise Http404("Method not supported.")

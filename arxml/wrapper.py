@@ -121,7 +121,7 @@ class Arxml:
 
         uid = swc.get('UUID')
 
-        file = open(self.directory + "/composition.arxml", mode="rb").read()
+        file = open(self.directory + "/composition.arxml", mode="rb").read().decode('utf-8')
 
         compositionWrapper = Arxml(file,self.directory)
 

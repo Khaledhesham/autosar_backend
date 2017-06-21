@@ -81,7 +81,7 @@ class ArxmlFile(models.Model):
     y = models.IntegerField(default=0)
 
     def CreateSoftwareComponent(self, name, pos_x, pos_y):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.CreateSoftwareComponent(name)
         self.file.Write(str(wrapper))
         self.x = pos_x
@@ -92,47 +92,47 @@ class ArxmlFile(models.Model):
         return uuid
 
     def AddDataType(self, type):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddDataType(type)
         self.file.Write(str(wrapper))
         self.file.save()
 
     def AddDataElement(self, interface_uid, name, type, swc_name):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddDataElement(interface_uid, name, type, self.file.name)
         self.file.Write(str(wrapper))
         self.file.save()
         return uuid
 
     def AddInterface(self, name):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddInterface(name)
         self.file.Write(str(wrapper))
         self.file.save()
         return uuid
 
     def AddRunnable(self, name, concurrent):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddRunnable(name, name, concurrent)
         self.file.Write(str(wrapper))
         self.file.save()
         return uuid
 
     def AddTimingEvent(self, name, runnable, period, swc_name):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddTimingEvent(name, runnable, period, self.file.name)
         self.file.Write(str(wrapper))
         self.file.save()
         return uuid
 
     def AddDataAccess(self, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddDataAccess(runnable_uid, type, port_type, self.file.name, port_name, interface, data_element)
         self.file.Write(str(wrapper))
         self.file.save()
 
     def AddPort(self, type, swc_name, name, interface):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
+        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddPort(type, self.file.name, name, interface)
         self.file.Write(str(wrapper))
         self.file.save()
