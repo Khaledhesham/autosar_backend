@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 
 def OwnsFile(file, user):
-    if user and user.is_authenticated:
+    if user and (user.is_authenticated or user.is_staff):
         if file is None or file.directory.GetProject() is None:
             raise Http404("File doesn't exist")
     else:
@@ -51,74 +51,66 @@ def generate_project(APIView, project_name, user_id):
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
     return Response(ser.data)
 
-@csrf_exempt
+@api_view(['POST'])
 def add_software_component(request):
-    if request.method == 'POST':
-        project = Project.objects.get(id=request.POST['project_id'])
-        if True:
-            sub_directory = Directory(name=project.name, parent=project.directory)
-            sub_directory.save()
-            File(name="components", file_type="c", directory=sub_directory).save()
-            File(name="components", file_type="h", directory=sub_directory).save()
-            file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
-            file.save()
-            arxml = ArxmlFile(file=file,swc_uid='')
-            return HttpResponse(str(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])))
-        raise PermissionDenied
-    else:
-        raise Http404("Method not supported.")
+    project = Project.objects.get(id=request.POST['project_id'])
+    if project.user == request.user:
+        sub_directory = Directory(name=project.name, parent=project.directory)
+        sub_directory.save()
+        File(name="components", file_type="c", directory=sub_directory).save()
+        File(name="components", file_type="h", directory=sub_directory).save()
+        file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
+        file.save()
+        arxml = ArxmlFile(file=file,swc_uid='')
+        return HttpResponse(str(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])))
+    raise PermissionDenied
 
-@csrf_exempt
+@api_view(['POST'])
 def add_interface(request):
-    if request.method == 'POST':
-        file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-        if file is None:
-            raise Http404("SWC not found.")
-        uid = file.AddInterface(request.POST['name'])
-        return HttpResponse(uid)
-    else:
-        raise Http404("Method not supported.")
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None and OwnsFile(file, request.user):
+        raise Http404("SWC not found.")
+    uid = file.AddInterface(request.POST['name'])
+    return HttpResponse(uid)
 
-@csrf_exempt
+@api_view(['POST'])
 def add_port(request):
-    if request.method == 'POST':
-        file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-        if file is None:
-            raise Http404("Port not found.")
-        uid = file.AddPort(request.POST['type'], request.POST['name'], request.POST['interface'])
-        return HttpResponse(uid)
-    else:
-        raise Http404("Method not supported.")
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("Port not found.")
+    uid = file.AddPort(request.POST['type'], request.POST['name'], request.POST['interface'])
+    return HttpResponse(uid)
 
+@api_view(['POST'])
 def add_dataType(request):
-    if request.method == 'POST':
-        file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-        if file is None:
-            raise Http404("SWC not found.")
-        uid = file.AddInterface(request.POST['name'])
-        return HttpResponse(uid)
-    else:
-        raise Http404("Method not supported.")
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    uid = file.AddInterface(request.POST['name'])
+    return HttpResponse(uid)
 
 def index(request):
     template = loader.get_template('index.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
-class ProjectList(APIView):
-    def get(self, request, user_id):
-        return self.get_Projects_with_id(request, user_id)
-
-    def get_Projects_with_id(self, request, user_id):
+@api_view(['GET'])
+def get_user_projects(request, user_id):
+    if request.user.id == user_id or request.user.is_staff:
         Projects = Project.objects.filter(user=user_id)
         serializer = ProjectSerializer(Projects, many=True, context={'request': request})
         return Response(serializer.data)
+    else:
+        raise PermissionDenied
 
-class ProjectDelete(APIView):
-   def delete(self,request,project_id):
-        try:
-            project = Project.objects.get(pk=project_id)
+@api_view(['POST'])
+def delete_project(request, project_id):
+    try:
+        project = Project.objects.get(pk=project_id)
+        if request.user.is_staff or project.user == request.user:
             project.delete()
-            return  HttpResponse("done")
-        except Project.DoesNotExist:
-            raise Http404
+            return  HttpResponse("Done")
+        raise PermissionDenied
+    except Project.DoesNotExist:
+        
+        raise Http404
