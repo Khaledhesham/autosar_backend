@@ -22,13 +22,17 @@ integer_types = {
 class Arxml:
     tree = ET.ElementTree
     directory = ''
+    build = False
 
     def __init__(self, s, directory):
-        ET.register_namespace("", autosar_schema_instance)
 
         if s != '':
-            xmlstring = re.sub(' xmlns="[^"]+"', '', s, count=1)
-            self.tree = ET.ElementTree(ET.fromstring(xmlstring))
+            s = s.replace(' xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd"',"")
+            print(s)
+            self.tree = ET.ElementTree(ET.fromstring(s))
+        else:
+            self.build = True
+            ET.register_namespace("", autosar_schema_instance)
 
         self.directory = directory
 
@@ -118,18 +122,6 @@ class Arxml:
         self.AddAdminData(impl)
 
         ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + name + "_pkg/" + name + "_swc/" + name + "Behavior"
-
-        uid = swc.get('UUID')
-
-        file = open(self.directory + "/composition.arxml", mode="rb").read().decode('utf-8')
-
-        compositionWrapper = Arxml(file,self.directory)
-
-        compositionWrapper.AddComponentToComposition(name,"/" + name + "_pkg/" + name + "_swc/" + name)
-
-        f = open(self.directory + "/composition.arxml", mode="w+")
-        f.write(str(compositionWrapper))
-        f.close()
         
         return swc.get('UUID')
 
@@ -155,7 +147,7 @@ class Arxml:
     def RemoveTimingEvent(self, event_uid):
         return self.Remove(behavior_path + "/EVENTS", "TIMING-EVENT", event_uid)
 
-    def AddRunnable(self, concurrent):
+    def AddRunnable(self, concurrent, name):
         root = self.tree.getroot()
 
         runnables = root.find(behavior_path + "/RUNNABLES")
@@ -530,6 +522,10 @@ class Arxml:
         return False
 
     def __str__(self):
-        self.tree.getroot().set("xmlns", autosar_org)
+        if not self.build:
+            root = self.tree.getroot()
+            root.set("xmlns",autosar_org)
+            root.set("xmlns:xsi",autosar_schema_instance)
+            root.set("xsi:schemaLocation",autosar_schema_location)
         indented = Arxml.Indent(self.tree.getroot())
         return ET.tostring(self.tree.getroot()).decode("utf-8")
