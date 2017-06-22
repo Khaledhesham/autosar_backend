@@ -142,7 +142,7 @@ class ArxmlFile(models.Model):
         self.file.Write(str(wrapper))
         self.file.save()
 
-    def AddPort(self, type, swc_name, name, interface):
+    def AddPort(self, type, name, interface):
         wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddPort(type, self.file.name, name, interface)
         self.file.Write(str(wrapper))

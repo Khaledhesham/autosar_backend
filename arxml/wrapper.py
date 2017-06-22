@@ -28,7 +28,6 @@ class Arxml:
 
         if s != '':
             s = s.replace(' xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd"',"")
-            print(s)
             self.tree = ET.ElementTree(ET.fromstring(s))
         else:
             self.build = True
@@ -376,7 +375,7 @@ class Arxml:
 
         return False
 
-    def AddPort(self, port_type, swc_name, name, interface):
+    def AddPort(self, port_type, swc_name, name, interface_name):
         root = self.tree.getroot()
 
         ports = root.find(swc_path + "/PORTS")
@@ -384,13 +383,15 @@ class Arxml:
         for port in list(ports):
             if port.find("SHORT-NAME").text == name:
                 return ''
-
+                print("hay")
+        print(swc_name)
         elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
 
         found = False
         for interface in elements.findall("SENDER-RECEIVER-INTERFACE"):
-            if interface.find("SHORT-NAME").text == name:
+            if interface.find("SHORT-NAME").text == interface_name:
                 found = True
+                print("mar7ba")
 
         if found is False:
             return ''
@@ -399,17 +400,17 @@ class Arxml:
         if port_type == "Provider":
             port = "P-PORT-PROTOTYPE"
 
-        swc = elements.find("APPLICATION-SOFTWARE-COMPONENT-TYPE")
+        ports_container = elements.find("APPLICATION-SOFTWARE-COMPONENT-TYPE/PORTS")
 
-        port = ET.SubElement(swc, port, UUID=str(guid.uuid1()))
+        port = ET.SubElement(ports_container, port, UUID=str(guid.uuid1()))
         ET.SubElement(port, "SHORT_NAME").text = name
 
         self.AddAdminData(port)
 
         if type == "R":
-            ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
+            ET.SubElement(port, "REQUIRED_INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + "/" + swc_name + "_swc/" + interface_name
         else:
-            ET.SubElement(port, "PROVIDED-INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + swc_name + "_swc/" + interface  
+            ET.SubElement(port, "PROVIDED-INTERFACE-TREF", DEST="SENDER-RECEIVER-INTERFACE").text = "/" + swc_name + "_pkg" + "/"  + swc_name + "_swc/" + interface_name
 
         return port.get('UUID')
 
