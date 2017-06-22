@@ -17,12 +17,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from files import views
-from registration_system import views as morad
+from registration_system import views as reg_views
 from files.models import Project
 from django.contrib.auth.models import User
 from rest_framework import viewsets,routers
 from files.serializers import ProjectSerializer
 from registration_system.serializers import UserSerializer
+from rest_framework.authtoken import views as auth_views
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -45,8 +46,8 @@ urlpatterns = [
     url(r'^generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/$',views.generate_project),
     url(r'^arxml/add_swc/$',views.add_software_component),    
     url(r'^arxml/add_interface/$',views.add_interface),    
-    url(r'^login/$',morad.check),
-    url(r'^users/(?P<user_id>[0-9]+)$',views.ProjectList.as_view()),
-    url(r'^delete/(?P<project_id>[0-9]+)$',views.ProjectDelete.as_view()),
-
+    url(r'^users/token$', auth_views.obtain_auth_token),
+    url(r'^users/projects/(?P<user_id>[0-9]+)$',views.get_user_projects),
+    url(r'^users/projects/delete/(?P<project_id>[0-9]+)$',views.delete_project),
+    url(r'^check_token$',reg_views.check),
 ]
