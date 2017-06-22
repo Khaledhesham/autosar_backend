@@ -104,9 +104,10 @@ class ArxmlFile(models.Model):
 
     def AddDataType(self, type):
         wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddDataType(type)
+        state = wrapper.AddDatatype(type)
         self.file.Write(str(wrapper))
         self.file.save()
+        return state
 
     def AddDataElement(self, interface_uid, name, type, swc_name):
         wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())

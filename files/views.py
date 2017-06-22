@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from files.models import File,Directory,Project,ArxmlFile
 from arxml.wrapper import Arxml
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -10,9 +9,6 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
-import time
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
 
 def OwnsFile(file, user):
     if user and (user.is_authenticated or user.is_staff):
@@ -86,8 +82,7 @@ def add_dataType(request):
     file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
     if file is None:
         raise Http404("SWC not found.")
-    uid = file.AddInterface(request.POST['name'])
-    return HttpResponse(uid)
+    return HttpResponse(file.AddDataType(request.POST['type']))
 
 def index(request):
     template = loader.get_template('index.html')

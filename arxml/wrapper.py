@@ -1,8 +1,5 @@
 import xml.etree.ElementTree as ET
 import uuid as guid
-from files.models import File
-from django.core.files.base import ContentFile
-import re
 
 autosar_org = "http://autosar.org/3.2.1"
 autosar_schema_instance = "http://www.w3.org/2001/XMLSchema-instance"
@@ -259,8 +256,9 @@ class Arxml:
         elements = root.find("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS")
 
         for data_type in list(elements):
-            if data_type.find("SHORT-NAME").text == type:
-                return
+            d = data_type.find("SHORT-NAME")
+            if d is not None and d.text == type:
+                return False
 
         if type == "Boolean":
             data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
@@ -277,6 +275,7 @@ class Arxml:
             ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
             ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["lower"]
             ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["upper"]
+        return True
 
     def RemoveDataType(self, type):
         child_type = ''
