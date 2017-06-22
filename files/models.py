@@ -86,7 +86,7 @@ class ArxmlFile(models.Model):
 
         ### Alter Composition 
         file = open(self.file.directory.GetPath() + "/composition.arxml", mode="rb").read()
-        compositionWrapper = Arxml(file,self.file.directory.GetPath())
+        compositionWrapper = Arxml(file.decode('utf-8'),self.file.directory.GetPath())
         compositionWrapper.AddComponentToComposition(name,"/" + name + "_pkg/" + name + "_swc/" + name)
         f = open(self.file.directory.GetPath() + "/composition.arxml", mode="w+")
         f.write(str(compositionWrapper))

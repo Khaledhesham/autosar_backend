@@ -73,6 +73,16 @@ def add_interface(request):
     uid = file.AddInterface(request.POST['name'])
     return HttpResponse(uid)
 
+def add_dataType(request):
+    if request.method == 'POST':
+        file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+        if file is None:
+            raise Http404("SWC not found.")
+        uid = file.AddInterface(request.POST['name'])
+        return HttpResponse(uid)
+    else:
+        raise Http404("Method not supported.")
+
 def index(request):
     template = loader.get_template('index.html')
     context = {}
