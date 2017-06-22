@@ -12,6 +12,7 @@ from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
 import time
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 
 def OwnsFile(file, user):
     if user and user.is_authenticated:
@@ -93,3 +94,21 @@ def index(request):
     template = loader.get_template('index.html')
     context = {}
     return HttpResponse(template.render(context, request))
+
+class ProjectList(APIView):
+    def get(self, request, user_id):
+        return self.get_Projects_with_id(request, user_id)
+
+    def get_Projects_with_id(self, request, user_id):
+        Projects = Project.objects.filter(user=user_id)
+        serializer = ProjectSerializer(Projects, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class ProjectDelete(APIView):
+   def delete(self,request,project_id):
+        try:
+            project = Project.objects.get(pk=project_id)
+            project.delete()
+            return  HttpResponse("done")
+        except Project.DoesNotExist:
+            raise Http404

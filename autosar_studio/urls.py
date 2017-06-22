@@ -46,4 +46,7 @@ urlpatterns = [
     url(r'^arxml/add_swc/$',views.add_software_component),    
     url(r'^arxml/add_interface/$',views.add_interface),    
     url(r'^login/$',morad.check),
+    url(r'^users/(?P<user_id>[0-9]+)$',views.ProjectList.as_view()),
+    url(r'^delete/(?P<project_id>[0-9]+)$',views.ProjectDelete.as_view()),
+
 ]
