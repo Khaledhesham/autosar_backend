@@ -84,6 +84,48 @@ def add_dataType(request):
         raise Http404("SWC not found.")
     return HttpResponse(file.AddDataType(request.POST['type']))
 
+@api_view(['POST'])
+def add_dataElement(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.AddDataElement(request.POST['interface_uid'], request.POST['name'], request.POST['type']))
+
+@api_view(['POST'])
+def add_runnable(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.AddRunnable(request.POST['name'], request.POST['concurrent']))
+
+@api_view(['POST'])
+def add_timingEvent(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.AddTimingEvent(request.POST['name'], request.POST['runnable_name'], request.POST['period'], request.POST['swc_name']))
+
+@api_view(['POST'])
+def add_dataAccess(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.AddDataAccess(request.POST['runnable_uid'], request.POST['type'], request.POST['port_type'], request.POST['port_name'], request.POST['interface'], request.POST['data_element']))
+
+@api_view(['POST'])
+def delete_softwareComponent(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.DeleteSoftwareComponent(request.POST['name']))
+
+@api_view(['POST'])
+def remove_port(request):
+    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
+    if file is None:
+        raise Http404("SWC not found.")
+    return HttpResponse(file.RemovePort(request.POST['port_id']))
+
 def index(request):
     template = loader.get_template('index.html')
     context = {}

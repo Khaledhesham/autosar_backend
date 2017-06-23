@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^arxml/add_interface/$',views.add_interface),
     url(r'^arxml/add_port/$',views.add_port),
     url(r'^arxml/add_datatype/$',views.add_dataType),
+    url(r'^arxml/add_dataElement/$',views.add_dataElement),
     url(r'^users/token$', auth_views.obtain_auth_token),
     url(r'^users/projects/(?P<user_id>[0-9]+)$',views.get_user_projects),
     url(r'^users/projects/delete/(?P<project_id>[0-9]+)$',views.delete_project),

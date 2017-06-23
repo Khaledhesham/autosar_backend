@@ -109,7 +109,7 @@ class ArxmlFile(models.Model):
         self.file.save()
         return state
 
-    def AddDataElement(self, interface_uid, name, type, swc_name):
+    def AddDataElement(self, interface_uid, name, type):
         wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddDataElement(interface_uid, name, type, self.file.name)
         self.file.Write(str(wrapper))
@@ -137,7 +137,7 @@ class ArxmlFile(models.Model):
         self.file.save()
         return uuid
 
-    def AddDataAccess(self, runnable_uid, type, port_type, swc_name, port_name, interface, data_element):
+    def AddDataAccess(self, runnable_uid, type, port_type, port_name, interface, data_element):
         wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
         uuid = wrapper.AddDataAccess(runnable_uid, type, port_type, self.file.name, port_name, interface, data_element)
         self.file.Write(str(wrapper))

@@ -121,7 +121,7 @@ class Arxml:
         
         return swc.get('UUID')
 
-    def AddTimingEvent(self, name, runnable, period, swc_name):
+    def AddTimingEvent(self, name, runnable_name, period, swc_name):
         root = self.tree.getroot()
 
         events = root.find(behavior_path + "/EVENTS")
@@ -135,7 +135,7 @@ class Arxml:
 
         self.AddAdminData(timing_event)
 
-        ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "Behavior/" + runnable
+        ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc_name + "_pkg/" + swc_name + "_swc/" + swc_name + "Behavior/" + runnable_name
         ET.SubElement(timing_event, "PERIOD").text = str(period)
 
         return timing_event.get('UUID')
@@ -143,7 +143,7 @@ class Arxml:
     def RemoveTimingEvent(self, event_uid):
         return self.Remove(behavior_path + "/EVENTS", "TIMING-EVENT", event_uid)
 
-    def AddRunnable(self, concurrent, name):
+    def AddRunnable(self, name, concurrent):
         root = self.tree.getroot()
 
         runnables = root.find(behavior_path + "/RUNNABLES")
@@ -327,8 +327,10 @@ class Arxml:
         for interface in root.findall("TOP-LEVEL-PACKAGES/AR-PACKAGE/SUB-PACKAGES/AR-PACKAGE/ELEMENTS/SENDER-RECEIVER-INTERFACE"):
             if interface.get('UUID') == str(interface_uid):
                 elements = interface.find("DATA-ELEMENTS")
+                print(elements)
 
                 for element in elements.findall("DATA-ELEMENT-PROTOTYPE"):
+                    print(element.find("SHORT-NAME").text)
                     if element.find("SHORT-NAME").text == name:
                         return ''
 
@@ -337,7 +339,8 @@ class Arxml:
                 found = False
 
                 for data_type in list(elements):
-                    if data_type.find("SHORT-NAME").text == type:
+                    d = data_type.find("SHORT-NAME")
+                    if d is not None and d.text == type:
                         found = True
 
                 if found is False:
