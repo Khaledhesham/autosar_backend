@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 import uuid as guid
 from files.models import File, Project
-from wrapper import CompositionARXML, SoftwareComponentARXML
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML
 
 def GetUUID():
     return str(guid.uuid1())
