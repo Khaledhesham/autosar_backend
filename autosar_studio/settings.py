@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'files.apps.FilesConfig',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'arxml'
 ]
 
 MIDDLEWARE_CLASSES = [

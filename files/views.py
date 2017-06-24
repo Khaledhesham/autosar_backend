@@ -1,5 +1,5 @@
-from files.models import File,Directory,Project,ArxmlFile
-from arxml.wrapper import Arxml
+from files.models import File,Directory,Project
+import arxml.models as ArxmlModels
 from django.http import HttpResponse, Http404
 from django.template import loader
 from django.contrib.auth.models import User
@@ -27,6 +27,17 @@ def access_file(request, file_id):
         return HttpResponse(file.Read())
     return False
 
+def GetSoftwareComponentIfOwns(user, id):
+    file = ArxmlModels.SoftwareComponent.objects.get(pk=id)
+
+    if file is None:
+        raise Http404("SWC not found.")
+
+    if not OwnsFile(file, user):
+        raise PermissionDenied
+
+    return file
+
 @api_view(['GET', 'POST', ])
 def generate_project(APIView, project_name, user_id):
     req_user = User.objects.get(id=user_id)
@@ -37,9 +48,8 @@ def generate_project(APIView, project_name, user_id):
     main_directory.save()
     arxml_file = File(name="composition", file_type="arxml", directory=main_directory)
     arxml_file.save()
-    wrapper = Arxml("", main_directory.GetPath())
-    wrapper.CreateComposition(project_name)
-    arxml_file.Write(str(wrapper))
+    composition = ArxmlModels.Composition(file=arxml_file, project=project)
+    composition.save()
     sub_directory = Directory(name=project_name, parent=main_directory)
     sub_directory.save()
     factory = APIRequestFactory()
@@ -50,81 +60,201 @@ def generate_project(APIView, project_name, user_id):
 @api_view(['POST'])
 def add_software_component(request):
     project = Project.objects.get(id=request.POST['project_id'])
-    if project.user == request.user:
-        sub_directory = Directory(name=project.name, parent=project.directory)
-        sub_directory.save()
-        File(name="components", file_type="c", directory=sub_directory).save()
-        File(name="components", file_type="h", directory=sub_directory).save()
+    if project is not None and project.user == request.user:
         file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
         file.save()
-        arxml = ArxmlFile(file=file,swc_uid='')
-        return HttpResponse(str(arxml.CreateSoftwareComponent(request.POST['name'], request.POST['x'], request.POST['y'])))
-    raise PermissionDenied
+        swc = SoftwareComponent(composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
+        swc.save()
+        return HttpResponse(swc.id)
+    return HttpResponse("Permission Denied")
 
 @api_view(['POST'])
 def add_interface(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None and OwnsFile(file, request.user):
-        raise Http404("SWC not found.")
-    uid = file.AddInterface(request.POST['name'])
-    return HttpResponse(uid)
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+        interface = ArxmlModels.Interface(name=request.POST['name'], swc=file.softwarecomponent)
+        interface.save()
+        return HttpResponse(interface.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_port(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("Port not found.")
-    uid = file.AddPort(request.POST['type'], request.POST['name'], request.POST['interface'])
-    return HttpResponse(uid)
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+        
+        type = "R-PORT-PROTOTYPE"
+        if request.POST['type'] == "P":
+            type = "P-PORT-PROTOTYPE"
+
+        port = ArxmlModels.Port(name=request.POST['name'], swc=file.softwarecomponent, type=type)
+        port.save()
+        return HttpResponse(port.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
+
+@api_view(['POST'])
+def set_port_interface(request):
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+        if interface is None or interface.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Interface")
+
+        port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+        if port is None or port.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Port")
+
+        port.interface = interface
+        port.save()
+        return HttpResponse("True")
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_dataType(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.AddDataType(request.POST['type']))
+    try:
+        swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        if request.POST['type'] not in ["Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32"]:
+            return HttpResponse("Unsupported Type")
+
+        data_type = ArxmlModels.DataType(type=request.POST['type'], swc=file.softwarecomponent)
+        data_type.save()
+        return HttpResponse("True")
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_dataElement(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.AddDataElement(request.POST['interface_uid'], request.POST['name'], request.POST['type']))
+    try:
+        GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+        if interface is None or interface.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Interface")
+        
+        data_type = ArxmlModels.DataType.objects.get(name=request.POST['type'])
+        if data_type is None or data_type.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Type")
+
+        element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
+        element.save()
+        return HttpResponse(element.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_runnable(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.AddRunnable(request.POST['name'], request.POST['concurrent']))
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+        runnable = ArxmlModels.Runnable(name=request.POST['name'], concurrent=bool(request.POST['concurrent']), swc=file.softwarecomponent)
+        runnable.save()
+        return HttpResponse(runnable.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_timingEvent(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.AddTimingEvent(request.POST['name'], request.POST['runnable_name'], request.POST['period'], request.POST['swc_name']))
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+        if runnable is None or runnable.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Runnable")
+
+        event = ArxmlModels.TimingEvent(name=request.POST['name'], runnable=runnable, period=float(request.POST['period']), swc=file.softwarecomponent)
+        event.save()
+        return HttpResponse(event.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def add_dataAccess(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.AddDataAccess(request.POST['runnable_uid'], request.POST['type'], request.POST['port_type'], request.POST['port_name'], request.POST['interface'], request.POST['data_element']))
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+        if runnable is None or runnable.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Runnable")
+
+        element = ArxmlModels.DataElement.objects.get(pk=request.POST['element_id'])
+        if element is None or element.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Data Element")
+
+        type = "DATA-READ-ACCESSS"
+        if request.POST['type'] == "WRITE":
+            type = "DATA-WRITE-ACCESSS"
+
+        access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element=element, type=type)
+        access.save()
+        return HttpResponse(access.id)
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def delete_softwareComponent(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.DeleteSoftwareComponent(request.POST['name']))
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+        file.delete()
+        return HttpResponse("True")
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 @api_view(['POST'])
 def remove_port(request):
-    file = ArxmlFile.objects.get(swc_uid=request.POST['swc_uid'])
-    if file is None:
-        raise Http404("SWC not found.")
-    return HttpResponse(file.RemovePort(request.POST['port_id']))
+    try:
+        file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+        port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+        if port is None or port.swc != file.softwarecomponent:
+            return HttpResponse("Invalid Port")
+
+        port.delete()
+        return HttpResponse("True")
+    except Http404:
+        return HttpResponse("Not Found")
+    except PermissionDenied:
+        return HttpResponse("Permission Denied")
+    except:
+        return HttpResponse("Error")
 
 def index(request):
     template = loader.get_template('index.html')

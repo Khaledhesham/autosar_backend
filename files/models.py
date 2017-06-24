@@ -9,7 +9,6 @@ from django.db.models.signals import post_delete, pre_delete, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 import os
-from arxml.wrapper import Arxml
 
 # Create your models here.
 
@@ -73,115 +72,6 @@ class File(models.Model):
 
     def Read(self):
         return self.Open().read()
-
-class ArxmlFile(models.Model):
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
-    swc_uid = models.CharField(max_length=20, blank=True)
-    x = models.IntegerField(default=0)
-    y = models.IntegerField(default=0)
-
-    def CreateSoftwareComponent(self, name, pos_x, pos_y):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.CreateSoftwareComponent(name)
-
-        ### Alter Composition 
-        file = open(self.file.directory.GetPath() + "/composition.arxml", mode="rb").read()
-        compositionWrapper = Arxml(file.decode('utf-8'),self.file.directory.GetPath())
-        compositionWrapper.AddComponentToComposition(name,"/" + name + "_pkg/" + name + "_swc/" + name)
-        f = open(self.file.directory.GetPath() + "/composition.arxml", mode="w+")
-        f.write(str(compositionWrapper))
-        f.close()
-        ###
-
-        self.file.Write(str(wrapper))
-        self.x = pos_x
-        self.y = pos_y
-        self.swc_uid = uuid
-        self.file.save()
-        self.save()
-
-        return uuid
-
-    def AddDataType(self, type):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        state = wrapper.AddDatatype(type)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return state
-
-    def AddDataElement(self, interface_uid, name, type):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddDataElement(interface_uid, name, type, self.file.name)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return uuid
-
-    def AddInterface(self, name):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddInterface(name)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return uuid
-
-    def AddRunnable(self, name, concurrent):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddRunnable(name, name, concurrent)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return uuid
-
-    def AddTimingEvent(self, name, runnable, period, swc_name):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddTimingEvent(name, runnable, period, self.file.name)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return uuid
-
-    def AddDataAccess(self, runnable_uid, type, port_type, port_name, interface, data_element):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddDataAccess(runnable_uid, type, port_type, self.file.name, port_name, interface, data_element)
-        self.file.Write(str(wrapper))
-        self.file.save()
-
-    def AddPort(self, type, name, interface):
-        wrapper = Arxml(self.file.Read().decode('utf-8'), self.file.directory.GetPath())
-        uuid = wrapper.AddPort(type, self.file.name, name, interface)
-        self.file.Write(str(wrapper))
-        self.file.save()
-        return uuid
-
-    def DeleteSoftwareComponent(self, name):
-        if self.file.name != name:
-            return False
-
-        ### Alter Composition
-        file = open(self.file.directory.GetPath() + "/composition.arxml", mode="rb").read()
-        compositionWrapper = Arxml(file,self.file.directory.GetPath())
-        compositionWrapper.RemoveComponentFromComposition(name)
-        f = open(self.file.directory.GetPath() + "/composition.arxml", mode="w+")
-        f.write(str(compositionWrapper))
-        f.close()
-        ###
-
-        self.file.delete()
-        return True
-
-    def RemovePort(self, uid):
-        wrapper = Arxml(self.file.Read(), self.file.directory.GetPath())
-        removed, name = wrapper.RemovePort(uid)
-
-        if removed is True:
-            ### Alter Composition
-            file = open(self.file.directory.GetPath() + "/composition.arxml", mode="rb").read()
-            compositionWrapper = Arxml(file,self.file.directory.GetPath())
-            compositionWrapper.RemoveConnectorByPort(name, self.file.name)
-            f = open(self.file.directory.GetPath() + "/composition.arxml", mode="w+")
-            f.write(str(compositionWrapper))
-            f.close()
-            ###
-
-        self.file.Write(str(wrapper))
-        self.file.save()
 
 @receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
