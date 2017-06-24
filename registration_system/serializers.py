@@ -1,4 +1,4 @@
-from rest_framework import serializers, viewsets, routers
+from rest_framework import serializers
 from django.contrib.auth.models import User
 
 # Serializers define the API representation.
