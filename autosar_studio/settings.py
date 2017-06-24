@@ -25,7 +25,7 @@ SECRET_KEY = 't%(qv6*dvg=ed$q(yxsg=n=++wcdkdk!%u+wl)6vh-re*gr&ip'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['autosar-studio-backend.herokuapp.com','localhost','testserver','127.0.0.1']
+ALLOWED_HOSTS = ['autosar-studio-backend.herokuapp.com','localhost','testserver','127.0.0.1',"autosar-studio.herokuapp.com"]
 
 # Application definition
 
