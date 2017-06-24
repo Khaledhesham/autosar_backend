@@ -31,7 +31,7 @@ def GetSoftwareComponentIfOwns(user, id):
     file = ArxmlModels.SoftwareComponent.objects.get(pk=id)
 
     if file is None:
-        raise Http404("SWC not found.")
+        raise Http404
 
     if not OwnsFile(file, user):
         raise PermissionDenied
@@ -50,6 +50,7 @@ def generate_project(APIView, project_name, user_id):
     arxml_file.save()
     composition = ArxmlModels.Composition(file=arxml_file, project=project)
     composition.save()
+    composition.Rewrite()
     sub_directory = Directory(name=project_name, parent=main_directory)
     sub_directory.save()
     factory = APIRequestFactory()
@@ -63,8 +64,10 @@ def add_software_component(request):
     if project is not None and project.user == request.user:
         file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
         file.save()
-        swc = SoftwareComponent(composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
+        swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
         swc.save()
+        swc.Rewrite()
+        project.composition.Rewrite()
         return HttpResponse(swc.id)
     return HttpResponse("Permission Denied")
 
@@ -74,6 +77,7 @@ def add_interface(request):
         file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
         interface = ArxmlModels.Interface(name=request.POST['name'], swc=file.softwarecomponent)
         interface.save()
+        file.swc.Rewrite()
         return HttpResponse(interface.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -93,6 +97,7 @@ def add_port(request):
 
         port = ArxmlModels.Port(name=request.POST['name'], swc=file.softwarecomponent, type=type)
         port.save()
+        file.swc.Rewrite()
         return HttpResponse(port.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -116,6 +121,7 @@ def set_port_interface(request):
 
         port.interface = interface
         port.save()
+        file.swc.Rewrite()
         return HttpResponse("True")
     except Http404:
         return HttpResponse("Not Found")
@@ -129,11 +135,12 @@ def add_dataType(request):
     try:
         swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
-        if request.POST['type'] not in ["Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32"]:
+        if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
             return HttpResponse("Unsupported Type")
 
         data_type = ArxmlModels.DataType(type=request.POST['type'], swc=file.softwarecomponent)
         data_type.save()
+        file.swc.Rewrite()
         return HttpResponse("True")
     except Http404:
         return HttpResponse("Not Found")
@@ -157,6 +164,7 @@ def add_dataElement(request):
 
         element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
         element.save()
+        file.swc.Rewrite()
         return HttpResponse(element.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -171,6 +179,7 @@ def add_runnable(request):
         file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
         runnable = ArxmlModels.Runnable(name=request.POST['name'], concurrent=bool(request.POST['concurrent']), swc=file.softwarecomponent)
         runnable.save()
+        file.swc.Rewrite()
         return HttpResponse(runnable.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -190,6 +199,7 @@ def add_timingEvent(request):
 
         event = ArxmlModels.TimingEvent(name=request.POST['name'], runnable=runnable, period=float(request.POST['period']), swc=file.softwarecomponent)
         event.save()
+        file.swc.Rewrite()
         return HttpResponse(event.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -217,6 +227,7 @@ def add_dataAccess(request):
 
         access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element=element, type=type)
         access.save()
+        file.swc.Rewrite()
         return HttpResponse(access.id)
     except Http404:
         return HttpResponse("Not Found")
@@ -248,6 +259,7 @@ def remove_port(request):
             return HttpResponse("Invalid Port")
 
         port.delete()
+        file.Rewrite()
         return HttpResponse("True")
     except Http404:
         return HttpResponse("Not Found")
@@ -268,7 +280,7 @@ def get_user_projects(request, user_id):
         serializer = ProjectSerializer(Projects, many=True, context={'request': request})
         return Response(serializer.data)
     else:
-        raise PermissionDenied
+        return HttpResponse("Permission Denied")
 
 @api_view(['POST'])
 def delete_project(request, project_id):
@@ -277,7 +289,6 @@ def delete_project(request, project_id):
         if request.user.is_staff or project.user == request.user:
             project.delete()
             return  HttpResponse("Done")
-        raise PermissionDenied
+        return HttpResponse("Permission Denied")
     except Project.DoesNotExist:
-        
-        raise Http404
+        return HttpResponse("Not Found")

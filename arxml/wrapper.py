@@ -29,7 +29,7 @@ class ArxmlWrapper:
             if not elem.tail or not elem.tail.strip():
                 elem.tail = i
             for subelem in elem:
-                Arxml.Indent(subelem, level+1)
+                ArxmlWrapper.Indent(subelem, level+1)
             if not elem.tail or not elem.tail.strip():
                 elem.tail = j
         else:
@@ -43,7 +43,7 @@ class ArxmlWrapper:
         ET.SubElement(sdgs, "SDG", GID="AutosarStudio::IdentifiableOptions")
 
     def __str__(self):
-        Arxml.Indent(self.root)
+        ArxmlWrapper.Indent(self.root)
         return ET.tostring(self.root).decode("utf-8")
 
 class SoftwareComponentARXML(ArxmlWrapper):
@@ -71,7 +71,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
         ###
 
         ### DataTypes
-        for datatype in swc.datatype_set:
+        for datatype in swc.datatype_set.all():
             if datatype.type == "Boolean":
                 data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
                 ET.SubElement(data_type, "SHORT-NAME").text = type
@@ -90,16 +90,16 @@ class SoftwareComponentARXML(ArxmlWrapper):
         ###
 
         ### Software Component
-        swc = ET.SubElement(elements, "APPLICATION-SOFTWARE-COMPONENT-TYPE", UUID=swc.uid)
-        ET.SubElement(swc, "SHORT_NAME").text = swc.name
+        swc_element = ET.SubElement(elements, "APPLICATION-SOFTWARE-COMPONENT-TYPE", UUID=swc.uid)
+        ET.SubElement(swc_element, "SHORT_NAME").text = swc.name
 
-        self.AddAdminData(swc)
+        self.AddAdminData(swc_element)
         ###
 
         ### Ports
-        ports = ET.SubElement(swc, "PORTS")
+        ports = ET.SubElement(swc_element, "PORTS")
 
-        for swc_port in swc.port_set:
+        for swc_port in swc.port_set.all():
             port = ET.SubElement(ports, swc_port.type, UUID=swc_port.uid)
             ET.SubElement(port, "SHORT_NAME").text = swc_port.name
 
@@ -123,7 +123,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
         events = ET.SubElement(behavior, "EVENTS")
 
-        for event in swc.timingevent_set:
+        for event in swc.timingevent_set.all():
             timing_event = ET.SubElement(events, "TIMING-EVENT", UUID=event.uid)
             ET.SubElement(timing_event, "SHORT-NAME").text = event.name
 
@@ -134,7 +134,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
         runnables = ET.SubElement(behavior, "RUNNABLES")
 
-        for runnable in swc.runnable_set:
+        for runnable in swc.runnable_set.all():
             run = ET.SubElement(runnables, "RUNNABLE-ENTITY", UUID=runnable.uid)
             ET.SubElement(run, "SHORT-NAME").text = runnable.name
 
@@ -148,7 +148,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
             data_read = ET.SubElement(run, "DATA-READ-ACCESSS")
             data_write = ET.SubElement(run, "DATA-WRITE-ACCESSS")
 
-            for acc in runnable.dataaccess_set:
+            for acc in runnable.dataaccess_set.all():
                 if acc.type == "DATA-WRITE-ACCESSS":
                     node = data_write
                 else:
@@ -178,7 +178,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
         ###
 
         ### Interfaces
-        for swc_interface in swc.interface_set:
+        for swc_interface in swc.interface_set.all():
             interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=swc_interface.uid)
 
             ET.SubElement(interface, "SHORT-NAME").text = swc_interface.name
@@ -187,7 +187,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             data_elements = ET.SubElement(interface, "DATA-ELEMENTS")
 
-            for data_ele in swc_interface.dataelement_set:
+            for data_ele in swc_interface.dataelement_set.all():
                 data_element = ET.SubElement(interface, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
 
                 ET.SubElement(data_element, "SHORT-NAME").text = data_ele.name
@@ -235,7 +235,7 @@ class CompositionARXML(ArxmlWrapper):
         ### Components
         components = ET.SubElement(composition_type, "COMPONENTS")
 
-        for swc in composition.softwarecomponent_set:
+        for swc in composition.softwarecomponent_set.all():
             component_prototype = ET.SubElement(components, "COMPONENT-PROTOTYPE")
             ET.SubElement(component_prototype, "SHORT_NAME").text = swc.name
             ET.SubElement(component_prototype, "TYPE-TREF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name
@@ -244,7 +244,7 @@ class CompositionARXML(ArxmlWrapper):
         ### Connectors
         connectors = ET.SubElement(composition_type, "CONNECTORS")
 
-        for connector in connectors.connector_set:
+        for connector in composition.connector_set.all():
             assembly_connector_prototype = ET.SubElement(connectors, "ASSEMBLY-CONNECTOR-PROTOTYPE", UUID=connector.uid)
 
             ET.SubElement(assembly_connector_prototype, "SHORT_NAME").text = connectpr.p_port.name + "Composition"
