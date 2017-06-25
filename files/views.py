@@ -25,7 +25,7 @@ def access_file(request, file_id):
     file = File.objects.get(id=file_id)
     if OwnsFile(file, request.user) is True:
         return HttpResponse(file.Read())
-    return False
+    return HttpResponse("Permission Denied")
 
 def GetSoftwareComponentIfOwns(user, id):
     file = ArxmlModels.SoftwareComponent.objects.get(pk=id)
