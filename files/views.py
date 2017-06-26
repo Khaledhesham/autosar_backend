@@ -25,7 +25,7 @@ def access_error_wrapper(func):
         except PermissionDenied:
             return APIResponse(550)
         except MultiValueDictKeyError:
-            return APIResponse(404, { 'error' : 'Missing Parameter' } )
+            return APIResponse(500, { 'error' : str(type(MultiValueDictKeyError)), 'message' : MultiValueDictKeyError.message } )
         except Exception as e:
             return APIResponse(500, { 'error' : str(type(e)) } )
     return func_wrapper
