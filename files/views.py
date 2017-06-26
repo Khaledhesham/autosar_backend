@@ -84,7 +84,21 @@ def generate_project(request, project_name):
 @api_view(['POST'])
 @access_error_wrapper
 def add_software_component(request):
-    return JsonResponse(request.POST)
+    project = Project.objects.get(id=request.POST['project_id'])
+    file = File
+    try:
+        if project is not None and project.user == request.user:
+            file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
+            file.save()
+            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
+            swc.save()
+            swc.Rewrite()
+            project.composition.Rewrite()
+            return HttpResponse(swc.id)
+        return APIResponse(550)
+    except Exception as e:
+        file.delete()
+        raise e
 
 @api_view(['POST'])
 @access_error_wrapper
