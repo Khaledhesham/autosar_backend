@@ -54,11 +54,11 @@ def GetSoftwareComponentIfOwns(user, id):
         raise Http404
 
     if not OwnsFile(file, user):
-        raise PermissionDenied 
+        raise PermissionDenied
 
     return file
 
-@api_view(['GET', 'POST', ])
+@api_view(['POST'])
 @access_error_wrapper
 def generate_project(APIView, project_name, user_id):
     req_user = User.objects.get(id=user_id)
@@ -255,5 +255,5 @@ def delete_project(request, project_id):
     project = Project.objects.get(pk=project_id)
     if request.user.is_staff or project.user == request.user:
         project.delete()
-        return  HttpResponse("Done")
+        return HttpResponse("Done")
     return APIResponse(550)
