@@ -14,6 +14,8 @@ def OwnsFile(file, user):
     if user and (user.is_authenticated or user.is_staff):
         if file is None or file.directory.GetProject() is None:
             raise Http404("File doesn't exist")
+        else:
+            return True
     else:
         owner = file.directory.GetProject().user
         if user.is_staff or owner.id == user.id:

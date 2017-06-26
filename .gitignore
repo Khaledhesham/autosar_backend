@@ -4,4 +4,4 @@ staticfiles
 .env
 .idea
 files/storage/
-*.sqlite3
+db.sqlite3
