@@ -11,17 +11,15 @@ from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
 
 def OwnsFile(file, user):
-    if user and (user.is_authenticated or user.is_staff):
+    if user and user.is_authenticated:
         if file is None or file.directory.GetProject() is None:
-            raise Http404("File doesn't exist")
+            raise Http404("Not Found")
         else:
-            return True
-    else:
-        owner = file.directory.GetProject().user
-        if user.is_staff or owner.id == user.id:
-            return True
-        else:
-            raise PermissionDenied
+            owner = file.directory.GetProject().user
+            if user.is_staff or owner.id == user.id:
+                return True
+
+    raise False
 
 @api_view(['GET'])
 def access_file(request, file_id):
