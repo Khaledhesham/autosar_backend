@@ -247,7 +247,7 @@ class CompositionARXML(ArxmlWrapper):
         for connector in composition.connector_set.all():
             assembly_connector_prototype = ET.SubElement(connectors, "ASSEMBLY-CONNECTOR-PROTOTYPE", UUID=connector.uid)
 
-            ET.SubElement(assembly_connector_prototype, "SHORT_NAME").text = connectpr.p_port.name + "Composition"
+            ET.SubElement(assembly_connector_prototype, "SHORT_NAME").text = connector.p_port.name + "Composition"
 
             p_component_path =  "/" + connector.p_port.swc.name + "_pkg/" + connector.p_port.swc.name + "_swc/" + connector.p_port.swc.name
             r_component_path =  "/" + connector.r_port.swc.name + "_pkg/" + connector.r_port.swc.name + "_swc/" + connector.r_port.swc.name

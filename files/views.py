@@ -18,7 +18,9 @@ def access_error_wrapper(func):
     def func_wrapper(request, *args, **kwargs):
         try:
             return func(request, *args, **kwargs)
-        except Http404, ObjectDoesNotExist:
+        except Http404:
+            return APIResponse(404)
+        except ObjectDoesNotExist:
             return APIResponse(404)
         except PermissionDenied:
             return APIResponse(550)
@@ -60,8 +62,8 @@ def GetSoftwareComponentIfOwns(user, id):
 
 @api_view(['POST'])
 @access_error_wrapper
-def generate_project(APIView, project_name, user_id):
-    req_user = User.objects.get(id=user_id)
+def generate_project(APIView, request, project_name):
+    req_user = request.user
     project = Project(name=project_name , user=req_user)
     project.save()
     directory_name = project_name + str("-") + str(project.id)
@@ -142,7 +144,7 @@ def set_port_interface(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataType(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
         return APIResponse(404, { 'error' : "Unsupported Type" })
@@ -155,7 +157,7 @@ def add_dataType(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataElement(request):
-    GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
     if interface is None or interface.swc != file.softwarecomponent:

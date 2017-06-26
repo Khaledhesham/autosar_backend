@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^admin/?', admin.site.urls),
     url(r'^users/token/?$', auth_views.obtain_auth_token),
     url(r'^api-auth/?', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^projects/generate/(?P<project_name>[A-Za-z0-9_-]+)/(?P<user_id>[0-9]+)/?$',views.generate_project),
+    url(r'^projects/generate/(?P<project_name>[A-Za-z0-9_-]+)/?$',views.generate_project),
     url(r'^arxml/swc/add/?$',views.add_software_component),    
     url(r'^arxml/swc/delete/?$',views.delete_softwareComponent),    
     url(r'^arxml/interface/add/?$',views.add_interface),
