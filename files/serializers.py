@@ -46,4 +46,3 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         fields = ('name', 'id', 'directory', 'user')
     directory = DirectorySerializer()
-    user = UserSerializer()

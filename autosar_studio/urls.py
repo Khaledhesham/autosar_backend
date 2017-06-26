@@ -67,7 +67,7 @@ urlpatterns = [
     url(r'^arxml/runnable/add/?$',views.add_runnable),
     url(r'^arxml/timing_event/add/?$',views.add_timingEvent),
     url(r'^arxml/data_access/add/?$',views.add_dataAccess),
-    url(r'^projects/(?P<user_id>[0-9]+)/?$',views.get_user_projects),
+    url(r'^users/projects/(?P<user_id>[0-9]+)/?$',views.get_user_projects),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/?$',views.delete_project),
     url(r'^check_token/?$',reg_views.check),
     url(r'^', include(router.urls)),
