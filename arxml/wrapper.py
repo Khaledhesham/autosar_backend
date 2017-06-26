@@ -155,7 +155,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
                     node = data_read
 
                 prototype_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name + "/" + acc.port.name
-                data_element_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + acc.data_element.interface + "/" + acc.data_element.name
+                data_element_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + acc.data_element.interface.name + "/" + acc.data_element.name
 
                 access_node = ET.SubElement(node, acc.type)
                 ET.SubElement(access_node, "SHORT-NAME").text = acc.name
