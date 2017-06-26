@@ -19,8 +19,8 @@ class SoftwareComponent(models.Model):
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
 
-    x = models.IntegerField(default=0)
-    y = models.IntegerField(default=0)
+    x = models.FloatField(default=0.0)
+    y = models.FloatField(default=0.0)
 
     def Rewrite(self):
         arxml = SoftwareComponentARXML(self, self.file.directory.GetPath())
