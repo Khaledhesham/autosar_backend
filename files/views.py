@@ -90,7 +90,7 @@ def add_software_component(request):
         if project is not None and project.user == request.user:
             file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
             file.save()
-            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
+            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=float(request.POST['x']), y=float(request.POST['y']))
             swc.save()
             swc.Rewrite()
             project.composition.Rewrite()
