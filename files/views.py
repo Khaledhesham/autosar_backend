@@ -21,6 +21,7 @@ def OwnsFile(file, user):
         else:
             raise PermissionDenied
 
+@api_view(['GET'])
 def access_file(request, file_id):
     file = File.objects.get(id=file_id)
     if OwnsFile(file, request.user) is True:
