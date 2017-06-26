@@ -25,7 +25,7 @@ def access_error_wrapper(func):
         except PermissionDenied:
             return APIResponse(550)
         except MultiValueDictKeyError:
-            return APIResponse(500, { 'error' : str(type(MultiValueDictKeyError)), 'message' : MultiValueDictKeyError.message } )
+            return APIResponse(404, { 'error' : 'Missing Parameter' } )
         except Exception as e:
             return APIResponse(500, { 'error' : str(type(e)) } )
     return func_wrapper
@@ -84,21 +84,7 @@ def generate_project(request, project_name):
 @api_view(['POST'])
 @access_error_wrapper
 def add_software_component(request):
-    project = Project.objects.get(id=request.POST['project_id'])
-    file = File
-    try:
-        if project is not None and project.user == request.user:
-            file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
-            file.save()
-            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
-            swc.save()
-            swc.Rewrite()
-            project.composition.Rewrite()
-            return HttpResponse(swc.id)
-        return APIResponse(550)
-    except Exception as e:
-        file.delete()
-        raise e
+    return JsonResponse(request.POST)
 
 @api_view(['POST'])
 @access_error_wrapper
