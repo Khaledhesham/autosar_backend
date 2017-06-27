@@ -46,7 +46,8 @@ def access_file(request, file_id):
     return APIResponse(550)
 
 def GetSoftwareComponentIfOwns(user, id):
-    file = ArxmlModels.SoftwareComponent.objects.get(pk=id).file
+    component = ArxmlModels.SoftwareComponent.objects.get(pk=id)
+    file = component.file
 
     if file is None:
         raise Http404
@@ -54,7 +55,7 @@ def GetSoftwareComponentIfOwns(user, id):
     if not OwnsFile(file, user):
         raise PermissionDenied
 
-    return file
+    return component
 
 def GetCompositionIfOwns(user, id):
     file = ArxmlModels.Composition.objects.get(project_id=id)
@@ -110,109 +111,108 @@ def add_software_component(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_interface(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    interface = ArxmlModels.Interface(name=request.POST['name'], swc=file.softwarecomponent)
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
     interface.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(interface.id)
 
 @api_view(['POST'])
-@access_error_wrapper
 def add_port(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     type = "R-PORT-PROTOTYPE"
     if request.POST['type'] == "P":
         type = "P-PORT-PROTOTYPE"
 
-    port = ArxmlModels.Port(name=request.POST['name'], swc=file.softwarecomponent, type=type)
+    port = ArxmlModels.Port(name=request.POST['name'], swc=swc, type=type)
     port.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(port.id)
 
 @api_view(['POST'])
 @access_error_wrapper
 def set_port_interface(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    if interface is None or interface.swc != file.softwarecomponent:
+    if interface is None or interface.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Interface" })
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
-    if port is None or port.swc != file.softwarecomponent:
+    if port is None or port.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Port" })
 
     port.interface = interface
     port.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse("True")
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataType(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
         return APIResponse(404, { 'error' : "Unsupported Type" })
 
-    data_type = ArxmlModels.DataType(type=request.POST['type'], swc=file.softwarecomponent)
+    data_type = ArxmlModels.DataType(type=request.POST['type'], swc=swc)
     data_type.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse("True")
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataElement(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    if interface is None or interface.swc != file.softwarecomponent:
+    if interface is None or interface.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Interface" })
     
     data_type = ArxmlModels.DataType.objects.get(name=request.POST['type'])
-    if data_type is None or data_type.swc != file.softwarecomponent:
+    if data_type is None or data_type.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Type" })
 
     element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
     element.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(element.id)
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_runnable(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    runnable = ArxmlModels.Runnable(name=request.POST['name'], concurrent=bool(request.POST['concurrent']), swc=file.softwarecomponent)
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    runnable = ArxmlModels.Runnable(name=request.POST['name'], concurrent=bool(request.POST['concurrent']), swc=swc)
     runnable.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(runnable.id)
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_timingEvent(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     if runnable is None or runnable.swc != file.softwarecomponent:
         return APIResponse(404, { 'error' : "Invalid Runnable" })
 
-    event = ArxmlModels.TimingEvent(name=request.POST['name'], runnable=runnable, period=float(request.POST['period']), swc=file.softwarecomponent)
+    event = ArxmlModels.TimingEvent(name=request.POST['name'], runnable=runnable, period=float(request.POST['period']), swc=swc)
     event.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(event.id)
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataAccess(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
-    if runnable is None or runnable.swc != file.softwarecomponent:
+    if runnable is None or runnable.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Runnable" })
 
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['element_id'])
-    if element is None or element.swc != file.softwarecomponent:
+    if element is None or element.swc != swc:
         return APIResponse(404, { 'error' : "Invalid DataElement" })
 
     type = "DATA-READ-ACCESSS"
@@ -221,37 +221,36 @@ def add_dataAccess(request):
 
     access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element=element, type=type)
     access.save()
-    file.swc.Rewrite()
+    swc.Rewrite()
     return HttpResponse(access.id)
 
 @api_view(['POST'])
-@access_error_wrapper
 def delete_softwareComponent(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    file.delete()
-    file.softwarecomponent.composition.Rewrite()
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    composition = swc.composition
+    swc.file.delete()
+    composition.Rewrite()
     return HttpResponse("True")
 
 @api_view(['POST'])
 @access_error_wrapper
 def remove_port(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
-    if port is None or port.swc != file.softwarecomponent:
+    if port is None or port.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Port" })
 
     port.delete()
-    file.Rewrite()
+    swc.Rewrite()
     return HttpResponse("True")
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_connector(request):
-    project = Project.objects.get(pk=request.POST['project_id'])
-    composition = ArxmlModels.Composition(project=project)
     p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port'])
     r_port = ArxmlModels.Port.objects.get(pk=request.POST['r_port'])
+    composition = p_port.swc.composition
     conn = ArxmlModels.Connector(composition=composition,p_port=p_port,r_port=r_port)
     conn.save()
     composition.Rewrite()
