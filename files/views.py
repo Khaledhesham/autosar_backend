@@ -1,8 +1,6 @@
 from files.models import File,Directory,Project
 import arxml.models as ArxmlModels
 from django.http import HttpResponse, Http404, JsonResponse
-from django.template import loader
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -31,15 +29,13 @@ def access_error_wrapper(func):
     return func_wrapper
 
 def OwnsFile(file, user):
-    if user and user.is_authenticated:
-        if file is None or file.directory.GetProject() is None:
-            raise Http404
-        else:
-            owner = file.directory.GetProject().user
-            if user.is_staff or owner.id == user.id:
-                return True
-
-    raise False
+    if file is None or file.directory.GetProject() is None:
+        raise Http404
+    else:
+        owner = file.directory.GetProject().user
+        if user.is_staff or owner.id == user.id:
+            return True
+    return False
 
 @api_view(['GET'])
 @access_error_wrapper
@@ -50,7 +46,19 @@ def access_file(request, file_id):
     return APIResponse(550)
 
 def GetSoftwareComponentIfOwns(user, id):
-    file = ArxmlModels.SoftwareComponent.objects.get(pk=id)
+    component = ArxmlModels.SoftwareComponent.objects.get(pk=id)
+    file = component.file
+
+    if file is None:
+        raise Http404
+
+    if not OwnsFile(file, user):
+        raise PermissionDenied
+
+    return component
+
+def GetCompositionIfOwns(user, id):
+    file = ArxmlModels.Composition.objects.get(project_id=id)
 
     if file is None:
         raise Http404
@@ -112,15 +120,15 @@ def add_interface(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_port(request):
-    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    
+    component = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
     type = "R-PORT-PROTOTYPE"
     if request.POST['type'] == "P":
         type = "P-PORT-PROTOTYPE"
 
-    port = ArxmlModels.Port(name=request.POST['name'], swc=file.softwarecomponent, type=type)
+    port = ArxmlModels.Port(name=request.POST['name'], swc=component, type=type)
     port.save()
-    file.swc.Rewrite()
+    component.Rewrite()
     return HttpResponse(port.id)
 
 @api_view(['POST'])
@@ -237,9 +245,17 @@ def remove_port(request):
     file.Rewrite()
     return HttpResponse("True")
 
-def index(request):
-    template = loader.get_template('index.html')
-    return HttpResponse(template.render({}, request))
+@api_view(['POST'])
+@access_error_wrapper
+def add_connector(request):
+    project = Project.objects.get(pk=request.POST['project_id'])
+    composition = ArxmlModels.Composition(project=project)
+    p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port'])
+    r_port = ArxmlModels.Port.objects.get(pk=request.POST['r_port'])
+    conn = ArxmlModels.Connector(composition=composition,p_port=p_port,r_port=r_port)
+    conn.save()
+    composition.Rewrite()
+    return HttpResponse(conn.id)
 
 @api_view(['GET'])
 @access_error_wrapper

@@ -34,7 +34,7 @@ class Port(models.Model):
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     type = models.CharField(max_length=40)
-    interface = models.ForeignKey('Interface', on_delete=models.DO_NOTHING, blank=True)
+    interface = models.ForeignKey('Interface', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
         return self.name

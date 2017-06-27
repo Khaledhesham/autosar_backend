@@ -106,7 +106,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
             self.AddAdminData(port)
 
             interface_path = ""
-            if port.interface is not None:
+            if swc_port.interface is not None:
                 interface_path = "/" + swc.name + "_pkg" + "/" + swc.name + "_swc/" + port.interface.name
 
             if type == "R-PORT-PROTOTYPE":
