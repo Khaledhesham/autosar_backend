@@ -46,8 +46,7 @@ def access_file(request, file_id):
     return APIResponse(550)
 
 def GetSoftwareComponentIfOwns(user, id):
-    component = ArxmlModels.SoftwareComponent.objects.get(pk=id)
-    file = component.file
+    file = ArxmlModels.SoftwareComponent.objects.get(pk=id).file
 
     if file is None:
         raise Http404
@@ -55,7 +54,7 @@ def GetSoftwareComponentIfOwns(user, id):
     if not OwnsFile(file, user):
         raise PermissionDenied
 
-    return component
+    return file
 
 def GetCompositionIfOwns(user, id):
     file = ArxmlModels.Composition.objects.get(project_id=id)
@@ -120,15 +119,15 @@ def add_interface(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_port(request):
-    component = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     type = "R-PORT-PROTOTYPE"
     if request.POST['type'] == "P":
         type = "P-PORT-PROTOTYPE"
 
-    port = ArxmlModels.Port(name=request.POST['name'], swc=component, type=type)
+    port = ArxmlModels.Port(name=request.POST['name'], swc=file.softwarecomponent, type=type)
     port.save()
-    component.Rewrite()
+    file.swc.Rewrite()
     return HttpResponse(port.id)
 
 @api_view(['POST'])
@@ -230,6 +229,7 @@ def add_dataAccess(request):
 def delete_softwareComponent(request):
     file = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     file.delete()
+    file.softwarecomponent.composition.Rewrite()
     return HttpResponse("True")
 
 @api_view(['POST'])
