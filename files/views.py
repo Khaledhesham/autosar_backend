@@ -9,8 +9,9 @@ from rest_framework.test import APIRequestFactory
 from django.utils.datastructures import MultiValueDictKeyError
 from .serializers import ProjectSerializer
 
-def APIResponse(status, message = {}):
-    return JsonResponse(message,status=status)
+
+def APIResponse(status, message={}):
+    return JsonResponse(message, status=status)
 
 def access_error_wrapper(func):
     def func_wrapper(request, *args, **kwargs):
@@ -45,6 +46,7 @@ def access_file(request, file_id):
         return HttpResponse(file.Read())
     return APIResponse(550)
 
+
 def GetSoftwareComponentIfOwns(user, id):
     component = ArxmlModels.SoftwareComponent.objects.get(pk=id)
     file = component.file
@@ -57,8 +59,10 @@ def GetSoftwareComponentIfOwns(user, id):
 
     return component
 
+
 def GetCompositionIfOwns(user, id):
-    file = ArxmlModels.Composition.objects.get(project_id=id)
+    composition = ArxmlModels.Composition.objects.get(project_id=id)
+    file = composition.file
 
     if file is None:
         raise Http404
@@ -66,7 +70,8 @@ def GetCompositionIfOwns(user, id):
     if not OwnsFile(file, user):
         raise PermissionDenied
 
-    return file
+    return composition
+
 
 @api_view(['POST'])
 @access_error_wrapper
@@ -89,6 +94,10 @@ def generate_project(request, project_name):
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
     return Response(ser.data)
 
+
+### software component
+
+
 @api_view(['POST'])
 @access_error_wrapper
 def add_software_component(request):
@@ -108,14 +117,31 @@ def add_software_component(request):
         file.delete()
         raise e
 
+
 @api_view(['POST'])
 @access_error_wrapper
-def add_interface(request):
+def delete_softwareComponent(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
-    interface.save()
+    composition = swc.composition
+    swc.file.delete()
+    composition.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_softwareComponent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    composition = swc.composition
+    swc.name = request.POST['name']
+    swc.save()
     swc.Rewrite()
-    return HttpResponse(interface.id)
+    composition.Rewrite()
+    return HttpResponse("True")
+
+
+### port
+
 
 @api_view(['POST'])
 def add_port(request):
@@ -130,6 +156,51 @@ def add_port(request):
     swc.Rewrite()
     return HttpResponse(port.id)
 
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_port(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+    if port is None or port.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Port" })
+
+    port.delete()
+    swc.Rewrite()
+    swc.composition.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_port(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+    if port is None or port.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Port" })
+
+    port.name = request.POST['name']
+    port.save()
+    swc.Rewrite()
+    swc.composition.Rewrite()
+    return HttpResponse("True")
+
+
+### interface
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_interface(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
+    interface.save()
+    swc.Rewrite()
+    return HttpResponse(interface.id)
+
+
 @api_view(['POST'])
 @access_error_wrapper
 def set_port_interface(request):
@@ -137,20 +208,45 @@ def set_port_interface(request):
 
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
     if interface is None or interface.swc != swc:
-        return APIResponse(404, { 'error' : "Invalid Interface" })
+        return APIResponse(404, {'error': "Invalid Interface" })
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
     if port is None or port.swc != swc:
-        return APIResponse(404, { 'error' : "Invalid Port" })
+        return APIResponse(404, {'error': "Invalid Port"})
 
     port.interface = interface
     port.save()
     swc.Rewrite()
     return HttpResponse("True")
 
+
 @api_view(['POST'])
 @access_error_wrapper
-def add_dataType(request):
+def remove_interface(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+    interface.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_interface(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+    interface.name = request.POST['name']
+    interface.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### datatype
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_datatype(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
@@ -159,7 +255,25 @@ def add_dataType(request):
     data_type = ArxmlModels.DataType(type=request.POST['type'], swc=swc)
     data_type.save()
     swc.Rewrite()
+    return HttpResponse(data_type.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_datatype(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
+        return APIResponse(404, { 'error' : "Unsupported Type" })
+
+    data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
+    data_type.delete()
+    swc.Rewrite()
     return HttpResponse("True")
+
+
+### data element
+
 
 @api_view(['POST'])
 @access_error_wrapper
@@ -179,6 +293,31 @@ def add_dataElement(request):
     swc.Rewrite()
     return HttpResponse(element.id)
 
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_dataElement(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
+    element.name = request.POST['name']
+    element.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_dataElement(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
+    element.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### runnable
+
+
 @api_view(['POST'])
 @access_error_wrapper
 def add_runnable(request):
@@ -188,19 +327,69 @@ def add_runnable(request):
     swc.Rewrite()
     return HttpResponse(runnable.id)
 
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_runnable(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    runnable.name = request.POST['name']
+    runnable.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_runnable(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    runnable.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### timing events
+
+
 @api_view(['POST'])
 @access_error_wrapper
 def add_timingEvent(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
-    if runnable is None or runnable.swc != file.softwarecomponent:
+    if runnable is None or runnable.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Runnable" })
 
     event = ArxmlModels.TimingEvent(name=request.POST['name'], runnable=runnable, period=float(request.POST['period']), swc=swc)
     event.save()
     swc.Rewrite()
     return HttpResponse(event.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_timingEvent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
+    event.name = request.POST['name']
+    event.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_timingEvent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
+    event.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### data access
+
 
 @api_view(['POST'])
 @access_error_wrapper
@@ -224,37 +413,55 @@ def add_dataAccess(request):
     swc.Rewrite()
     return HttpResponse(access.id)
 
-@api_view(['POST'])
-def delete_softwareComponent(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    composition = swc.composition
-    swc.file.delete()
-    composition.Rewrite()
-    return HttpResponse("True")
 
 @api_view(['POST'])
 @access_error_wrapper
-def remove_port(request):
+def rename_dataAccess(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-
-    port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
-    if port is None or port.swc != swc:
-        return APIResponse(404, { 'error' : "Invalid Port" })
-
-    port.delete()
+    access = ArxmlModels.DataAccess.objects.get(pk=request.POST['dataAccess_id'])
+    access.name = request.POST['name']
+    access.save()
     swc.Rewrite()
     return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_dataAccess(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    access = ArxmlModels.DataAccess.objects.get(pk=request.POST['dataAccess_id'])
+    access.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### connector
+
 
 @api_view(['POST'])
 @access_error_wrapper
 def add_connector(request):
-    p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port'])
-    r_port = ArxmlModels.Port.objects.get(pk=request.POST['r_port'])
-    composition = p_port.swc.composition
+    composition = GetCompositionIfOwns(request.user, request.POST['project_id'])
+    p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port_id'])
+    r_port = ArxmlModels.Port.objects.get(pk=request.POST['r_port_id'])
     conn = ArxmlModels.Connector(composition=composition,p_port=p_port,r_port=r_port)
     conn.save()
     composition.Rewrite()
     return HttpResponse(conn.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_connector(request):
+    composition = GetCompositionIfOwns(request.user, request.POST['project_id'])
+    conn = ArxmlModels.Connector.objects.get(pk=request.POST['connection_id'])
+    conn.delete()
+    composition.Rewrite()
+    return HttpResponse("True")
+
+
+### project
+
 
 @api_view(['GET'])
 @access_error_wrapper
@@ -265,6 +472,7 @@ def get_user_projects(request, user_id):
         return Response(serializer.data)
     else:
         return APIResponse(550)
+
 
 @api_view(['POST'])
 @access_error_wrapper
