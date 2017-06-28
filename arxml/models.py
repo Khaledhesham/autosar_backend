@@ -62,7 +62,7 @@ class TimingEvent(models.Model):
     def validate_unique(self, exclude=None):
         qs = TimingEvent.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
-            raise ValidationError('Port name must be unique per project')
+            raise ValidationError('Event name must be unique per project')
 
     def save(self, *args, **kwargs):
         self.validate_unique()
@@ -81,7 +81,7 @@ class Runnable(models.Model):
     def validate_unique(self, exclude=None):
         qs = Runnable.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
-            raise ValidationError('Port name must be unique per project')
+            raise ValidationError('Runnable name must be unique per project')
 
     def save(self, *args, **kwargs):
         self.validate_unique()
@@ -100,7 +100,7 @@ class Interface(models.Model):
     def validate_unique(self, exclude=None):
         qs = Interface.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
-            raise ValidationError('Port name must be unique per project')
+            raise ValidationError('Interface name must be unique per project')
 
     def save(self, *args, **kwargs):
         self.validate_unique()
@@ -127,7 +127,7 @@ class DataElement(models.Model):
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
-            raise ValidationError('Port name must be unique per project')
+            raise ValidationError('Data Element name must be unique per project')
 
     def save(self, *args, **kwargs):
         self.validate_unique()
@@ -148,7 +148,7 @@ class DataAccess(models.Model):
     def validate_unique(self, exclude=None):
         qs = DataAccess.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
-            raise ValidationError('Port name must be unique per project')
+            raise ValidationError('Data Access name must be unique per project')
 
     def save(self, *args, **kwargs):
         self.validate_unique()
