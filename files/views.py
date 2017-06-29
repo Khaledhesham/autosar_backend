@@ -13,6 +13,7 @@ from .serializers import ProjectSerializer
 def APIResponse(status, message={}):
     return JsonResponse(message, status=status)
 
+
 def access_error_wrapper(func):
     def func_wrapper(request, *args, **kwargs):
         try:
@@ -29,6 +30,7 @@ def access_error_wrapper(func):
             return APIResponse(500, { 'error' : str(type(e)) } )
     return func_wrapper
 
+
 def OwnsFile(file, user):
     if file is None or file.directory.GetProject() is None:
         raise Http404
@@ -37,6 +39,7 @@ def OwnsFile(file, user):
         if user.is_staff or owner.id == user.id:
             return True
     return False
+
 
 @api_view(['GET'])
 @access_error_wrapper

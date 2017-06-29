@@ -17,6 +17,9 @@ class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField('Date Created', default=timezone.now)
 
+    class Meta:
+        unique_together = (('name', 'user'),)
+
     def __str__(self):
         return self.name
 
