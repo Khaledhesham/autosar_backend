@@ -64,6 +64,7 @@ urlpatterns = [
     url(r'^arxml/interface/delete/?$',views.remove_interface),
     url(r'^arxml/port/add/?$',views.add_port),
     url(r'^arxml/port/set_interface/?$',views.set_port_interface),
+    url(r'^arxml/port/add_data_element/?$',views.add_port_dataElement),
     url(r'^arxml/port/rename/?$',views.rename_port),
     url(r'^arxml/port/delete/?$',views.remove_port),
     url(r'^arxml/datatype/add/?$',views.add_datatype),
