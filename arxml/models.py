@@ -117,7 +117,6 @@ class DataType(models.Model):
     class Meta:
         unique_together = (('type', 'swc'),)
 
-
 class DataElement(models.Model):
     name = models.CharField(max_length=100, default='DataElement')
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
@@ -137,12 +136,19 @@ class DataElement(models.Model):
     def __str__(self):
         return self.name
 
+class DataElementRef(models.Model):
+    port = models.ForeignKey(Port, on_delete=models.CASCADE)
+    data_element = models.ForeignKey(DataElement, on_delete=models.CASCADE)
+    timeout = models.FloatField(default=60.0)
+
+    class Meta:
+        unique_together = (('port', 'data_element'),)
+
 class DataAccess(models.Model):
     name = models.CharField(max_length=100, default='DataAccess')
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     runnable = models.ForeignKey(Runnable, on_delete=models.CASCADE)
-    data_element = models.ForeignKey(DataElement, on_delete=models.CASCADE)
-    port = models.ForeignKey(Port, on_delete=models.CASCADE)
+    data_element_ref = models.ForeignKey(DataElementRef, on_delete=models.CASCADE)
     type = models.CharField(max_length=20)
 
     def validate_unique(self, exclude=None):
@@ -172,7 +178,6 @@ class Connector(models.Model):
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
     p_port = models.ForeignKey(Port, on_delete=models.CASCADE, related_name='p_port')
     r_port = models.ForeignKey(Port, on_delete=models.CASCADE, related_name='r_port')
-
 
     class Meta:
         unique_together = (('p_port', 'composition'),('r_port', 'composition'),)

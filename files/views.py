@@ -222,6 +222,29 @@ def set_port_interface(request):
 
 @api_view(['POST'])
 @access_error_wrapper
+def add_port_dataElement(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    data_element = ArxmlModels.DataElement.objects.get(pk=request.POST['data_element_id'])
+    if interface is None or interface.swc != swc:
+        return APIResponse(404, {'error': "Invalid Data Element" })
+
+    port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+    if port is None or port.swc != swc:
+        return APIResponse(404, {'error': "Invalid Port"})
+
+    interface = port.interface
+
+    if data_element.interface != interface:
+        return APIResponse(404, {'error': "Data Element Doesn't belong to the Port's Interface"})
+
+    ref = ArxmlModels.DataElementRef(data_element=data_element, port=port)
+    ref.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+@api_view(['POST'])
+@access_error_wrapper
 def remove_interface(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
@@ -400,15 +423,15 @@ def add_dataAccess(request):
     if runnable is None or runnable.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Runnable" })
 
-    element = ArxmlModels.DataElement.objects.get(pk=request.POST['element_id'])
-    if element is None or element.swc != swc:
-        return APIResponse(404, { 'error' : "Invalid DataElement" })
+    element = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
+    if element is None or element.port.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid DataElement Reference" })
 
     type = "DATA-READ-ACCESSS"
     if request.POST['type'] == "WRITE":
         type = "DATA-WRITE-ACCESSS"
 
-    access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element=element, type=type)
+    access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element_ref=element, type=type)
     access.save()
     swc.Rewrite()
     return HttpResponse(access.id)
