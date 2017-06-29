@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^arxml/swc/add/?$',views.add_software_component),
     url(r'^arxml/swc/rename/?$',views.rename_softwareComponent),
     url(r'^arxml/swc/delete/?$',views.delete_softwareComponent),
+    url(r'^arxml/swc/move/?$',views.move_softwareComponent),
     url(r'^arxml/interface/add/?$',views.add_interface),
     url(r'^arxml/interface/rename/?$',views.rename_interface),
     url(r'^arxml/interface/delete/?$',views.remove_interface),

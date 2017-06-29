@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from files.models import Project,File,Directory
-from registration_system.serializers import UserSerializer
 
 class RecursiveField(serializers.Serializer):
     def to_representation(self, value):
@@ -27,7 +26,6 @@ class DirectorySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Directory
-        # fields = ('name', 'id', 'file_set' , 'directory_set')
         fields = ('name', 'id', 'children', 'type')
 
     def get_type(self,obj):
