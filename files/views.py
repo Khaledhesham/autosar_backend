@@ -9,6 +9,7 @@ from rest_framework.test import APIRequestFactory
 from django.utils.datastructures import MultiValueDictKeyError
 from .serializers import ProjectSerializer
 import shutil
+import os
 
 
 def APIResponse(status, message={}):
@@ -518,5 +519,6 @@ def download_project(request, project_id):
         response['Content-Type'] = 'application/zip, application/octet-stream'
         response['Content-Disposition'] = 'attachment; filename="%s.zip"' \
                                           % project.name
+        os.remove("files/storage/" + project.name + ".zip")
         return response
     return APIResponse(550)
