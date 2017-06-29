@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from django.utils.datastructures import MultiValueDictKeyError
 from .serializers import ProjectSerializer
+from arxml.serializers import CompositionSerializer
 import shutil
 import os
 
@@ -479,7 +480,6 @@ def remove_dataAccess(request):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def add_connector(request):
     composition = GetCompositionIfOwns(request.user, request.POST['project_id'])
     p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port_id'])
@@ -518,6 +518,15 @@ def delete_project(request, project_id):
     if request.user.is_staff or project.user == request.user:
         project.delete()
         return HttpResponse("Done")
+    return APIResponse(550)
+
+@api_view(['POST'])
+def serialize_project(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    if request.user.is_staff or project.user == request.user:
+        composition = ArxmlModels.Composition.objects.get(project=project)
+        serializer = CompositionSerializer(instance=composition, context={'request': request})
+        return Response(serializer.data)
     return APIResponse(550)
 
 @api_view(['GET'])
