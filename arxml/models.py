@@ -22,7 +22,7 @@ class SoftwareComponent(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file')
     rte_datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
     datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='datatypes_file')
-    rte_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte__file')
+    rte_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte_file')
     runnables_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='runnables_file')
     child_directory = models.ForeignKey(Directory, on_delete=models.DO_NOTHING)
 
@@ -35,7 +35,7 @@ class SoftwareComponent(models.Model):
     def Rewrite(self):
         arxml = SoftwareComponentARXML(self, self.file.directory.GetPath())
         DataTypeHFile(self.datatypes_file.Open('w+'), self)
-        DataTypeHFile(self.rte_file.Open('w+'), self)
+        RteHFile(self.rte_file.Open('w+'), self)
         self.file.Write(str(arxml))
 
     def __str__(self):
