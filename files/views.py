@@ -92,8 +92,6 @@ def generate_project(request, project_name):
     composition = ArxmlModels.Composition(file=arxml_file, project=project)
     composition.save()
     composition.Rewrite()
-    sub_directory = Directory(name=project_name, parent=main_directory)
-    sub_directory.save()
     factory = APIRequestFactory()
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
@@ -114,14 +112,14 @@ def add_software_component(request):
             file.save()
             swc_directory = Directory(name=request.POST['name'], parent=project.directory)
             swc_directory.save()
-            rte_types = File(directory=swc_directory, file_type="h", name='rtetypes.h')
+            rte_types = File(directory=swc_directory, file_type="h", name='rtetypes')
             rte_types.save()
-            rte_types.Write(open("files/default_datatypes.orig", 'rb'))
-            datatypes = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_datatypes.h')
+            rte_types.Write(open("files/default_datatypes.orig", 'rb').read())
+            datatypes = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_datatypes')
             datatypes.save()
-            rte = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_rte.h')
+            rte = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_rte')
             rte.save()
-            runnables_file = File(directory=swc_directory, file_type="c", name=request.POST['name'] + '_runnables.h')
+            runnables_file = File(directory=swc_directory, file_type="c", name=request.POST['name'] + '_runnables')
             runnables_file.save()
             swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'], \
                     rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file)
@@ -131,7 +129,8 @@ def add_software_component(request):
             return HttpResponse(swc.id)
         return APIResponse(550)
     except Exception as e:
-        file.delete()
+        if file.id is not None:
+            file.delete()
         raise e
 
 

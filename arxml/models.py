@@ -20,11 +20,11 @@ class SoftwareComponent(models.Model):
     subpackage_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file')
-    rte_datatypes_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='rte_datatypes_file')
-    datatypes_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='datatypes_file')
-    rte_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='rte__file')
-    runnables_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='runnables_file')
-    child_directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
+    rte_datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
+    datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='datatypes_file')
+    rte_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte__file')
+    runnables_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='runnables_file')
+    child_directory = models.ForeignKey(Directory, on_delete=models.DO_NOTHING)
 
     class Meta:
         unique_together = (('name', 'composition'),)
@@ -34,8 +34,8 @@ class SoftwareComponent(models.Model):
 
     def Rewrite(self):
         arxml = SoftwareComponentARXML(self, self.file.directory.GetPath())
-        DataTypeHFile(self.data_types_file.Open('w+'))
-        DataTypeHFile(self.rte_file.Open('w+'))
+        DataTypeHFile(self.datatypes_file.Open('w+'), self)
+        DataTypeHFile(self.rte_file.Open('w+'), self)
         self.file.Write(str(arxml))
 
     def __str__(self):
@@ -44,7 +44,11 @@ class SoftwareComponent(models.Model):
 @receiver(pre_delete, sender=SoftwareComponent)
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
-    swc.child_directory.delete()
+    #swc.child_directory.delete()
+    #swc.rte_datatypes_file.delete()
+    #swc.datatypes_file.delete()
+    #swc.rte_file.delete()
+    #swc.runnables_file.delete()
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')
