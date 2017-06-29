@@ -82,7 +82,7 @@ urlpatterns = [
     url(r'^arxml/data_access/delete/?$',views.remove_dataAccess),
     url(r'^arxml/connector/add/?$', views.add_connector),
     url(r'^arxml/connector/delete/?$', views.remove_connector),
-    url(r'^users/projects/(?P<user_id>[0-9]+)/?$',views.get_user_projects),
+    url(r'^users/projects/?$',views.get_user_projects),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/?$',views.delete_project),
     url(r'^check_token/?$',reg_views.check),
     url(r'^', include(router.urls)),
