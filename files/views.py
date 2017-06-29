@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from django.utils.datastructures import MultiValueDictKeyError
 from .serializers import ProjectSerializer
+import shutil
 
 
 def APIResponse(status, message={}):
@@ -154,7 +155,7 @@ def add_port(request):
     if request.POST['type'] == "P":
         type = "P-PORT-PROTOTYPE"
 
-    port = ArxmlModels.Port(name=request.POST['name'], swc=swc, type=type)
+    port = ArxmlModels.Port(name=request.POST['name'], x=request.POST['x'], y=request.POST['y'], swc=swc, type=type)
     port.save()
     swc.Rewrite()
     return HttpResponse(port.id)
@@ -504,4 +505,18 @@ def delete_project(request, project_id):
     if request.user.is_staff or project.user == request.user:
         project.delete()
         return HttpResponse("Done")
+    return APIResponse(550)
+
+@api_view(['GET'])
+@access_error_wrapper
+def download_project(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    if request.user.is_staff or project.user == request.user:
+        shutil.make_archive("files/storage/"+project.name, 'zip', project.directory.GetPath())
+        zip = open("files/storage/"+project.name+".zip", 'rb')
+        response = HttpResponse(content=zip)
+        response['Content-Type'] = 'application/zip, application/octet-stream'
+        response['Content-Disposition'] = 'attachment; filename="%s.zip"' \
+                                          % project.name
+        return response
     return APIResponse(550)

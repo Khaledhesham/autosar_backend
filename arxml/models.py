@@ -39,6 +39,9 @@ class Port(models.Model):
     type = models.CharField(max_length=40)
     interface = models.ForeignKey('Interface', on_delete=models.DO_NOTHING, blank=True, null=True)
 
+    x = models.FloatField(default=0.0)
+    y = models.FloatField(default=0.0)
+
     def validate_unique(self, exclude=None):
         qs = Port.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
