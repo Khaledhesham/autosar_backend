@@ -465,13 +465,10 @@ def remove_connector(request):
 
 @api_view(['GET'])
 @access_error_wrapper
-def get_user_projects(request, user_id):
-    if request.user.id == user_id or request.user.is_staff:
-        Projects = Project.objects.filter(user=user_id)
-        serializer = ProjectSerializer(Projects, many=True, context={'request': request})
-        return Response(serializer.data)
-    else:
-        return APIResponse(550)
+def get_user_projects(request):
+    Projects = Project.objects.filter(user=request.user)
+    serializer = ProjectSerializer(Projects, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
