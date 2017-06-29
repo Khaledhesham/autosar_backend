@@ -2,9 +2,11 @@ from __future__ import unicode_literals
 
 from django.db import models
 import uuid as guid
-from files.models import File, Project
-from arxml.wrapper import CompositionARXML, SoftwareComponentARXML
+from files.models import File, Project, Directory
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile
 from django.core.exceptions import ValidationError
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 def GetUUID():
     return str(guid.uuid1())
@@ -17,7 +19,12 @@ class SoftwareComponent(models.Model):
     package_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     subpackage_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file')
+    rte_datatypes_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='rte_datatypes_file')
+    datatypes_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='datatypes_file')
+    rte_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='rte__file')
+    runnables_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='runnables_file')
+    child_directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('name', 'composition'),)
@@ -27,10 +34,17 @@ class SoftwareComponent(models.Model):
 
     def Rewrite(self):
         arxml = SoftwareComponentARXML(self, self.file.directory.GetPath())
+        DataTypeHFile(self.data_types_file.Open('w+'))
+        DataTypeHFile(self.rte_file.Open('w+'))
         self.file.Write(str(arxml))
 
     def __str__(self):
         return self.name
+
+@receiver(pre_delete, sender=SoftwareComponent)
+def swc_pre_delete_handler(sender, **kwargs):
+    swc = kwargs['instance']
+    swc.child_directory.delete()
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')

@@ -112,7 +112,17 @@ def add_software_component(request):
         if project is not None and project.user == request.user:
             file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
             file.save()
-            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'])
+            swc_directory = Directory(name=request.POST['name'], parent=project.directory)
+            swc_directory.save()
+            rte_types = File(directory=swc_directory, file_type="h", name='rtetypes.h')
+            rte_types.save()
+            rte_types.Write(open("files/default_datatypes.orig", 'rb'))
+            datatypes = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_datatypes.h')
+            datatypes.save()
+            rte = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_rte.h')
+            rte.save()
+            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'], \
+                    rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory)
             swc.save()
             swc.Rewrite()
             project.composition.Rewrite()
