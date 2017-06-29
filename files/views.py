@@ -79,6 +79,7 @@ def GetCompositionIfOwns(user, id):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def generate_project(request, project_name):
     req_user = request.user
     project = Project(name=project_name , user=req_user)
@@ -159,6 +160,7 @@ def rename_softwareComponent(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def add_port(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
