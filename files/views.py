@@ -114,7 +114,7 @@ def add_software_component(request):
             swc_directory.save()
             rte_types = File(directory=swc_directory, file_type="h", name='rtetypes')
             rte_types.save()
-            rte_types.Write(open("files/default_datatypes.orig", 'rb').read())
+            rte_types.Write(open("files/default_datatypes.orig").read())
             datatypes = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_datatypes')
             datatypes.save()
             rte = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_rte')

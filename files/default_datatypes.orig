@@ -2,6 +2,9 @@
    Default AUTOSAR DataType definitions.
 */
 
+#ifndef __AUTOSAR_RTETYPES__
+#define __AUTOSAR_RTETYPES__
+
 /*=======================================================================*
  * Fixed width word size data types:                                     *
  *   int8_T, int16_T, int32_T     - signed 8, 16, or 32 bit integers     *
