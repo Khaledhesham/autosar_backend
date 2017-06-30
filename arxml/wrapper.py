@@ -20,11 +20,11 @@ data_type_typedef = {
     "Boolean": "boolean_T",
     "Float": "real_T",
     "SInt8": "int8_T",
-    "Uint8": "uint8_T",
+    "UInt8": "uint8_T",
     "SInt16": "int16_T",
-    "Uint16": "uint16_T",
+    "UInt16": "uint16_T",
     "SInt32": "int32_T",
-    "Uint32": "uint32_T" }
+    "UInt32": "uint32_T" }
 
 class DataTypeHFile:
     def __init__(self, file, swc):
@@ -144,19 +144,19 @@ class SoftwareComponentARXML(ArxmlWrapper):
         for datatype in swc.datatype_set.all():
             if datatype.type == "Boolean":
                 data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = type
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
             elif datatype.type == "Float":
                 data_type = ET.SubElement(elements, "REAL-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = type
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
                 ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
                 ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
                 ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
             else:
                 data_type = ET.SubElement(elements, "INTEGER-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = type
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
                 ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
-                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["lower"]
-                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[type]["upper"]
+                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["lower"]
+                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["upper"]
         ###
 
         ### Software Component
