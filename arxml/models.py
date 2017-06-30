@@ -11,6 +11,7 @@ from django.dispatch import receiver
 def GetUUID():
     return str(guid.uuid1())
 
+
 class SoftwareComponent(models.Model):
     name = models.CharField(max_length=100, default='SoftwareComponent')
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
@@ -41,14 +42,16 @@ class SoftwareComponent(models.Model):
     def __str__(self):
         return self.name
 
+
 @receiver(pre_delete, sender=SoftwareComponent)
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
-    #swc.child_directory.delete()
-    #swc.rte_datatypes_file.delete()
-    #swc.datatypes_file.delete()
-    #swc.rte_file.delete()
-    #swc.runnables_file.delete()
+    swc.child_directory.delete()
+    swc.rte_datatypes_file.delete()
+    swc.datatypes_file.delete()
+    swc.rte_file.delete()
+    swc.runnables_file.delete()
+
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')
@@ -73,6 +76,7 @@ class Port(models.Model):
     def __str__(self):
         return self.name
 
+
 class TimingEvent(models.Model):
     name = models.CharField(max_length=100, default='TimingEvent')
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
@@ -93,6 +97,7 @@ class TimingEvent(models.Model):
     def __str__(self):
         return self.name
 
+
 class Runnable(models.Model):
     name = models.CharField(max_length=100, default='Runnable')
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
@@ -111,6 +116,7 @@ class Runnable(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
@@ -131,12 +137,14 @@ class Interface(models.Model):
     def __str__(self):
         return self.name
 
+
 class DataType(models.Model):
     type = models.CharField(max_length=10)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('type', 'swc'),)
+
 
 class DataElement(models.Model):
     name = models.CharField(max_length=100, default='DataElement')
@@ -157,6 +165,7 @@ class DataElement(models.Model):
     def __str__(self):
         return self.name
 
+
 class DataElementRef(models.Model):
     port = models.ForeignKey(Port, on_delete=models.CASCADE)
     data_element = models.ForeignKey(DataElement, on_delete=models.CASCADE)
@@ -164,6 +173,7 @@ class DataElementRef(models.Model):
 
     class Meta:
         unique_together = (('port', 'data_element'),)
+
 
 class DataAccess(models.Model):
     name = models.CharField(max_length=100, default='DataAccess')
@@ -185,6 +195,7 @@ class DataAccess(models.Model):
     def __str__(self):
         return self.name
 
+
 class Composition(models.Model):
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     file = models.OneToOneField(File, on_delete=models.CASCADE)
@@ -193,6 +204,7 @@ class Composition(models.Model):
     def Rewrite(self):
         arxml = CompositionARXML(self)
         self.file.Write(str(arxml))
+
 
 class Connector(models.Model):
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
