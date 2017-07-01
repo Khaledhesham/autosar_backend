@@ -47,11 +47,6 @@ class SoftwareComponent(models.Model):
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
     swc.child_directory.delete()
-    swc.rte_datatypes_file.delete()
-    swc.datatypes_file.delete()
-    swc.rte_file.delete()
-    swc.runnables_file.delete()
-
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')
