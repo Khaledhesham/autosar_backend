@@ -7,6 +7,7 @@ from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFil
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+import re
 
 def GetUUID():
     return str(guid.uuid1())
@@ -41,6 +42,12 @@ class SoftwareComponent(models.Model):
 
     def __str__(self):
         return self.name
+
+    def PrepareCompileFile(self):
+        rte_datatypes_str = self.rte_datatypes_file.Read()
+        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes, self.datatypes_file.Read())
+        rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Read())
+        return re.sub("#include \"" + self.name + "_rte.h\"", rte_str, self.runnables_file.Read())
 
 
 @receiver(pre_delete, sender=SoftwareComponent)

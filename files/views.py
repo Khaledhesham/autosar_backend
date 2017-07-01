@@ -11,7 +11,7 @@ from .serializers import ProjectSerializer
 from arxml.serializers import CompositionSerializer
 import shutil
 import os
-
+from arxml.wrapper import RunnableCFile
 
 def APIResponse(status, message={}):
     return JsonResponse(message, status=status)
@@ -126,6 +126,7 @@ def add_software_component(request):
                     rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file)
             swc.save()
             swc.Rewrite()
+            RunnableCFile(runnables_file.file, swc)
             project.composition.Rewrite()
             return HttpResponse(swc.id)
         return APIResponse(550)
