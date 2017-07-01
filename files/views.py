@@ -136,6 +136,7 @@ def add_software_component(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def delete_softwareComponent(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     composition = swc.composition
