@@ -459,7 +459,7 @@ def add_dataAccess(request):
         return APIResponse(404, { 'error' : "Invalid DataElement Reference" })
 
     type = "DATA-READ-ACCESSS"
-    if request.POST['type'] == "WRITE":
+    if element.port.type == "P-PORT-PROTOTYPE":
         type = "DATA-WRITE-ACCESSS"
 
     access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element_ref=element, type=type)
