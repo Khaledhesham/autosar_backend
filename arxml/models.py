@@ -45,7 +45,7 @@ class SoftwareComponent(models.Model):
 
     def PrepareCompileFile(self):
         rte_datatypes_str = self.rte_datatypes_file.Read()
-        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes, self.datatypes_file.Read())
+        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes_str, self.datatypes_file.Read())
         rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Read())
         return re.sub("#include \"" + self.name + "_rte.h\"", rte_str, self.runnables_file.Read())
 
