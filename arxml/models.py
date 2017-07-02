@@ -167,6 +167,9 @@ class DataElement(models.Model):
     def __str__(self):
         return self.name
 
+    def GetValue(self):
+        return 0
+
 
 class DataElementRef(models.Model):
     port = models.ForeignKey(Port, on_delete=models.CASCADE)
