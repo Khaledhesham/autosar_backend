@@ -258,7 +258,7 @@ def add_port_dataElement(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     data_element = ArxmlModels.DataElement.objects.get(pk=request.POST['data_element_id'])
-    if data_element is None or data_element.swc != swc:
+    if data_element is None or data_element.interface.swc != swc:
         return APIResponse(404, {'error': "Invalid Data Element" })
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
