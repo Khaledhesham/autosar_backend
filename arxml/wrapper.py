@@ -369,12 +369,12 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
                 self.AddAdminData(data_element)
 
-                if data_ele.type.name == "Boolean":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.name
-                elif data_ele.type.name == "Float":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.name
+                if data_ele.type.type == "Boolean":
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
+                elif data_ele.type.type == "Float":
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
                 else:
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.name
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
         ###
         
         self.root = root
