@@ -12,6 +12,7 @@ from arxml.serializers import CompositionSerializer
 import shutil
 import os
 from arxml.wrapper import RunnableCFile
+import json
 
 def APIResponse(status, message={}):
     return JsonResponse(message, status=status)
@@ -556,3 +557,62 @@ def download_project(request, project_id):
         os.remove("files/storage/" + project.name + ".zip")
         return response
     return APIResponse(550)
+
+
+# Simulation
+
+@api_view(['GET'])
+@access_error_wrapper
+def get_input_output_list(request):
+    project = Project.objects.get(pk=request.GET['project_id'])
+
+    if request.user.is_staff or request.user == project.user:
+        d = dict()
+
+        for swc in project.GetSoftwareComponents():
+            for port in swc.port_set.all():
+                if port.connector is None: # Means that the port is not internally connected
+                    l = list()
+
+                    for de_ref in port.dataelementref_set.all():
+                        l.append({ 'name': de_ref.dataelement.name, 'type': de_ref.data_element.type, 'id': de_ref.dataelement.id })
+
+                    if port.type == "R-PORT-PROTOTYPE":
+                        d['inputs'][port.name] = l
+                    else:
+                        d['outputs'][port.name] = l
+
+        return JsonResponse(d)
+    raise PermissionDenied
+
+@api_view(['POST'])
+@access_error_wrapper
+def start_simulation(request):
+    d = json.loads(request.POST['values'])
+    project = Project.objects.get(pk=request.GET['project_id'])
+
+    if request.user.is_staff or request.user == project.user:
+        user_values = set()
+
+        for key in d:
+            user_values.add(int(key))
+
+        s = set()
+
+        for swc in project.GetSoftwareComponents():
+            for port in swc.port_set.all():
+                for de_ref in port.dataelementref_set.all():
+                    de_ref.dataelement.Reset()
+                    if port.connector is None: # Means that the port is not internally connected
+                            s.add(de_ref.dataelement.id)
+
+        if s != user_values: # Validation
+            return APIResponse(404, { 'error' : 'Some input values are missing' } )
+
+        for key, value in d.items():
+            data_element = ArxmlModels.DataElement.objects.get(pk=int(key))
+            data_element.SetValue(value)
+
+        return HttpResponse("Start")
+
+    raise PermissionDenied

@@ -23,6 +23,16 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def GetSoftwareComponents(self):
+        l = list()
+
+        for directory in self.directory_set.all():
+            for file in directory.file_set.all():
+                if file.softwarecomponent is not None:
+                    l.append(file.softwarecomponent)
+                    
+        return l
+
 class Directory(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)

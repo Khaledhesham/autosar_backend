@@ -21,12 +21,12 @@ class SoftwareComponent(models.Model):
     package_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     subpackage_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
-    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file')
-    rte_datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
-    datatypes_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='datatypes_file')
-    rte_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='rte_file')
-    runnables_file = models.ForeignKey(File, on_delete=models.DO_NOTHING, related_name='runnables_file')
-    child_directory = models.ForeignKey(Directory, on_delete=models.DO_NOTHING)
+    file = models.OneToOneField(File, on_delete=models.CASCADE, related_name='file')
+    rte_datatypes_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
+    datatypes_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='datatypes_file')
+    rte_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='rte_file')
+    runnables_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='runnables_file')
+    child_directory = models.OneToOneField(Directory, on_delete=models.DO_NOTHING)
 
     class Meta:
         unique_together = (('name', 'composition'),)
@@ -43,7 +43,7 @@ class SoftwareComponent(models.Model):
     def __str__(self):
         return self.name
 
-    def PrepareCompileFile(self):
+    def PreprocessHeaders(self):
         rte_datatypes_str = self.rte_datatypes_file.Read()
         datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes_str, self.datatypes_file.Read())
         rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Read())
@@ -154,6 +154,10 @@ class DataElement(models.Model):
     interface = models.ForeignKey(Interface, on_delete=models.CASCADE)
     type = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
+    bool_value = models.BooleanField(default=False)
+    float_value = models.FloatField(default=0.0)
+    int_value = models.IntegerField(default=0)
+
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
         if qs.filter(swc__composition=self.swc.composition).exists():
@@ -161,14 +165,31 @@ class DataElement(models.Model):
 
     def save(self, *args, **kwargs):
         self.validate_unique()
-
         super(DataElement, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
+    def Reset(self):
+        self.bool_value = False
+        self.float_value = 0.0
+        self.int_value = 0
+        
+    def SetValue(self, val):
+        if self.type.name == "Boolean":
+            self.bool_value = bool(val)
+        elif self.type.name == "Float":
+            self.float_value = float(val)
+        else:
+            self.int_value = int(val)
+
     def GetValue(self):
-        return 0
+        if self.type.name == "Boolean":
+            return self.bool_value
+        elif self.type.name == "Float":
+            return self.float_value
+        else:
+            return self.int_value
 
 
 class DataElementRef(models.Model):
@@ -214,8 +235,8 @@ class Composition(models.Model):
 class Connector(models.Model):
     uid = models.CharField(max_length=20, default=GetUUID, unique=True)
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
-    p_port = models.ForeignKey(Port, on_delete=models.CASCADE, related_name='p_port')
-    r_port = models.ForeignKey(Port, on_delete=models.CASCADE, related_name='r_port')
+    p_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='p_port')
+    r_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='r_port')
 
     class Meta:
         unique_together = (('p_port', 'composition'),('r_port', 'composition'),)
