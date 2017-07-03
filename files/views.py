@@ -224,7 +224,6 @@ def rename_port(request):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def add_interface(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
