@@ -88,6 +88,9 @@ urlpatterns = [
     url(r'^projects/delete/(?P<project_id>[0-9]+)/?$',views.delete_project),
     url(r'^projects/download/(?P<project_id>[0-9]+)/?$',views.download_project),
     url(r'^projects/serialize/(?P<project_id>[0-9]+)/?$',views.serialize_project),
+    url(r'^simulate/get/?$',views.get_input_output_list),
+    url(r'^simulate/start/?$',views.start_simulation),
+    url(r'^simulate/run/?$',views.run_runnable),
     url(r'^check_token/?$',reg_views.check),
     url(r'^', include(router.urls)),
 ]

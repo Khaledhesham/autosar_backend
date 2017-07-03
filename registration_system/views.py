@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .serializers import UserSerializer
 from django.contrib.auth import authenticate,login
 from django.core.exceptions import PermissionDenied
-
 from rest_framework.decorators import api_view
 
 @api_view(['POST'])
