@@ -18,13 +18,13 @@ def GetUUID():
 
 class SoftwareComponent(models.Model):
     name = models.CharField(max_length=100, default='SoftwareComponent')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
-    implementation_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
-    behavior_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
-    package_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
-    subpackage_uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    implementation_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    behavior_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    package_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    subpackage_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
-    file = models.OneToOneField(File, on_delete=models.CASCADE, related_name='file')
+    file = models.OneToOneField(File, on_delete=models.CASCADE, related_name='swc')
     rte_datatypes_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
     datatypes_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='datatypes_file')
     rte_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='rte_file')
@@ -60,7 +60,7 @@ def swc_pre_delete_handler(sender, **kwargs):
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     type = models.CharField(max_length=40)
     interface = models.ForeignKey('Interface', on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -84,7 +84,7 @@ class Port(models.Model):
 
 class TimingEvent(models.Model):
     name = models.CharField(max_length=100, default='TimingEvent')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     runnable = models.ForeignKey('Runnable', on_delete=models.CASCADE)
     period = models.FloatField()
@@ -105,7 +105,7 @@ class TimingEvent(models.Model):
 
 class Runnable(models.Model):
     name = models.CharField(max_length=100, default='Runnable')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     concurrent = models.BooleanField()
 
@@ -153,7 +153,7 @@ class Runnable(models.Model):
 
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, default='SENDER-RECEIVER-INTERFACE')
 
@@ -181,7 +181,7 @@ class DataType(models.Model):
 
 class DataElement(models.Model):
     name = models.CharField(max_length=100, default='DataElement')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     interface = models.ForeignKey(Interface, on_delete=models.CASCADE)
     type = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
@@ -234,10 +234,10 @@ class DataElementRef(models.Model):
 
 class DataAccess(models.Model):
     name = models.CharField(max_length=100, default='DataAccess')
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     runnable = models.ForeignKey(Runnable, on_delete=models.CASCADE)
     data_element_ref = models.ForeignKey(DataElementRef, on_delete=models.CASCADE)
-    type = models.CharField(max_length=20)
+    type = models.CharField(max_length=100)
 
     def validate_unique(self, exclude=None):
         qs = DataAccess.objects.filter(name=self.name)
@@ -254,7 +254,7 @@ class DataAccess(models.Model):
 
 
 class Composition(models.Model):
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     file = models.OneToOneField(File, on_delete=models.CASCADE)
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
 
@@ -264,7 +264,7 @@ class Composition(models.Model):
 
 
 class Connector(models.Model):
-    uid = models.CharField(max_length=20, default=GetUUID, unique=True)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
     p_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='p_port')
     r_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='r_port')

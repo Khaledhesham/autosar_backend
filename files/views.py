@@ -561,10 +561,10 @@ def download_project(request, project_id):
 
 # Simulation
 
-@api_view(['GET'])
+@api_view(['POST'])
 @access_error_wrapper
 def get_input_output_list(request):
-    project = Project.objects.get(pk=request.GET['project_id'])
+    project = Project.objects.get(pk=request.POST['project_id'])
 
     if request.user.is_staff or request.user == project.user:
         d = dict()

@@ -26,10 +26,9 @@ class Project(models.Model):
     def GetSoftwareComponents(self):
         l = list()
 
-        for directory in self.directory_set.all():
-            for file in directory.file_set.all():
-                if file.softwarecomponent is not None:
-                    l.append(file.softwarecomponent)
+        for file in self.directory.file_set.all():
+            if file.swc is not None:
+                l.append(file.swc)
                     
         return l
 
