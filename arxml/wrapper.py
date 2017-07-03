@@ -270,7 +270,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             interface_path = ""
             if swc_port.interface is not None:
-                interface_path = "/" + swc.name + "_pkg" + "/" + swc.name + "_swc/" + port.interface.name
+                interface_path = "/" + swc.name + "_pkg" + "/" + swc.name + "_swc/" + swc_port.interface.name
 
             # if type == "P-PORT-PROTOTYPE":
             req = ET.SubElement(port, "PROVIDED-COM-SPECS")
