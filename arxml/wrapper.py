@@ -167,13 +167,16 @@ class RunnableCompileFile:
 
         for e in input_data_elements:
             name = r'\"e.name\"'
+            s = r'\"%s\"'
+            f = r'\"%f\"'
+            d = r'\"%d\"'
             
             if e.type.name == "Boolean":
-                print("    printf(\"" + name + "\": %s\", " + e.name + " ? \"True\" : \"False\")")
+                print("    printf(\"" + name + "\": " + s + ",\", " + e.name + " ? \"True\" : \"False\")")
             elif e.type.name == "Float":
-                print("    printf(\"" + name + "\": %f\", " + e.name + ")")
+                print("    printf(\"" + name + "\": " + f + ",\", " + e.name + ")")
             else:
-                print("    printf(\"" + name + "\": %d\", " + e.name + ")")
+                print("    printf(\"" + name + "\": " + d + ",\", " + e.name + ")")
 
         print("    printf(\"}\")", file=file)
 

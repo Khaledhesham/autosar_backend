@@ -460,7 +460,7 @@ def add_dataAccess(request):
 
     type = "DATA-READ-ACCESSS"
     if element.port.type == "P-PORT-PROTOTYPE":
-        type = "DATA-WRITE-ACCESSS"
+        type = "    "
 
     access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element_ref=element, type=type)
     access.save()
@@ -615,3 +615,10 @@ def start_simulation(request):
         return HttpResponse("Start")
 
     raise PermissionDenied
+
+@api_view(['POST'])
+@access_error_wrapper
+def run_runnable(request):
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.GET['runnable_id'])
+    outputs = runnable.Compile()
+    return JsonResponse(outputs)

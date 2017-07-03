@@ -3,11 +3,14 @@ from __future__ import unicode_literals
 from django.db import models
 import uuid as guid
 from files.models import File, Project, Directory
-from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, RunnableCompileFile
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import re
+import os
+import requests
+import json
 
 def GetUUID():
     return str(guid.uuid1())
@@ -118,6 +121,34 @@ class Runnable(models.Model):
 
     def __str__(self):
         return self.name
+
+    def Compile(self):
+        header = self.swc.PreprocessHeaders()
+        file = open("/files/storage/" + self.id + "_compile_file.c", 'w+')
+        file.write(header)
+        RunnableCompileFile(file, self)
+
+        data = {
+            'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
+            'async': 0,
+            'source': file.read(),
+            'lang': "C",
+            'time_limit': 3,
+            'memory_limit': 1024,
+        }
+
+        r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
+
+        outputs = json.loads(r.text)["run_status"]["output"]
+
+        for access in self.dataaccess_set.all():
+            if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
+                access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
+
+        file.close()
+        os.remove("/files/storage/" + self.id + "_compile_file.c")
+
+        return outputs
 
 
 class Interface(models.Model):
