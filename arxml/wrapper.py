@@ -79,7 +79,7 @@ class RteHFile:
                 if access.type == "DATA-READ-ACCESSS":
                     print(data_type_typedef[access.data_element_ref.data_element.type.name] + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
                 else:
-                    print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + data_type_typedef[access.data_element_ref.data_element.type.name] + "u);", file=file)
+                    print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + data_type_typedef[access.data_element_ref.data_element.type.type] + "u);", file=file)
  
                 print("", file=file)
 
@@ -333,14 +333,14 @@ class SoftwareComponentARXML(ArxmlWrapper):
                     node = data_read
 
                 prototype_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name + "/" + acc.data_element_ref.port.name
-                data_element_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + acc.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
+                data_element_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + acc.data_element_ref.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
 
                 access_node = ET.SubElement(node, acc.type)
                 ET.SubElement(access_node, "SHORT-NAME").text = acc.name
 
                 data_element = ET.SubElement(access_node, "DATA-ELEMENT-IREF")
 
-                ET.SubElement(data_element, acc.port.type + "-REF", DEST=acc.port.type).text = prototype_ref
+                ET.SubElement(data_element, acc.data_element_ref.port.type + "-REF", DEST=acc.data_element_ref.port.type).text = prototype_ref
                 ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text = data_element_ref
 
         ET.SubElement(behavior, "COMPONTENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name

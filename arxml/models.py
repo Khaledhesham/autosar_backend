@@ -241,7 +241,7 @@ class DataAccess(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataAccess.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
+        if qs.filter(runnable__swc__composition=self.runnable.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Data Access name must be unique per project')
 
     def save(self, *args, **kwargs):
