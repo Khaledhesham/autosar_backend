@@ -273,7 +273,7 @@ def add_port_dataElement(request):
     ref = ArxmlModels.DataElementRef(data_element=data_element, port=port)
     ref.save()
     swc.Rewrite()
-    return HttpResponse("True")
+    return HttpResponse(ref.id)
 
 @api_view(['POST'])
 @access_error_wrapper
