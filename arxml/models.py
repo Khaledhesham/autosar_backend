@@ -67,7 +67,7 @@ class Port(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = Port.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Port name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -88,7 +88,7 @@ class TimingEvent(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = TimingEvent.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Event name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -108,7 +108,7 @@ class Runnable(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = Runnable.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Runnable name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -128,7 +128,7 @@ class Interface(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = Interface.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Interface name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -156,7 +156,7 @@ class DataElement(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Data Element name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -189,7 +189,7 @@ class DataAccess(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataAccess.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exists():
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Data Access name must be unique per project')
 
     def save(self, *args, **kwargs):
