@@ -224,6 +224,7 @@ def rename_port(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def add_interface(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
@@ -338,7 +339,7 @@ def add_dataElement(request):
     if interface is None or interface.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Interface" })
     
-    data_type = ArxmlModels.DataType.objects.get(name=request.POST['type'])
+    data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
     if data_type is None or data_type.swc != swc:
         return APIResponse(404, { 'error' : "Invalid Type" })
 

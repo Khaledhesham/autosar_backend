@@ -191,7 +191,7 @@ class DataElement(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
+        if qs.filter(interface__swc__composition=self.interface.swc.composition).exclude(pk=self.pk).exists():
             raise ValidationError('Data Element name must be unique per project')
 
     def save(self, *args, **kwargs):
@@ -207,17 +207,17 @@ class DataElement(models.Model):
         self.int_value = 0
         
     def SetValue(self, val):
-        if self.type.name == "Boolean":
+        if self.type.type == "Boolean":
             self.bool_value = bool(val)
-        elif self.type.name == "Float":
+        elif self.type.type == "Float":
             self.float_value = float(val)
         else:
             self.int_value = int(val)
 
     def GetValue(self):
-        if self.type.name == "Boolean":
+        if self.type.type == "Boolean":
             return self.bool_value
-        elif self.type.name == "Float":
+        elif self.type.type == "Float":
             return self.float_value
         else:
             return self.int_value
