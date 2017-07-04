@@ -647,7 +647,7 @@ def get_input_output_list(request):
 
         for swc in project.GetSoftwareComponents():
             for port in swc.port_set.all():
-                if port.connector is None: # Means that the port is not internally connected
+                if not hasattr(port, 'connector') or port.connector is None: # Means that the port is not internally connected
                     l = list()
 
                     for de_ref in port.dataelementref_set.all():
