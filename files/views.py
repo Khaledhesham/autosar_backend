@@ -447,6 +447,7 @@ def remove_timingEvent(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def add_dataAccess(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 

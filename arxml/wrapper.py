@@ -77,7 +77,7 @@ class RteHFile:
         for runnable in swc.runnable_set.all():
             for access in runnable.dataaccess_set.all():
                 if access.type == "DATA-READ-ACCESSS":
-                    print(data_type_typedef[access.data_element_ref.data_element.type.name] + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
+                    print(data_type_typedef[access.data_element_ref.data_element.type.type] + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
                 else:
                     print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + data_type_typedef[access.data_element_ref.data_element.type.type] + "u);", file=file)
  
