@@ -277,6 +277,20 @@ def add_port_dataElement(request):
 
 @api_view(['POST'])
 @access_error_wrapper
+def remove_port_dataElement(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
+    if data_element_ref.port.swc == swc:
+        data_element_ref.delete()
+        swc.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
 def remove_interface(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
@@ -370,6 +384,20 @@ def remove_dataElement(request):
     return HttpResponse("True")
 
 
+@api_view(['POST'])
+@access_error_wrapper
+def set_dataElement_type(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
+    datatype = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
+    if element.interface.swc == swc and datatype.swc == swc:
+        element.type = datatype
+        swc.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
 ### runnable
 
 
@@ -403,6 +431,18 @@ def remove_runnable(request):
     swc.Rewrite()
     return HttpResponse("True")
 
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_runnable_concurrent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if runnable.swc == swc:
+        runnable.concurrent = bool(request.POST['concurrent'])
+        swc.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
 
 ### timing events
 
@@ -442,6 +482,31 @@ def remove_timingEvent(request):
     swc.Rewrite()
     return HttpResponse("True")
 
+@api_view(['POST'])
+@access_error_wrapper
+def set_timingEvent_runnable(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
+    runnable = ArxmlModels.TimingEvent.objects.get(pk=request.POST['runnable_id'])
+    if event.swc == swc and runnable.swc == swc:
+        event.runnable = runnable
+        swc.Rewrite()   
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_timingEvent_period(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
+    if event.swc == swc:
+        event.period = float(request.POST['period'])
+        swc.Rewrite()   
+        return HttpResponse("True")
+
+    raise PermissionDenied
 
 ### data access
 
@@ -488,6 +553,18 @@ def remove_dataAccess(request):
     access.delete()
     swc.Rewrite()
     return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_dataAccess_element_ref(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    access = ArxmlModels.DataAccess.objects.get(pk=request.POST['dataAccess_id'])
+    data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
+    if access.runnable.swc == swc:
+        access.data_element_ref = data_element_ref
+        swc.Rewrite()
+        return HttpResponse("True")
 
 
 ### connector
