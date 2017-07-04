@@ -27,7 +27,7 @@ class Project(models.Model):
         l = list()
 
         for file in self.directory.file_set.all():
-            if file.swc:
+            if hasattr(file, 'swc') and file.swc is not None:
                 l.append(file.swc)
                     
         return l
