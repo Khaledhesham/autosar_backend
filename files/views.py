@@ -66,6 +66,14 @@ def GetSoftwareComponentIfOwns(user, id):
 
     return component
 
+def GetProjectIfOwns(user, id):
+    project = Project.objects.get(pk=id)
+
+    if user.is_staff or project.user == user:
+        return project
+
+    raise PermissionDenied
+
 
 def GetCompositionIfOwns(user, id):
     composition = ArxmlModels.Composition.objects.get(project_id=id)
@@ -89,8 +97,13 @@ def generate_project(request, project_name):
     directory_name = project_name + str("-") + str(project.id)
     main_directory = Directory(name=directory_name, project=project)
     main_directory.save()
-    arxml_file = File(name="composition", file_type="arxml", directory=main_directory)
+    arxml_file = File(name="Composition", file_type="arxml", directory=main_directory)
     arxml_file.save()
+    interfaces_file = File(name="DataTypesAndInterfaces", file_type="arxml", directory=main_directory)
+    interfaces_file.save()
+    package = ArxmlModels.Package(project=project, interfaces_file=interfaces_file)
+    package.save()
+    package.Rewrite()
     composition = ArxmlModels.Composition(file=arxml_file, project=project)
     composition.save()
     composition.Rewrite()
@@ -226,10 +239,11 @@ def rename_port(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_interface(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    interface = ArxmlModels.Interface(name=request.POST['name'], swc=swc)
+    project = GetProjectIfOwns(request.user, request.POST['project_id'])
+    package = project.package
+    interface = ArxmlModels.Interface(name=request.POST['name'], package=package)
     interface.save()
-    swc.Rewrite()
+    package.Rewrite()
     return HttpResponse(interface.id)
 
 
@@ -239,7 +253,7 @@ def set_port_interface(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    if interface is None or interface.swc != swc:
+    if interface is None or interface.package != swc.package:
         return APIResponse(404, {'error': "Invalid Interface" })
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
@@ -255,15 +269,17 @@ def set_port_interface(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_port_dataElement(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-
     data_element = ArxmlModels.DataElement.objects.get(pk=request.POST['data_element_id'])
-    if data_element is None or data_element.interface.swc != swc:
+    if data_element is None:
         return APIResponse(404, {'error': "Invalid Data Element" })
+    if data_element.interface.package.project.user != request.user and not request.user.is_staff:
+        raise PermissionDenied
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
-    if port is None or port.swc != swc:
+    if port is None:
         return APIResponse(404, {'error': "Invalid Port"})
+    if port.swc.package.project.user != request.user and not request.user.is_staff:
+        raise PermissionDenied
 
     interface = port.interface
 
@@ -278,10 +294,8 @@ def add_port_dataElement(request):
 @api_view(['POST'])
 @access_error_wrapper
 def remove_port_dataElement(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-
     data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
-    if data_element_ref.port.swc == swc:
+    if request.user.is_staff or data_element_ref.port.swc.package.user == request.user:
         data_element_ref.delete()
         swc.Rewrite()
         return HttpResponse("True")
@@ -292,23 +306,27 @@ def remove_port_dataElement(request):
 @api_view(['POST'])
 @access_error_wrapper
 def remove_interface(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    interface.delete()
-    swc.Rewrite()
-    return HttpResponse("True")
+    if request.user.is_staff or interface.package.project.user == request.user:
+        package = interface.package
+        interface.delete()
+        package.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
 
 
 @api_view(['POST'])
 @access_error_wrapper
 def rename_interface(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    interface.name = request.POST['name']
-    interface.save()
-    swc.Rewrite()
-    return HttpResponse("True")
+    if request.user.is_staff or interface.package.project.user == request.user:
+        interface.name = request.POST['name']
+        interface.save()
+        interface.package.Rewrite()
+        return HttpResponse("True")
 
+    raise PermissionDenied
 
 ### datatype
 
@@ -316,29 +334,28 @@ def rename_interface(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_datatype(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    project = GetProjectIfOwns(request.user, request.POST['project_id'])
 
     if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
         return APIResponse(404, { 'error' : "Unsupported Type" })
 
-    data_type = ArxmlModels.DataType(type=request.POST['type'], swc=swc)
+    data_type = ArxmlModels.DataType(type=request.POST['type'], package=project.package)
     data_type.save()
-    swc.Rewrite()
+    project.package.Rewrite()
     return HttpResponse(data_type.id)
 
 
 @api_view(['POST'])
 @access_error_wrapper
 def remove_datatype(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-
-    if request.POST['type'] not in { "Boolean", "Float", "SInt8", "UInt8", "SInt16", "UInt16", "SInt32", "UInt32" }:
-        return APIResponse(404, { 'error' : "Unsupported Type" })
-
     data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
-    data_type.delete()
-    swc.Rewrite()
-    return HttpResponse("True")
+
+    if request.user.is_staff or data_type.package.project.user == request.user:
+        data_type.delete()
+        swc.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
 
 
 ### data element
@@ -347,53 +364,65 @@ def remove_datatype(request):
 @api_view(['POST'])
 @access_error_wrapper
 def add_dataElement(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
-    if interface is None or interface.swc != swc:
+
+    if interface is None:
         return APIResponse(404, { 'error' : "Invalid Interface" })
+    if not request.user.is_staff or interface.package.project.user != request.user:
+        raise PermissionDenied
     
     data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
-    if data_type is None or data_type.swc != swc:
+    if data_type is None:
         return APIResponse(404, { 'error' : "Invalid Type" })
+    if not request.user.is_staff or data_type.package.project.user != request.user:
+        raise PermissionDenied
+
+    if data_type.package != interface.package:
+        return APIResponse(404, { 'error' : "DataType and Interface don't belong to the same Project" })
 
     element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
     element.save()
-    swc.Rewrite()
+    inteface.package.Rewrite()
     return HttpResponse(element.id)
 
 
 @api_view(['POST'])
 @access_error_wrapper
 def rename_dataElement(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    element.name = request.POST['name']
-    element.save()
-    swc.Rewrite()
-    return HttpResponse("True")
+    if requests.user.is_staff or element.interface.package.project.user == request.user:
+        element.name = request.POST['name']
+        element.save()
+        element.interface.package.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
 
 
 @api_view(['POST'])
 @access_error_wrapper
 def remove_dataElement(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    element.delete()
-    swc.Rewrite()
-    return HttpResponse("True")
+    if requests.user.is_staff or element.interface.package.project.user == request.user:
+        package = element.interface.package
+        element.delete()
+        package.Rewrite()
+        return HttpResponse("True")
 
 
 @api_view(['POST'])
 @access_error_wrapper
 def set_dataElement_type(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
     datatype = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
-    if element.interface.swc == swc and datatype.swc == swc:
-        element.type = datatype
-        swc.Rewrite()
-        return HttpResponse("True")
+
+    if request.user.is_staff or request.user == datatype.package.project.user:
+        if element.interface.package == datatype.package:
+            element.type = datatype
+            element.interface.package.Rewrite()
+            return HttpResponse("True")
+        
+        return APIResponse(404, { 'error' : "DataType and Interface don't belong to the same Project" })
 
     raise PermissionDenied
 

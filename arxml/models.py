@@ -15,14 +15,26 @@ import json
 def GetUUID():
     return str(guid.uuid1())
 
+class Package(models.Model):
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    subpackage_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    interfaces_file = models.OneToOneField(File, on_delete=models.CASCADE)
+
+    def Rewrite(self):
+        for swc in self.softwarecomponent_set.all():
+            swc.Rewrite()
+
+        arxml = DataTypesAndInterfacesARXML(self)
+        self.interface_file.Write(str(arxml))
+
 
 class SoftwareComponent(models.Model):
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='SoftwareComponent')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     implementation_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     behavior_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
-    package_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
-    subpackage_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     composition = models.ForeignKey('Composition', on_delete=models.DO_NOTHING)
     file = models.OneToOneField(File, on_delete=models.CASCADE, related_name='swc')
     rte_datatypes_file = models.OneToOneField(File, on_delete=models.DO_NOTHING, related_name='rte_datatypes_file')
@@ -154,18 +166,11 @@ class Runnable(models.Model):
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
-    swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
+    package = models.OneToOneField(Package, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, default='SENDER-RECEIVER-INTERFACE')
 
-    def validate_unique(self, exclude=None):
-        qs = Interface.objects.filter(name=self.name)
-        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
-            raise ValidationError('Interface name must be unique per project')
-
-    def save(self, *args, **kwargs):
-        self.validate_unique()
-
-        super(Interface, self).save(*args, **kwargs)
+    class Meta:
+        unique_together = (('name', 'package'),)
 
     def __str__(self):
         return self.name
@@ -173,10 +178,10 @@ class Interface(models.Model):
 
 class DataType(models.Model):
     type = models.CharField(max_length=10)
-    swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
+    package = models.OneToOneField(Package, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (('type', 'swc'),)
+        unique_together = (('type', 'package'),)
 
 
 class DataElement(models.Model):

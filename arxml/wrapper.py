@@ -226,33 +226,14 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
 
-        package = ET.SubElement(packages, "AR-PACKAGE", UUID=swc.package_uid)
-        ET.SubElement(package, "SHORT_NAME").text = swc.name + "_pkg"
+        package = ET.SubElement(packages, "AR-PACKAGE", UUID=swc.package.uid)
+        ET.SubElement(package, "SHORT_NAME").text = swc.package.project.name
         sub = ET.SubElement(package, "SUB-PACKAGES")
 
-        package = ET.SubElement(sub, "AR-PACKAGE", UUID=swc.subpackage_uid)
+        package = ET.SubElement(sub, "AR-PACKAGE", UUID=swc.package.subpackage_uid)
         ET.SubElement(package, "SHORT_NAME").text = swc.name + "_swc"
 
         elements = ET.SubElement(package, "ELEMENTS")
-        ###
-
-        ### DataTypes
-        for datatype in swc.datatype_set.all():
-            if datatype.type == "Boolean":
-                data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
-            elif datatype.type == "Float":
-                data_type = ET.SubElement(elements, "REAL-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
-                ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
-                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
-                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
-            else:
-                data_type = ET.SubElement(elements, "INTEGER-TYPE")
-                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
-                ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
-                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["lower"]
-                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["upper"]
         ###
 
         ### Software Component
@@ -287,7 +268,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             for data_element_ref in swc_port.dataelementref_set.all():
                     ref = ET.SubElement(req, spec)
-                    ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc_port.interface.name + "/" + data_element_ref.data_element.name
+                    ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name + "/" + data_element_ref.data_element.name
                     ET.SubElement(ref, "ALIVE-TIMEOUT").text = str(data_element_ref.timeout)
 
             ET.SubElement(port, interface_t_ref, DEST="SENDER-RECEIVER-INTERFACE").text = interface_path
@@ -307,7 +288,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             self.AddAdminData(timing_event)
 
-            ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
+            ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
             ET.SubElement(timing_event, "PERIOD").text = str(event.period)
 
         runnables = ET.SubElement(behavior, "RUNNABLES")
@@ -332,8 +313,8 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 else:
                     node = data_read
 
-                prototype_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name + "/" + acc.data_element_ref.port.name
-                data_element_ref =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + acc.data_element_ref.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
+                prototype_ref =  "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "/" + acc.data_element_ref.port.name
+                data_element_ref =  "/" + swc.package.project.name + "/Interfaces/" + acc.data_element_ref.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
 
                 access_node = ET.SubElement(node, acc.type)
                 ET.SubElement(access_node, "SHORT-NAME").text = acc.name
@@ -343,7 +324,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 ET.SubElement(data_element, acc.data_element_ref.port.type + "-REF", DEST=acc.data_element_ref.port.type).text = prototype_ref
                 ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text = data_element_ref
 
-        ET.SubElement(behavior, "COMPONTENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name
+        ET.SubElement(behavior, "COMPONTENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name
         ###
 
         ### Implementation
@@ -352,20 +333,68 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
         self.AddAdminData(impl)
 
-        ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name + "Behavior"
+        ET.SubElement(impl, "BEHAVIOR-REF", DEST="INTERNAL-BEHAVIOR").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior"
+        ###
+        
+        self.root = root
+
+class DataTypesAndInterfacesARXML(ArxmlWrapper):
+    def __init__(self, package):
+        ET.register_namespace("", autosar_schema_instance)
+        root = ET.Element("AUTOSAR", { "xmlns":autosar_org, "xmlns:xsi":autosar_schema_instance, "xsi:schemaLocation":autosar_schema_location })
+
+        admin_data = ET.SubElement(root, "ADMIN-DATA")
+
+        sdgs = ET.SubElement(admin_data, "SDGS")
+        sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::AutosarOptions")
+        ET.SubElement(sdg, "SD", GID="GENDIR").text = directory
+
+        packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
+
+        package = ET.SubElement(packages, "AR-PACKAGE", UUID=package.uid)
+        ET.SubElement(package, "SHORT_NAME").text = package.project.name
+        sub = ET.SubElement(package, "SUB-PACKAGES")
+
+        package = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(package, "SHORT_NAME").text = "DataTypes"
+
+        elements = ET.SubElement(package, "ELEMENTS")
+
+        ### DataTypes
+        for datatype in package.datatype_set.all():
+            if datatype.type == "Boolean":
+                data_type = ET.SubElement(elements, "BOOLEAN-TYPE")
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
+            elif datatype.type == "Float":
+                data_type = ET.SubElement(elements, "REAL-TYPE")
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
+                ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
+                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
+                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } )
+            else:
+                data_type = ET.SubElement(elements, "INTEGER-TYPE")
+                ET.SubElement(data_type, "SHORT-NAME").text = datatype.type
+                ET.SubElement(data_type, "SW-DATA-DEF-PROPS")
+                ET.SubElement(data_type, "LOWER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["lower"]
+                ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["upper"]
         ###
 
-        ### Interfaces
-        for swc_interface in swc.interface_set.all():
-            interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=swc_interface.uid)
+        package = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(package, "SHORT_NAME").text = "Interfaces"
 
-            ET.SubElement(interface, "SHORT-NAME").text = swc_interface.name
+        elements = ET.SubElement(package, "ELEMENTS")
+
+        ### Interfaces
+        for pkg_interface in package.interface_set.all():
+            interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=pkg_interface.uid)
+
+            ET.SubElement(interface, "SHORT-NAME").text = pkg_interface.name
 
             self.AddAdminData(interface)
 
             data_elements = ET.SubElement(interface, "DATA-ELEMENTS")
 
-            for data_ele in swc_interface.dataelement_set.all():
+            for data_ele in pkg_interface.dataelement_set.all():
                 data_element = ET.SubElement(interface, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
 
                 ET.SubElement(data_element, "SHORT-NAME").text = data_ele.name
@@ -373,14 +402,13 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 self.AddAdminData(data_element)
 
                 if data_ele.type.type == "Boolean":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + package.project.name + "/DataTypes/" + data_ele.type.type
                 elif data_ele.type.type == "Float":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
                 else:
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + data_ele.type.type
+                    ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
         ###
-        
-        self.root = root
+
 
 class CompositionARXML(ArxmlWrapper):
     def __init__(self, composition):
@@ -416,7 +444,7 @@ class CompositionARXML(ArxmlWrapper):
         for swc in composition.softwarecomponent_set.all():
             component_prototype = ET.SubElement(components, "COMPONENT-PROTOTYPE")
             ET.SubElement(component_prototype, "SHORT_NAME").text = swc.name
-            ET.SubElement(component_prototype, "TYPE-TREF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text =  "/" + swc.name + "_pkg/" + swc.name + "_swc/" + swc.name
+            ET.SubElement(component_prototype, "TYPE-TREF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text =  "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name
         ###
 
         ### Connectors
