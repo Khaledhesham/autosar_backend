@@ -653,7 +653,7 @@ def get_input_output_list(request):
                     l = list()
 
                     for de_ref in port.dataelementref_set.all():
-                        l.append({ 'name': de_ref.data_element.name, 'type': de_ref.data_element.type, 'id': de_ref.data_element.id })
+                        l.append({ 'name': de_ref.data_element.name, 'type': de_ref.data_element.type.type, 'id': de_ref.data_element.id })
 
                     if len(l) > 0:
                         if port.type == "R-PORT-PROTOTYPE":
