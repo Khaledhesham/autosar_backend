@@ -644,6 +644,8 @@ def get_input_output_list(request):
 
     if request.user.is_staff or request.user == project.user:
         d = dict()
+        d['inputs'] = dict()
+        d['outputs'] = dict()
 
         for swc in project.GetSoftwareComponents():
             for port in swc.port_set.all():
@@ -653,10 +655,11 @@ def get_input_output_list(request):
                     for de_ref in port.dataelementref_set.all():
                         l.append({ 'name': de_ref.dataelement.name, 'type': de_ref.data_element.type, 'id': de_ref.dataelement.id })
 
-                    if port.type == "R-PORT-PROTOTYPE":
-                        d['inputs'][port.name] = l
-                    else:
-                        d['outputs'][port.name] = l
+                    if len(l) > 0:
+                        if port.type == "R-PORT-PROTOTYPE":
+                            d['inputs'][port.name] = l
+                        else:
+                            d['outputs'][port.name] = l
 
         return JsonResponse(d)
     raise PermissionDenied
