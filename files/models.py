@@ -27,7 +27,7 @@ class Project(models.Model):
         l = list()
 
         for file in self.directory.file_set.all():
-            if file.swc is not None:
+            if file.swc:
                 l.append(file.swc)
                     
         return l
