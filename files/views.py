@@ -89,7 +89,6 @@ def GetCompositionIfOwns(user, id):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def generate_project(request, project_name):
     req_user = request.user
     project = Project(name=project_name , user=req_user)
@@ -421,7 +420,7 @@ def set_dataElement_type(request):
             element.type = datatype
             element.interface.package.Rewrite()
             return HttpResponse("True")
-        
+
         return APIResponse(404, { 'error' : "DataType and Interface don't belong to the same Project" })
 
     raise PermissionDenied

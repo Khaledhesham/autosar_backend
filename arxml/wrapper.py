@@ -347,18 +347,18 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
 
         sdgs = ET.SubElement(admin_data, "SDGS")
         sdg = ET.SubElement(sdgs, "SDG", GID="AutosarStudio::AutosarOptions")
-        ET.SubElement(sdg, "SD", GID="GENDIR").text = directory
+        ET.SubElement(sdg, "SD", GID="GENDIR").text = package.project.directory.GetPath()
 
         packages = ET.SubElement(root, "TOP-LEVEL-PACKAGES")
 
-        package = ET.SubElement(packages, "AR-PACKAGE", UUID=package.uid)
-        ET.SubElement(package, "SHORT_NAME").text = package.project.name
-        sub = ET.SubElement(package, "SUB-PACKAGES")
+        pkg = ET.SubElement(packages, "AR-PACKAGE", UUID=package.uid)
+        ET.SubElement(pkg, "SHORT_NAME").text = package.project.name
+        sub = ET.SubElement(pkg, "SUB-PACKAGES")
 
-        package = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
-        ET.SubElement(package, "SHORT_NAME").text = "DataTypes"
+        plg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(pkg, "SHORT_NAME").text = "DataTypes"
 
-        elements = ET.SubElement(package, "ELEMENTS")
+        elements = ET.SubElement(pkg, "ELEMENTS")
 
         ### DataTypes
         for datatype in package.datatype_set.all():
@@ -379,10 +379,10 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
                 ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["upper"]
         ###
 
-        package = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
-        ET.SubElement(package, "SHORT_NAME").text = "Interfaces"
+        pkg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(pkg, "SHORT_NAME").text = "Interfaces"
 
-        elements = ET.SubElement(package, "ELEMENTS")
+        elements = ET.SubElement(pkg, "ELEMENTS")
 
         ### Interfaces
         for pkg_interface in package.interface_set.all():
@@ -408,6 +408,8 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
                 else:
                     ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
         ###
+
+        self.root = root
 
 
 class CompositionARXML(ArxmlWrapper):

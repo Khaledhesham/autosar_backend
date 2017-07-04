@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 import uuid as guid
 from files.models import File, Project, Directory
-from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, RunnableCompileFile
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, RunnableCompileFile, DataTypesAndInterfacesARXML
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -26,7 +26,7 @@ class Package(models.Model):
             swc.Rewrite()
 
         arxml = DataTypesAndInterfacesARXML(self)
-        self.interface_file.Write(str(arxml))
+        self.interfaces_file.Write(str(arxml))
 
 
 class SoftwareComponent(models.Model):
@@ -166,7 +166,7 @@ class Runnable(models.Model):
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
-    package = models.OneToOneField(Package, on_delete=models.CASCADE)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, default='SENDER-RECEIVER-INTERFACE')
 
     class Meta:
@@ -178,7 +178,7 @@ class Interface(models.Model):
 
 class DataType(models.Model):
     type = models.CharField(max_length=10)
-    package = models.OneToOneField(Package, on_delete=models.CASCADE)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('type', 'package'),)
@@ -196,7 +196,7 @@ class DataElement(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
-        if qs.filter(interface__swc__composition=self.interface.swc.composition).exclude(pk=self.pk).exists():
+        if qs.filter(interface__package=self.interface.package).exclude(pk=self.pk).exists():
             raise ValidationError('Data Element name must be unique per project')
 
     def save(self, *args, **kwargs):
