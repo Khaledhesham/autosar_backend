@@ -665,6 +665,7 @@ def get_input_output_list(request):
         return JsonResponse(d)
     raise PermissionDenied
 
+
 @api_view(['POST'])
 @access_error_wrapper
 def start_simulation(request):
@@ -679,7 +680,13 @@ def start_simulation(request):
 
         s = set()
 
+        data = dict()
+        data['events'] = dict()
+
         for swc in project.GetSoftwareComponents():
+            for event in swc.timingevent_set.all():
+                data['events'][event.runnable.id] = event.period
+
             for port in swc.port_set.all():
                 for de_ref in port.dataelementref_set.all():
                     de_ref.dataelement.Reset()
@@ -693,9 +700,26 @@ def start_simulation(request):
             data_element = ArxmlModels.DataElement.objects.get(pk=int(key))
             data_element.SetValue(value)
 
+        return JsonResponse(data['events'])
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_simulation_values(request):
+    d = json.loads(request.POST['values'])
+    project = Project.objects.get(pk=request.GET['project_id'])
+
+    if request.user.is_staff or request.user == project.user:
+        for key, value in d.items():
+            data_element = ArxmlModels.DataElement.objects.get(pk=int(key))
+            data_element.SetValue(value)
+
         return HttpResponse("Start")
 
     raise PermissionDenied
+
 
 @api_view(['POST'])
 @access_error_wrapper
