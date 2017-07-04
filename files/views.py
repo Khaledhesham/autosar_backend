@@ -381,7 +381,7 @@ def add_dataElement(request):
 
     element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
     element.save()
-    inteface.package.Rewrite()
+    interface.package.Rewrite()
     return HttpResponse(element.id)
 
 
