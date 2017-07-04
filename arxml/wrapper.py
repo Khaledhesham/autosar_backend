@@ -46,7 +46,7 @@ class DataTypeHFile:
         print("*/", file=file)
         print("", file=file)
 
-        for data_type in swc.datatype_set.all():
+        for data_type in swc.package.datatype_set.all():
             print("typedef " + data_type_typedef[data_type.type] + " " + data_type.type, file=file)
 
         print("", file=file)
@@ -181,6 +181,7 @@ class RunnableCompileFile:
         print("    printf(\"}\")", file=file)
 
         print("}", file=file)
+        
 
 class ArxmlWrapper:
     root = ET.Element

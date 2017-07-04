@@ -136,7 +136,7 @@ def add_software_component(request):
             runnables_file = File(directory=swc_directory, file_type="c", name=request.POST['name'] + '_runnables')
             runnables_file.save()
             swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'], \
-                    rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file)
+                    rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file, package=project.package)
             swc.save()
             swc.Rewrite()
             RunnableCFile(runnables_file.Open('w+'), swc)
