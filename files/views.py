@@ -461,7 +461,7 @@ def add_dataAccess(request):
 
     type = "DATA-READ-ACCESSS"
     if element.port.type == "P-PORT-PROTOTYPE":
-        type = "    "
+        type = "DATA-WRITE-ACCESSS"
 
     access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element_ref=element, type=type)
     access.save()
