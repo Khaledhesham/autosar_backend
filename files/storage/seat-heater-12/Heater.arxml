@@ -1,0 +1,71 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/seat-heater-12</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="2daca1fc-6110-11e7-9a06-927a4226fa31">
+      <SHORT_NAME>seat-heater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="2daca45e-6110-11e7-9a06-927a4226fa31">
+          <SHORT_NAME>Heater_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="39eb1606-6110-11e7-9a06-927a4226fa31">
+              <SHORT_NAME>Heater</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="93f6d32e-6110-11e7-9a06-927a4226fa31">
+                  <SHORT_NAME>Input</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Heater_pkg/Heater_swc/in</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="9f68fba6-6110-11e7-b832-927a4226fa31">
+                  <SHORT_NAME>InternalOutput</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Heater_pkg/Heater_swc/internal</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="39eb194e-6110-11e7-9a06-927a4226fa31">
+              <SHORT-NAME>HeaterBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES />
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/seat-heater/Heater_swc/Heater</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="39eb1804-6110-11e7-9a06-927a4226fa31">
+              <SHORT-NAME>HeaterImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/seat-heater/Heater_swc/HeaterBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

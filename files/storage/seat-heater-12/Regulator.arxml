@@ -1,0 +1,71 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/seat-heater-12</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="2daca1fc-6110-11e7-9a06-927a4226fa31">
+      <SHORT_NAME>seat-heater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="2daca45e-6110-11e7-9a06-927a4226fa31">
+          <SHORT_NAME>Regulator_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="40500646-6110-11e7-b832-927a4226fa31">
+              <SHORT_NAME>Regulator</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="a71bb79e-6110-11e7-b832-927a4226fa31">
+                  <SHORT_NAME>InternalInput</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Regulator_pkg/Regulator_swc/internal</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="ad31803c-6110-11e7-b832-927a4226fa31">
+                  <SHORT_NAME>Output</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Regulator_pkg/Regulator_swc/out</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="40500aa6-6110-11e7-b832-927a4226fa31">
+              <SHORT-NAME>RegulatorBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES />
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/seat-heater/Regulator_swc/Regulator</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="405008da-6110-11e7-b832-927a4226fa31">
+              <SHORT-NAME>RegulatorImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/seat-heater/Regulator_swc/RegulatorBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
