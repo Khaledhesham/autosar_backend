@@ -351,7 +351,7 @@ def remove_datatype(request):
 
     if request.user.is_staff or data_type.package.project.user == request.user:
         data_type.delete()
-        swc.Rewrite()
+        data_type.package.Rewrite()
         return HttpResponse("True")
 
     raise PermissionDenied
