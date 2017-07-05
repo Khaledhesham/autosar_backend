@@ -516,7 +516,7 @@ def remove_timingEvent(request):
 def set_timingEvent_runnable(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
-    runnable = ArxmlModels.TimingEvent.objects.get(pk=request.POST['runnable_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     if event.swc == swc and runnable.swc == swc:
         event.runnable = runnable
         swc.Rewrite()   
