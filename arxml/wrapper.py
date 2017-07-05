@@ -356,10 +356,10 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
         ET.SubElement(pkg, "SHORT_NAME").text = package.project.name
         sub = ET.SubElement(pkg, "SUB-PACKAGES")
 
-        plg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
-        ET.SubElement(pkg, "SHORT_NAME").text = "DataTypes"
+        data_types_pkg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(data_types_pkg, "SHORT_NAME").text = "DataTypes"
 
-        elements = ET.SubElement(pkg, "ELEMENTS")
+        elements = ET.SubElement(data_types_pkg, "ELEMENTS")
 
         ### DataTypes
         for datatype in package.datatype_set.all():
@@ -380,10 +380,10 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
                 ET.SubElement(data_type, "UPPER-LIMIT", { "INTERVAL-TYPE": "CLOSED" } ).text = integer_types[datatype.type]["upper"]
         ###
 
-        pkg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
-        ET.SubElement(pkg, "SHORT_NAME").text = "Interfaces"
+        interfaces_pkg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
+        ET.SubElement(interfaces_pkg, "SHORT_NAME").text = "Interfaces"
 
-        elements = ET.SubElement(pkg, "ELEMENTS")
+        elements = ET.SubElement(interfaces_pkg, "ELEMENTS")
 
         ### Interfaces
         for pkg_interface in package.interface_set.all():
