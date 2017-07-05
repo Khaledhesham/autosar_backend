@@ -402,7 +402,7 @@ def rename_dataElement(request):
 @access_error_wrapper
 def remove_dataElement(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    if requests.user.is_staff or element.interface.package.project.user == request.user:
+    if request.user.is_staff or element.interface.package.project.user == request.user:
         package = element.interface.package
         element.delete()
         package.Rewrite()
