@@ -719,9 +719,9 @@ def start_simulation(request):
 
             for port in swc.port_set.all():
                 for de_ref in port.dataelementref_set.all():
-                    de_ref.dataelement.Reset()
+                    de_ref.data_element.Reset()
                     if not hasattr(port, 'connector') or port.connector is None: # Means that the port is not internally connected
-                        s.add(de_ref.dataelement.id)
+                        s.add(de_ref.data_element.id)
 
         if s != user_values: # Validation
             return APIResponse(404, { 'error' : 'Some input values are missing' } )
