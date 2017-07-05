@@ -1,0 +1,86 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/heater-12</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d5ac1926-61c5-11e7-825a-b88687f772a2">
+      <SHORT_NAME>heater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
+          <SHORT_NAME>Blinker_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="1e50e9d4-61c6-11e7-be70-b88687f772a2">
+              <SHORT_NAME>Blinker</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <P-PORT-PROTOTYPE UUID="2c3ad886-61c6-11e7-b2ee-b88687f772a2">
+                  <SHORT_NAME>Led</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/blinkLed</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Blinker_pkg/Blinker_swc/blink</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="1e50e9d6-61c6-11e7-83a6-b88687f772a2">
+              <SHORT-NAME>BlinkerBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="1806ab88-61ca-11e7-acf4-b88687f772a2">
+                  <SHORT-NAME>BlinkerRunnable</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>BlinkerRunnable</SYMBOL>
+                <DATA-READ-ACCESSS />
+                <DATA-WRITE-ACCESSS>
+                    <DATA-WRITE-ACCESSS>
+                      <SHORT-NAME>BlinkerAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/heater/Blinker_swc/Blinker/Led</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESSS>
+                  </DATA-WRITE-ACCESSS>
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/heater/Blinker_swc/Blinker</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="1e50e9d5-61c6-11e7-bb46-b88687f772a2">
+              <SHORT-NAME>BlinkerImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/heater/Blinker_swc/BlinkerBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

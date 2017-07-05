@@ -109,10 +109,11 @@ class PortSerializer(serializers.HyperlinkedModelSerializer):
     portName = serializers.SerializerMethodField()
     portType = serializers.SerializerMethodField()
     selectedInterface = serializers.SerializerMethodField()
+    dataElements = serializers.SerializerMethodField()
 
     class Meta:
         model = Port
-        fields = ('portName', 'x', 'y', 'portType', 'portServerId','portId', 'selectedInterface')
+        fields = ('portName', 'x', 'y', 'portType', 'portServerId','portId', 'selectedInterface', 'dataElements')
 
     def get_portId(self,obj):
         for index, item in enumerate(Port.objects.filter(swc=obj.swc)):
@@ -128,13 +129,19 @@ class PortSerializer(serializers.HyperlinkedModelSerializer):
     def get_portType(self,obj):
         return obj.type
 
+    def get_dataElements(self,obj):
+        items = []
+        for item_dataelementref in DataElementRef.objects.filter(port=obj):
+            items.append(DataElementRefSerializer(instance=item_dataelementref).data)
+        return items
+
     def get_selectedInterface(self,obj):
         if obj.interface is not None:
             for index, item in enumerate(Interface.objects.filter(package=obj.swc.package)):
                 if item == obj.interface:
                     return index
         else:
-            return ""
+            return -1
 
 class DataTypeserializer(serializers.HyperlinkedModelSerializer):
     value = serializers.SerializerMethodField()
@@ -164,12 +171,16 @@ class InterfaceSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_dataElements(self,obj):
         items = []
-        for item_dataelement in Interface.objects.filter(uid=obj.id):
+        for item_dataelement in DataElement.objects.filter(interface=obj):
             items.append(dataElementSerializer(instance=item_dataelement).data)
         return items
 
 
 class dataElementSerializer(serializers.HyperlinkedModelSerializer):
+    dataElementId = serializers.SerializerMethodField()
+    dataElementName = serializers.SerializerMethodField()
+    dataElementType = serializers.SerializerMethodField()
+
     class Meta:
         model = DataElement
         fields = ('dataElementId', 'dataElementName', 'dataElementType')
@@ -211,21 +222,19 @@ class TimedEventSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RunnableSerializer(serializers.HyperlinkedModelSerializer):
-    RunnableName = serializers.SerializerMethodField()
-    RunnableId = serializers.SerializerMethodField()
+    runnableName = serializers.SerializerMethodField()
+    runnableId = serializers.SerializerMethodField()
     dataAccess = serializers.SerializerMethodField()
 
     class Meta:
         model = Runnable
-        fields =('RunnableName','RunnableId', 'concurrent', 'dataAccess')
+        fields =('runnableName','runnableId', 'concurrent', 'dataAccess')
 
-    def get_RunnableName(self,obj):
+    def get_runnableName(self,obj):
         return obj.name
 
-    def get_RunnableId(self,obj):
-        for index, item in enumerate(Runnable.objects.filter(swc=obj.swc)):
-            if item == obj:
-                return index
+    def get_runnableId(self,obj):
+        return obj.id
 
     def get_dataAccess(self, obj):
         items = []
