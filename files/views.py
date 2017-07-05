@@ -414,9 +414,9 @@ def remove_dataElement(request):
 @access_error_wrapper
 def set_dataElement_type(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-
-    if request.user.is_staff or request.user == element.interface.package.project.user:
-        for data_type in element.interface.datatype_set.all():
+    package = element.interface.package
+    if request.user.is_staff or request.user == package.project.user:
+        for data_type in package.datatype_set.all():
             if data_type.type == request.POST['type']:
                 element.type = data_type
                 element.interface.package.Rewrite()
@@ -516,7 +516,7 @@ def remove_timingEvent(request):
 def set_timingEvent_runnable(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
-    runnable = ArxmlModels.TimingEvent.objects.get(pk=request.POST['runnable_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     if event.swc == swc and runnable.swc == swc:
         event.runnable = runnable
         swc.Rewrite()   
