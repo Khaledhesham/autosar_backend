@@ -414,15 +414,15 @@ def remove_dataElement(request):
 @access_error_wrapper
 def set_dataElement_type(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    datatype = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
 
-    if request.user.is_staff or request.user == datatype.package.project.user:
-        if element.interface.package == datatype.package:
-            element.type = datatype
-            element.interface.package.Rewrite()
-            return HttpResponse("True")
-
-        return APIResponse(404, { 'error' : "DataType and Interface don't belong to the same Project" })
+    if request.user.is_staff or request.user == element.interface.package.project.user:
+        for data_type in element.interface.datatype_set.all():
+            if data_type.type == request.POST['type']:
+                element.type = data_type
+                element.interface.package.Rewrite()
+                return HttpResponse("True")
+        
+        return APIResponse(404, { 'error' : "Datatype is not supported in the current project" })
 
     raise PermissionDenied
 
