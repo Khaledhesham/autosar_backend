@@ -390,7 +390,7 @@ def add_dataElement(request):
 @access_error_wrapper
 def rename_dataElement(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    if requests.user.is_staff or element.interface.package.project.user == request.user:
+    if request.user.is_staff or element.interface.package.project.user == request.user:
         element.name = request.POST['name']
         element.save()
         element.interface.package.Rewrite()
