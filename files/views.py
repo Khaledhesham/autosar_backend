@@ -697,6 +697,7 @@ def get_input_output_list(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def start_simulation(request):
     d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
