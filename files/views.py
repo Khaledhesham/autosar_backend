@@ -348,16 +348,14 @@ def add_datatype(request):
 @api_view(['POST'])
 @access_error_wrapper
 def remove_datatype(request):
-    project = GetProjectIfOwns(request.userrequest.POST['project_id'])
+    data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
 
-    for data_type in project.package.datatype_set.all():
-        if data_type.type == request.POST['type']:
-            package = data_type.package
-            data_type.delete()
-            package.Rewrite()
-            return HttpResponse("True")
+    if request.user.is_staff or data_type.package.project.user == request.user:
+        data_type.delete()
+        data_type.package.Rewrite()
+        return HttpResponse("True")
 
-    return APIResponse(404, { 'error' : "Unsupported Type" })
+    raise PermissionDenied
 
 
 ### data element
@@ -700,9 +698,7 @@ def get_input_output_list(request):
 @api_view(['POST'])
 @access_error_wrapper
 def start_simulation(request):
-    #d = json.loads(request.POST['values'])
-    d = dict()
-    d[]
+    d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
 
     if request.user.is_staff or request.user == project.user:
