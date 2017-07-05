@@ -1,0 +1,90 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/seat-heater-11</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="e055d3ee-61b3-11e7-89ca-b88687f772a2">
+      <SHORT_NAME>seat-heater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="e055e78a-61b3-11e7-a704-b88687f772a2">
+          <SHORT_NAME>Regulator_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="f8ec4a74-61b3-11e7-a76a-b88687f772a2">
+              <SHORT_NAME>Regulator</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <P-PORT-PROTOTYPE UUID="fc46bb2e-61b3-11e7-bbae-b88687f772a2">
+                  <SHORT_NAME>Output</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Regulator_pkg/Regulator_swc/out</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="4b3a1264-61b4-11e7-a28f-b88687f772a2">
+                  <SHORT_NAME>Input</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE" />
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="f8ec4a76-61b3-11e7-8116-b88687f772a2">
+              <SHORT-NAME>RegulatorBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS>
+                <TIMING-EVENT UUID="6057b3a2-61b5-11e7-8459-b88687f772a2">
+                  <SHORT-NAME>event</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/seat-heater/Regulator_swc/RegulatorBehavior/runnable1</START-ON-EVENT-REF>
+                <PERIOD>1.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="d388e7f0-61b4-11e7-9212-b88687f772a2">
+                  <SHORT-NAME>runnable1</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>runnable1</SYMBOL>
+                <DATA-READ-ACCESSS />
+                <DATA-WRITE-ACCESSS />
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/seat-heater/Regulator_swc/Regulator</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="f8ec4a75-61b3-11e7-9d0e-b88687f772a2">
+              <SHORT-NAME>RegulatorImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/seat-heater/Regulator_swc/RegulatorBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

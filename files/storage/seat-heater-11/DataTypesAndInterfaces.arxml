@@ -1,0 +1,37 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/seat-heater-11</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="e055d3ee-61b3-11e7-89ca-b88687f772a2">
+      <SHORT_NAME>seat-heater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="e055e78a-61b3-11e7-a704-b88687f772a2" />
+      <AR-PACKAGE UUID="e055e78a-61b3-11e7-a704-b88687f772a2">
+          <SHORT_NAME>Interfaces</SHORT_NAME>
+        <ELEMENTS>
+            <SENDER-RECEIVER-INTERFACE UUID="ffc04f38-61b3-11e7-a895-b88687f772a2">
+              <SHORT-NAME>out</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            </SENDER-RECEIVER-INTERFACE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    <SHORT_NAME>DataTypes</SHORT_NAME>
+    <ELEMENTS>
+        <BOOLEAN-TYPE>
+          <SHORT-NAME>Boolean</SHORT-NAME>
+        </BOOLEAN-TYPE>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
