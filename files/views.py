@@ -287,7 +287,7 @@ def add_port_dataElement(request):
 
     ref = ArxmlModels.DataElementRef(data_element=data_element, port=port)
     ref.save()
-    interface.package.Rewrite()
+    ref.port.swc.Rewrite()
     return HttpResponse(ref.id)
 
 @api_view(['POST'])
@@ -295,6 +295,7 @@ def add_port_dataElement(request):
 def remove_port_dataElement(request):
     data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
     if request.user.is_staff or data_element_ref.port.swc.package.user == request.user:
+        swc = data_element_ref.port.swc
         data_element_ref.delete()
         swc.Rewrite()
         return HttpResponse("True")
