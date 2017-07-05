@@ -714,7 +714,8 @@ def start_simulation(request):
 
         for swc in project.GetSoftwareComponents():
             for event in swc.timingevent_set.all():
-                data['events'][event.runnable.id] = event.period
+                if hasattr(event, 'runnable') and event.runnable is not None:
+                    data['events'][event.runnable.id] = event.period
 
             for port in swc.port_set.all():
                 for de_ref in port.dataelementref_set.all():
