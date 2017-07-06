@@ -20,5 +20,5 @@
 
 void BlinkerRunnable()
 {
-    Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(true);
+    Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(1);
 }
