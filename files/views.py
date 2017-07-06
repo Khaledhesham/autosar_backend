@@ -754,7 +754,6 @@ def set_simulation_values(request):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def run_runnable(request):
     runnable = ArxmlModels.Runnable.objects.get(pk=request.GET['runnable_id'])
     outputs = runnable.Compile()
