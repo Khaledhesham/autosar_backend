@@ -138,10 +138,9 @@ class Runnable(models.Model):
         header = self.swc.PreprocessHeaders()
         file = open("files/storage/" + str(self.id) + "_compile_file.c", 'w+')
         file.write(header)
-        file.close()
-        return { "code": file.read(), }
         RunnableCompileFile(file, self)
 
+        file.seek(0)
         #data = {
         #    'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
         #    'async': 0,
@@ -163,7 +162,7 @@ class Runnable(models.Model):
         file.close()
         os.remove("files/storage/" + str(self.id) + "_compile_file.c")
 
-        return { "code": header, }
+        return { "code": outputs, }
 
 
 class Interface(models.Model):
