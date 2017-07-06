@@ -11,6 +11,7 @@ import re
 import os
 import requests
 import json
+import subprocess
 
 def GetUUID():
     return str(guid.uuid1())
@@ -27,6 +28,27 @@ class Package(models.Model):
 
         arxml = DataTypesAndInterfacesARXML(self)
         self.interfaces_file.Write(str(arxml))
+
+    def Compile(self):
+        file = open(self.project.directory.GetPath() + "/compile_file.c", 'w+')
+        RunnableCompileFile(file, self)
+
+        file.close()
+
+        gcc_str = "gcc " + self.project.directory.GetPath() + "/compile_file.c" 
+
+        for swc in self.softwarecomponent_set.all():
+            gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
+
+        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name
+
+        errors = subprocess.call(gcc_str)
+        subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name, cwd=self.project.directory.GetPath())
+
+        if errors == '0':
+            return True
+
+        return False
 
 
 class SoftwareComponent(models.Model):
@@ -57,12 +79,6 @@ class SoftwareComponent(models.Model):
 
     def __str__(self):
         return self.name
-
-    def PreprocessHeaders(self):
-        rte_datatypes_str = self.rte_datatypes_file.Open('r').read()
-        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes_str, self.datatypes_file.Open('r').read())
-        rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Open('r').read())
-        return re.sub("#include \"" + self.name + "_rte.h\"", rte_str, self.runnables_file.Open('r').read())
 
 
 @receiver(pre_delete, sender=SoftwareComponent)
@@ -134,36 +150,6 @@ class Runnable(models.Model):
     def __str__(self):
         return self.name
 
-    def Compile(self):
-        header = self.swc.PreprocessHeaders()
-        file = open("files/storage/" + str(self.id) + "_compile_file.c", 'w+')
-        file.write(header)
-        RunnableCompileFile(file, self)
-
-        file.seek(0)
-
-        data = {
-            'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
-            'async': 0,
-            'source': file.read(),
-            'lang': "C",
-            'time_limit': 3,
-            'memory_limit': 1024,
-        }
-
-        r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
-
-        outputs = json.loads(r.text)["run_status"]["output"]
-
-        for access in self.dataaccess_set.all():
-            if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
-                access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
-
-        file.close()
-        os.remove("files/storage/" + str(self.id) + "_compile_file.c")
-
-        return json.loads(outputs)
-
 
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
@@ -192,10 +178,6 @@ class DataElement(models.Model):
     interface = models.ForeignKey(Interface, on_delete=models.CASCADE)
     type = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
-    bool_value = models.BooleanField(default=False)
-    float_value = models.FloatField(default=0.0)
-    int_value = models.IntegerField(default=0)
-
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
         if qs.filter(interface__package=self.interface.package).exclude(pk=self.pk).exists():
@@ -207,28 +189,7 @@ class DataElement(models.Model):
 
     def __str__(self):
         return self.name
-
-    def Reset(self):
-        self.bool_value = False
-        self.float_value = 0.0
-        self.int_value = 0
         
-    def SetValue(self, val):
-        if self.type.type == "Boolean":
-            self.bool_value = bool(val)
-        elif self.type.type == "Float":
-            self.float_value = float(val)
-        else:
-            self.int_value = int(val)
-
-    def GetValue(self):
-        if self.type.type == "Boolean":
-            return self.bool_value
-        elif self.type.type == "Float":
-            return self.float_value
-        else:
-            return self.int_value
-
 
 class DataElementRef(models.Model):
     port = models.ForeignKey(Port, on_delete=models.CASCADE)

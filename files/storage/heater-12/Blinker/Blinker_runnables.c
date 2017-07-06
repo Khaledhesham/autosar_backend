@@ -18,7 +18,10 @@
 
 /* WRITE YOUR CODE DOWN HERE */
 
+Boolean blink = false;
+
 void BlinkerRunnable()
 {
-    Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(1);
+    blink = !blink;
+    Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(blink);
 }

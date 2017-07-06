@@ -96,7 +96,6 @@ urlpatterns = [
     url(r'^projects/serialize/(?P<project_id>[0-9]+)/?$',views.serialize_project),
     url(r'^simulate/get/?$',views.get_input_output_list),
     url(r'^simulate/start/?$',views.start_simulation),
-    url(r'^simulate/run/?$',views.run_runnable),
     url(r'^simulate/setvalues/?$',views.set_simulation_values),
     url(r'^check_token/?$',reg_views.check),
     url(r'^', include(router.urls)),

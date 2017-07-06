@@ -119,53 +119,157 @@ class RunnableCFile:
         file.close()
 
 class RunnableCompileFile:
-    def __init__(self, file, runnable):
+    def __init__(self, file, package):
+        for swc in package.softwarecomponent_set.all():
+            print("#include \"" + swc.name + "/" + swc.name + "_rte.h\"", file=file)
+
+        print("#include <stdio.h>", file=file)
+        print("#include <time.h>", file=file)
+        
         print("", file=file)
 
         data_elements_set = set()
         input_data_elements = set()
         output_data_elements = set()
 
-        for access in runnable.dataaccess_set.all():
-            data_elements_set.add(access.data_element_ref.data_element.type.type + " " + access.data_element_ref.data_element.name + ";")
+        for swc in package.softwarecomponent_set.all():
+            for runnable in swc.runnable_set.all():
+                for access in runnable.dataaccess_set.all():
+                    data_elements_set.add(access.data_element_ref.data_element.type.type + " " + access.data_element_ref.data_element.name + ";")
 
-            if access.type == "DATA-READ-ACCESS":
-                input_data_elements.add(access.data_element_ref.data_element)
-            else:
-                output_data_elements.add(access.data_element_ref.data_element)
+                    if access.type == "DATA-READ-ACCESS":
+                        input_data_elements.add(access.data_element_ref.data_element)
+                    else:
+                        output_data_elements.add(access.data_element_ref.data_element)
 
         for de in data_elements_set:
             print(de, file=file)
 
         print("", file=file)
 
-        for access in runnable.dataaccess_set.all():
-            if access.type == "DATA-READ-ACCESS":
-                print(access.data_element_ref.data_element.type + " " + "Rte_IRead_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void)", file=file)
-                print("{", file=file)
-                print("    return " + access.data_element_ref.data_element.name + ";", file=file)
-                print("}", file=file)
-            else:
-                print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u)", file=file)
-                print("{", file=file)
-                print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
-                print("}", file=file)
+        print("void SetValue(char* var, Float f_value , Boolean b_value, int i_value)", file=file)
+        print("{", file=file)
+        for de in input_data_elements:
+                print("    if (var == \"" + de.name + "\")", file=file)
 
-            print("", file=file)
+                if de.type.type == "Boolean":
+                    print("        " + de.name + "= b_value;", file=file)
+                elif de.type.type == "Float":
+                    print("        " + de.name + "= f_value;", file=file)
+                else:
+                    print("        " + de.name + "= i_value;", file=file)
 
+        print("}", file=file)
+
+        print("", file=file)
+
+        for swc in package.softwarecomponent_set.all():
+            for runnable in swc.runnable_set.all():
+                for access in runnable.dataaccess_set.all():
+                    if access.type == "DATA-READ-ACCESS":
+                        print(access.data_element_ref.data_element.type.type + " " + "Rte_IRead_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void)", file=file)
+                        print("{", file=file)
+                        print("    return " + access.data_element_ref.data_element.name + ";", file=file)
+                        print("}", file=file)
+                    else:
+                        print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u)", file=file)
+                        print("{", file=file)
+                        print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
+                        print("}", file=file)
+
+                    print("", file=file)
+
+        print("typedef void (*Runnable)();", file=file)
+        print("", file=file)
+        print("struct TimingEvent", file=file)
+        print("{", file=file)
+        print("    clock_t trigger;", file=file)
+        print("    int period;", file=file)
+        print("    Runnable runnable;", file=file)
+        print("};", file=file)
+        print("", file=file)
+
+        print("Boolean Update(struct TimingEvent* event)", file=file)
+        print("{", file=file)
+        print("", file=file)
+        print("    if (clock() >= event->trigger)", file=file)
+        print("    {", file=file)
+        print("        event->runnable();", file=file)
+        print("        event->trigger = clock() + event->period;", file=file)
+        print("        return true;", file=file)
+        print("    }", file=file)
+        print("", file=file)
+        print("    return false;", file=file)
+        print("}", file=file)
+        print("", file=file)
+        
         print("int main()", file=file)
         print("{", file=file)
 
-        for e in input_data_elements:
-            print("    " + e.name + " = " + e.GetValue() + ";", file=file)
+        for swc in package.softwarecomponent_set.all():
+            for event in swc.timingevent_set.all():
+                if event.runnable is not None:
+                    print("    struct TimingEvent " + event.name + ";", file=file)
+                    print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
+                    print("    " + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
+                    print("    " + event.name + ".trigger = clock() + " + str(int(event.period * 1000)) + ";", file=file)
+                    print("", file=file)
+
+        print("    Boolean save = true;", file=file)
+        print("", file=file)
+
+        print("    while (1)", file=file)
+        print("    {", file=file)
+
+        if input_data_elements:
+            print("        FILE* file;", file=file)
+            print("        file = fopen(\"inputs.txt\", \"r\");", file=file)
+            print("        fscanf(file, \"", end="", file=file)
+
+            first = True
+
+            for e in input_data_elements:
+                
+                if not first:
+                    print(", ", end="", file=file)
+
+                if e.type.type == "Boolean" or e.type.type != "Float":
+                    print("%d", end="", file=file)
+                else:
+                    print("%f", end="", file=file)
+
+                first = False
+
+            print("\",", end="", file=file)
+
+            first = True
+
+            for e in input_data_elements:
+                if not first:
+                    print(", ", end="", file=file)
+
+                print("&" + e.name, end="", file=file)
+
+                first = False
+
+            print(");", file=file)
+            print("        fclose(file);", file=file)
+
+        for swc in package.softwarecomponent_set.all():
+            for event in swc.timingevent_set.all():
+                if event.runnable is not None:
+                    print("        if (Update(&" + event.name + "))", file=file)
+                    print("            save = true;", file=file)
 
         print("", file=file)
-        print("    " + runnable.name + "();", file=file)
-        print("", file=file)
 
-        print("    printf(\"{\");", file=file)
+        print("        if (save)", file=file)
+        print("        {", file=file)
 
-        print(output_data_elements) 
+        print("            FILE* file;", file=file)
+        print("            file = fopen(\"outputs.txt\", \"w+\");", file=file)
+
+        print("            fprintf(file, \"{\");", file=file)
 
         start = True
 
@@ -177,19 +281,25 @@ class RunnableCompileFile:
             d = r'\"%d\"'
 
             if not start:
-                print("    printf(\",\")", file=file)
+                print("            fprintf(\",\")", file=file)
+
+            print("            printf(\"%d\", " + e.name + ");", file=file)
 
             if e.type.type == "Boolean":
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + s + "\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
+                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + s + "\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
             elif e.type.type == "Float":
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + f + "\", " + e.name + ");", file=file)
+                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + f + "\", " + e.name + ");", file=file)
             else:
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + d + "\", " + e.name + ");", file=file)
+                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + d + "\", " + e.name + ");", file=file)
 
             start = False
 
-        print("    printf(\"}\");", file=file)
-
+        print("            fprintf(file, \"}\");", file=file)
+        print("            fclose(file);", file=file)
+        print("        }", file=file)
+        print("", file=file)
+        print("        save = false;", file=file)
+        print("    }", file=file)
         print("}", file=file)
         
 

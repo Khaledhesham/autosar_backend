@@ -714,13 +714,8 @@ def start_simulation(request):
         data['events'] = dict()
 
         for swc in project.GetSoftwareComponents():
-            for event in swc.timingevent_set.all():
-                if hasattr(event, 'runnable') and event.runnable is not None:
-                    data['events'][event.runnable.id] = event.period
-
             for port in swc.port_set.all():
                 for de_ref in port.dataelementref_set.all():
-                    de_ref.data_element.Reset()
                     if port.type == "R-PORT-PROTOTYPE":
                         if not hasattr(port, 'connector') or port.connector is None: # Means that the port is not internally connected
                             s.add(de_ref.data_element.id)
@@ -728,11 +723,14 @@ def start_simulation(request):
         if s != user_values: # Validation
             return APIResponse(404, { 'error' : 'Some input values are missing' } )
 
-        for key, value in d.items():
-            data_element = ArxmlModels.DataElement.objects.get(pk=int(key))
-            data_element.SetValue(value)
+        file = open(project.directory.GetPath() + "/inputs.txt", 'w+')
 
-        return JsonResponse(data['events'])
+        for i in s:
+            print(d[i], file=file)
+
+        file.close()
+
+        return HttpResponse(project.package.Compile())
 
     raise PermissionDenied
 
@@ -741,20 +739,36 @@ def start_simulation(request):
 @access_error_wrapper
 def set_simulation_values(request):
     d = json.loads(request.POST['values'])
-    project = Project.objects.get(pk=request.GET['project_id'])
+    project = Project.objects.get(pk=request.POST['project_id'])
 
     if request.user.is_staff or request.user == project.user:
-        for key, value in d.items():
-            data_element = ArxmlModels.DataElement.objects.get(pk=int(key))
-            data_element.SetValue(value)
+        user_values = set()
 
-        return HttpResponse("Start")
+        for key in d:
+            user_values.add(int(key))
+
+        s = set()
+
+        data = dict()
+        data['events'] = dict()
+
+        for swc in project.GetSoftwareComponents():
+            for port in swc.port_set.all():
+                for de_ref in port.dataelementref_set.all():
+                    if port.type == "R-PORT-PROTOTYPE":
+                        if not hasattr(port, 'connector') or port.connector is None: # Means that the port is not internally connected
+                            s.add(de_ref.data_element.id)
+
+        if s != user_values: # Validation
+            return APIResponse(404, { 'error' : 'Some input values are missing' } )
+
+        file = open(project.directory.GetPath() + "/inputs.txt", 'w+')
+
+        for i in s:
+            print(d[i], file=file)
+
+        file.close()
+
+        return HttpResponse("True")
 
     raise PermissionDenied
-
-
-@api_view(['POST'])
-def run_runnable(request):
-    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
-    outputs = runnable.Compile()
-    return JsonResponse(outputs)
