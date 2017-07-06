@@ -136,7 +136,7 @@ class Runnable(models.Model):
 
     def Compile(self):
         header = self.swc.PreprocessHeaders()
-        file = open("/files/storage/" + self.id + "_compile_file.c", 'w+')
+        file = open("/files/storage/" + str(self.id) + "_compile_file.c", 'w+')
         file.write(header)
         RunnableCompileFile(file, self)
 
