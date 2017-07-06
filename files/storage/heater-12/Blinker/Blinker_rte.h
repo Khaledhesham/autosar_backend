@@ -6,7 +6,7 @@
 #ifndef RTE_HEADER_Blinker_h_
 #define RTE_HEADER_Blinker_h_
 
-#include "datatypes.h"
+#include "Blinker_datatypes.h"
 
 /*
    This file contains prototypes for the runnables and data access points

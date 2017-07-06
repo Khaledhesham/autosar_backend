@@ -66,7 +66,7 @@ class RteHFile:
         print("#ifndef RTE_HEADER_" + swc.name + "_h_", file=file)
         print("#define RTE_HEADER_" + swc.name + "_h_", file=file)
         print("", file=file)
-        print("#include \"datatypes.h\"", file=file)
+        print("#include \"" + swc.name + "_datatypes.h\"", file=file)
         print("", file=file)
         print("/*", file=file)
         print("   This file contains prototypes for the runnables and data access points", file=file)
