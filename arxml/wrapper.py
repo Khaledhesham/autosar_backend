@@ -127,7 +127,7 @@ class RunnableCompileFile:
         output_data_elements = set()
 
         for access in runnable.dataaccess_set.all():
-            data_elements_set.add(access.data_element_ref.data_element.type + " " + access.data_element_ref.data_element.name + ";")
+            data_elements_set.add(access.data_element_ref.data_element.type.type + " " + access.data_element_ref.data_element.name + ";")
 
             if access.type == "DATA-READ-ACCESSS":
                 input_data_elements.add(access.data_element_ref.data_element)
