@@ -165,7 +165,7 @@ class RunnableCompileFile:
 
         print("    printf(\"{\");", file=file)
 
-        for e in input_data_elements:
+        for e in output_data_elements:
             name = r'\"e.name\"'
             s = r'\"%s\"'
             f = r'\"%f\"'
