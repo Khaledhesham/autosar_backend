@@ -158,7 +158,7 @@ class Runnable(models.Model):
                 access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
 
         file.close()
-        os.remove("/files/storage/" + self.id + "_compile_file.c")
+        os.remove("files/storage/" + str(self.id) + "_compile_file.c")
 
         return outputs
 
