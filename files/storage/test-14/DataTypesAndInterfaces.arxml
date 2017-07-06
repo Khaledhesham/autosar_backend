@@ -1,0 +1,101 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/test-14</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="650de814-61e1-11e7-a211-b88687f772a2">
+      <SHORT_NAME>test</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="650de815-61e1-11e7-83c9-b88687f772a2">
+          <SHORT_NAME>DataTypes</SHORT_NAME>
+        <ELEMENTS>
+            <BOOLEAN-TYPE>
+              <SHORT-NAME>Boolean</SHORT-NAME>
+            </BOOLEAN-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      <AR-PACKAGE UUID="650de815-61e1-11e7-83c9-b88687f772a2">
+          <SHORT_NAME>Interfaces</SHORT_NAME>
+        <ELEMENTS>
+            <SENDER-RECEIVER-INTERFACE UUID="7ad37624-61e1-11e7-9b09-b88687f772a2">
+              <SHORT-NAME>dsa</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="7f9c5722-61e1-11e7-acbd-b88687f772a2">
+                <SHORT-NAME>dsa</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENT-PROTOTYPE UUID="80f590a6-61e1-11e7-8ebd-b88687f772a2">
+                <SHORT-NAME>ds</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENT-PROTOTYPE UUID="836469f6-61e1-11e7-84a2-b88687f772a2">
+                <SHORT-NAME>fg</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="7d4b18ca-61e1-11e7-b177-b88687f772a2">
+              <SHORT-NAME>dsadsa</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="8663eadc-61e1-11e7-b4b5-b88687f772a2">
+                <SHORT-NAME>s</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENT-PROTOTYPE UUID="88ca8762-61e1-11e7-8b37-b88687f772a2">
+                <SHORT-NAME>d</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENT-PROTOTYPE UUID="8a089e06-61e1-11e7-b3b6-b88687f772a2">
+                <SHORT-NAME>f</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
