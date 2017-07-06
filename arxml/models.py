@@ -153,16 +153,16 @@ class Runnable(models.Model):
 
         r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
 
-        #outputs = json.loads(r.text)["run_status"]["output"]
+        outputs = json.loads(r.text)["run_status"]["output"]
 
-        #for access in self.dataaccess_set.all():
-        #    if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
-        #        access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
+        for access in self.dataaccess_set.all():
+            if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
+                access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
 
         file.close()
         os.remove("files/storage/" + str(self.id) + "_compile_file.c")
 
-        return { "test": r.text }
+        return outputs
 
 
 class Interface(models.Model):

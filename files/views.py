@@ -554,9 +554,9 @@ def add_dataAccess(request):
     if element is None or element.port.swc != swc:
         return APIResponse(404, { 'error' : "Invalid DataElement Reference" })
 
-    type = "DATA-READ-ACCESSS"
+    type = "DATA-READ-ACCESS"
     if element.port.type == "P-PORT-PROTOTYPE":
-        type = "DATA-WRITE-ACCESSS"
+        type = "DATA-WRITE-ACCESS"
 
     access = ArxmlModels.DataAccess(name=request.POST['name'], runnable=runnable, data_element_ref=element, type=type)
     access.save()

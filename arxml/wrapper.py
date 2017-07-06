@@ -76,7 +76,7 @@ class RteHFile:
 
         for runnable in swc.runnable_set.all():
             for access in runnable.dataaccess_set.all():
-                if access.type == "DATA-READ-ACCESSS":
+                if access.type == "DATA-READ-ACCESS":
                     print(access.data_element_ref.data_element.type.type + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
                 else:
                     print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u);", file=file)
@@ -129,7 +129,7 @@ class RunnableCompileFile:
         for access in runnable.dataaccess_set.all():
             data_elements_set.add(access.data_element_ref.data_element.type.type + " " + access.data_element_ref.data_element.name + ";")
 
-            if access.type == "DATA-READ-ACCESSS":
+            if access.type == "DATA-READ-ACCESS":
                 input_data_elements.add(access.data_element_ref.data_element)
             else:
                 output_data_elements.add(access.data_element_ref.data_element)
@@ -140,7 +140,7 @@ class RunnableCompileFile:
         print("", file=file)
 
         for access in runnable.dataaccess_set.all():
-            if access.type == "DATA-READ-ACCESSS":
+            if access.type == "DATA-READ-ACCESS":
                 print(access.data_element_ref.data_element.type + " " + "Rte_IRead_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void)", file=file)
                 print("{", file=file)
                 print("    return " + access.data_element_ref.data_element.name + ";", file=file)
@@ -165,18 +165,21 @@ class RunnableCompileFile:
 
         print("    printf(\"{\");", file=file)
 
+        print(output_data_elements) 
+
         for e in output_data_elements:
-            name = r'\"e.name\"'
+            quote = r'"'
+            escaped_quote = r'\"'
             s = r'\"%s\"'
             f = r'\"%f\"'
             d = r'\"%d\"'
-            
+
             if e.type.type == "Boolean":
-                print("    printf(\"" + name + "\": " + s + ",\", " + e.name + " ? \"True\" : \"False\");")
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + s + ",\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
             elif e.type.type == "Float":
-                print("    printf(\"" + name + "\": " + f + ",\", " + e.name + ");")
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + f + ",\", " + e.name + ");", file=file)
             else:
-                print("    printf(\"" + name + "\": " + d + ",\", " + e.name + ");")
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + d + ",\", " + e.name + ");", file=file)
 
         print("    printf(\"}\");", file=file)
 
@@ -305,11 +308,11 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             ET.SubElement(run, "SYMBOL").text = runnable.name
 
-            data_read = ET.SubElement(run, "DATA-READ-ACCESSS")
-            data_write = ET.SubElement(run, "DATA-WRITE-ACCESSS")
+            data_read = ET.SubElement(run, "DATA-READ-ACCESS")
+            data_write = ET.SubElement(run, "DATA-WRITE-ACCESS")
 
             for acc in runnable.dataaccess_set.all():
-                if acc.type == "DATA-WRITE-ACCESSS":
+                if acc.type == "DATA-WRITE-ACCESS":
                     node = data_write
                 else:
                     node = data_read
