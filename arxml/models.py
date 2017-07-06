@@ -59,10 +59,10 @@ class SoftwareComponent(models.Model):
         return self.name
 
     def PreprocessHeaders(self):
-        rte_datatypes_str = self.rte_datatypes_file.Read()
-        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes_str, self.datatypes_file.Read())
-        rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Read())
-        return re.sub("#include \"" + self.name + "_rte.h\"", rte_str, self.runnables_file.Read())
+        rte_datatypes_str = self.rte_datatypes_file.Open('r').read()
+        datatypes_str = re.sub("#include \"rtetypes.h\"", rte_datatypes_str, self.datatypes_file.Open('r').read())
+        rte_str = re.sub("#include \"" + self.name + "_datatypes.h\"", datatypes_str, self.rte_file.Open('r').read())
+        return re.sub("#include \"" + self.name + "_rte.h\"", rte_str, self.runnables_file.Open('r').read())
 
 
 @receiver(pre_delete, sender=SoftwareComponent)
