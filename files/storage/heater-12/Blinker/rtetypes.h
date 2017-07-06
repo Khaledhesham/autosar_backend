@@ -5,6 +5,17 @@
 #ifndef __AUTOSAR_RTETYPES__
 #define __AUTOSAR_RTETYPES__
 
+/* Logical type definitions */
+#if (!defined(__cplusplus))
+#  ifndef false
+#   define false                       (0U)
+#  endif
+
+#  ifndef true
+#   define true                        (1U)
+#  endif
+#endif
+
 /*=======================================================================*
  * Fixed width word size data types:                                     *
  *   int8_T, int16_T, int32_T     - signed 8, 16, or 32 bit integers     *
