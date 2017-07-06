@@ -161,7 +161,7 @@ class Runnable(models.Model):
         file.close()
         os.remove("files/storage/" + str(self.id) + "_compile_file.c")
 
-        return { "code": outputs, }
+        return { "code": header, }
 
 
 class Interface(models.Model):
