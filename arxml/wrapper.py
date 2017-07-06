@@ -47,7 +47,7 @@ class DataTypeHFile:
         print("", file=file)
 
         for data_type in swc.package.datatype_set.all():
-            print("typedef " + data_type_typedef[data_type.type] + " " + data_type.type, file=file)
+            print("typedef " + data_type_typedef[data_type.type] + " " + data_type.type + ";", file=file)
 
         print("", file=file)
         print("#endif", file=file)
@@ -77,9 +77,9 @@ class RteHFile:
         for runnable in swc.runnable_set.all():
             for access in runnable.dataaccess_set.all():
                 if access.type == "DATA-READ-ACCESSS":
-                    print(data_type_typedef[access.data_element_ref.data_element.type.type] + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
+                    print(access.data_element_ref.data_element.type.type + " " + "Rte_IRead_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(void);", file=file)
                 else:
-                    print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + data_type_typedef[access.data_element_ref.data_element.type.type] + "u);", file=file)
+                    print("void " + "Rte_IWrite_" + swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u);", file=file)
  
                 print("", file=file)
 
@@ -146,7 +146,7 @@ class RunnableCompileFile:
                 print("    return " + access.data_element_ref.data_element.name + ";", file=file)
                 print("}", file=file)
             else:
-                print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + "u)", file=file)
+                print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u)", file=file)
                 print("{", file=file)
                 print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
                 print("}", file=file)
@@ -163,7 +163,7 @@ class RunnableCompileFile:
         print("    " + runnable.name + "();", file=file)
         print("", file=file)
 
-        print("    printf(\"{\")", file=file)
+        print("    printf(\"{\");", file=file)
 
         for e in input_data_elements:
             name = r'\"e.name\"'
@@ -172,13 +172,13 @@ class RunnableCompileFile:
             d = r'\"%d\"'
             
             if e.type.name == "Boolean":
-                print("    printf(\"" + name + "\": " + s + ",\", " + e.name + " ? \"True\" : \"False\")")
+                print("    printf(\"" + name + "\": " + s + ",\", " + e.name + " ? \"True\" : \"False\");")
             elif e.type.name == "Float":
-                print("    printf(\"" + name + "\": " + f + ",\", " + e.name + ")")
+                print("    printf(\"" + name + "\": " + f + ",\", " + e.name + ");")
             else:
-                print("    printf(\"" + name + "\": " + d + ",\", " + e.name + ")")
+                print("    printf(\"" + name + "\": " + d + ",\", " + e.name + ");")
 
-        print("    printf(\"}\")", file=file)
+        print("    printf(\"}\");", file=file)
 
         print("}", file=file)
         

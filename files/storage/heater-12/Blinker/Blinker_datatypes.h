@@ -13,7 +13,7 @@
    by the Software Component (Blinker)
 */
 
-typedef boolean_T Boolean
-typedef real_T Float
+typedef boolean_T Boolean;
+typedef real_T Float;
 
 #endif

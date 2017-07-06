@@ -13,7 +13,7 @@
    used by the Software Component (Blinker)
 */
 
-void Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(boolean_Tu);
+void Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(boolean_T u);
 
 extern void BlinkerRunnable(void);
 
