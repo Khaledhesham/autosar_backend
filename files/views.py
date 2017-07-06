@@ -755,6 +755,6 @@ def set_simulation_values(request):
 
 @api_view(['POST'])
 def run_runnable(request):
-    runnable = ArxmlModels.Runnable.objects.get(pk=request.GET['runnable_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     outputs = runnable.Compile()
     return JsonResponse(outputs)
