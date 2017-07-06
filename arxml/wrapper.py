@@ -171,9 +171,9 @@ class RunnableCompileFile:
             f = r'\"%f\"'
             d = r'\"%d\"'
             
-            if e.type.name == "Boolean":
+            if e.type.type == "Boolean":
                 print("    printf(\"" + name + "\": " + s + ",\", " + e.name + " ? \"True\" : \"False\");")
-            elif e.type.name == "Float":
+            elif e.type.type == "Float":
                 print("    printf(\"" + name + "\": " + f + ",\", " + e.name + ");")
             else:
                 print("    printf(\"" + name + "\": " + d + ",\", " + e.name + ");")
