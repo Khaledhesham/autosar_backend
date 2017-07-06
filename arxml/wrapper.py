@@ -135,7 +135,7 @@ class RunnableCompileFile:
                 output_data_elements.add(access.data_element_ref.data_element)
 
         for de in data_elements_set:
-            print(de)
+            print(de, file=file)
 
         print("", file=file)
 
