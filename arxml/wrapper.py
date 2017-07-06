@@ -167,6 +167,8 @@ class RunnableCompileFile:
 
         print(output_data_elements) 
 
+        start = True
+
         for e in output_data_elements:
             quote = r'"'
             escaped_quote = r'\"'
@@ -174,12 +176,17 @@ class RunnableCompileFile:
             f = r'\"%f\"'
             d = r'\"%d\"'
 
+            if not start:
+                print("    printf(\",\")", file=file)
+
             if e.type.type == "Boolean":
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + s + ",\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + s + "\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
             elif e.type.type == "Float":
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + f + ",\", " + e.name + ");", file=file)
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + f + "\", " + e.name + ");", file=file)
             else:
-                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + d + ",\", " + e.name + ");", file=file)
+                print("    printf(\"" + escaped_quote + e.name + escaped_quote + " : " + d + "\", " + e.name + ");", file=file)
+
+            start = False
 
         print("    printf(\"}\");", file=file)
 
