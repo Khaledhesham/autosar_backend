@@ -153,9 +153,9 @@ class Runnable(models.Model):
 
         #outputs = json.loads(r.text)["run_status"]["output"]
 
-        for access in self.dataaccess_set.all():
-            if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
-                access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
+        #for access in self.dataaccess_set.all():
+        #    if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
+        #        access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
 
         outputs = file.read()
         file.close()
