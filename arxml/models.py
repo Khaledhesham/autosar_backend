@@ -140,14 +140,14 @@ class Runnable(models.Model):
         file.write(header)
         RunnableCompileFile(file, self)
 
-        data = {
-            'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
-            'async': 0,
-            'source': file.read(),
-            'lang': "C",
-            'time_limit': 3,
-            'memory_limit': 1024,
-        }
+        #data = {
+        #    'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
+        #    'async': 0,
+        #    'source': file.read(),
+        #    'lang': "C",
+        #    'time_limit': 3,
+        #    'memory_limit': 1024,
+        #}
 
         #r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
 
