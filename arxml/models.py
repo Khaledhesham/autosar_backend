@@ -141,16 +141,17 @@ class Runnable(models.Model):
         RunnableCompileFile(file, self)
 
         file.seek(0)
-        #data = {
-        #    'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
-        #    'async': 0,
-        #    'source': file.read(),
-        #    'lang': "C",
-        #    'time_limit': 3,
-        #    'memory_limit': 1024,
-        #}
 
-        #r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
+        data = {
+            'client_secret': "41bf8ec32d2743d1fd40bace3893cb8c31870f2d",
+            'async': 0,
+            'source': file.read(),
+            'lang': "C",
+            'time_limit': 3,
+            'memory_limit': 1024,
+        }
+
+        r = requests.post(u'http://api.hackerearth.com/code/run/', data=data)
 
         #outputs = json.loads(r.text)["run_status"]["output"]
 
@@ -158,11 +159,10 @@ class Runnable(models.Model):
         #    if access.type == "DATA-WRITE-ACCESSS" and access.data_element_ref.data_element.name in outputs:
         #        access.data_element_ref.data_element.SetValue(outputs[access.data_element_ref.data_element.name])
 
-        outputs = file.read()
         file.close()
         os.remove("files/storage/" + str(self.id) + "_compile_file.c")
 
-        return { "code": outputs, }
+        return { "test": r }
 
 
 class Interface(models.Model):
