@@ -146,7 +146,7 @@ class RunnableCompileFile:
                 print("    return " + access.data_element_ref.data_element.name + ";", file=file)
                 print("}", file=file)
             else:
-                print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type + "u)", file=file)
+                print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + "u)", file=file)
                 print("{", file=file)
                 print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
                 print("}", file=file)
