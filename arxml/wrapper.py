@@ -208,7 +208,7 @@ class RunnableCompileFile:
                 if not start:
                     print("    fprintf(file, \",\");", file=file)
 
-                print("    printf(\"" + e.name + " \"", file=file)
+                print("    printf(\"" + e.name + " \");", file=file)
                 print("    printf(\"%d\\n\", " + e.name + ");", file=file)
 
                 if e.type.type == "Boolean":
