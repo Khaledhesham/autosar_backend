@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import uuid as guid
+import os
 
 autosar_org = "http://autosar.org/3.2.1"
 autosar_schema_instance = "http://www.w3.org/2001/XMLSchema-instance"
@@ -125,6 +126,8 @@ class RunnableCompileFile:
 
         print("#include <stdio.h>", file=file)
         print("#include <time.h>", file=file)
+        print("#include <unistd.h>", file=file)
+        print("#include <pthread.h>", file=file)
         
         print("", file=file)
 
@@ -179,52 +182,60 @@ class RunnableCompileFile:
 
                     print("", file=file)
 
-        print("typedef void (*Runnable)();", file=file)
-        print("", file=file)
-        print("struct TimingEvent", file=file)
-        print("{", file=file)
-        print("    clock_t trigger;", file=file)
-        print("    int period;", file=file)
-        print("    Runnable runnable;", file=file)
-        print("};", file=file)
+        print("pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
+        print("pthread_mutex_t output_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
         print("", file=file)
 
-        print("Boolean Update(struct TimingEvent* event)", file=file)
+        print("void Rewrite()", file=file)
         print("{", file=file)
-        print("", file=file)
-        print("    if (clock() >= event->trigger)", file=file)
-        print("    {", file=file)
-        print("        event->runnable();", file=file)
-        print("        event->trigger = clock() + event->period;", file=file)
-        print("        return true;", file=file)
-        print("    }", file=file)
-        print("", file=file)
-        print("    return false;", file=file)
+
+        start = True
+
+        if output_data_elements:
+            print("    pthread_mutex_lock(&output_mutex);", file=file)
+
+            print("    FILE* file;", file=file)
+            print("    file = fopen(\"outputs.txt\", \"w+\");", file=file)
+            print("    fprintf(file, \"{\");", file=file)
+
+            for e in output_data_elements:
+                quote = r'"'
+                escaped_quote = r'\"'
+                s = r'\"%s\"'
+                f = r'\"%f\"'
+                d = r'\"%d\"'
+
+                if not start:
+                    print("    fprintf(\",\")", file=file)
+
+                print("    printf(\"%d\", " + e.name + ");", file=file)
+
+                if e.type.type == "Boolean":
+                    print("    fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + s + "\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
+                elif e.type.type == "Float":
+                    print("    fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + f + "\", " + e.name + ");", file=file)
+                else:
+                    print("    fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + d + "\", " + e.name + ");", file=file)
+
+                start = False
+
+            print("    fprintf(file, \"}\");", file=file)
+            print("    fclose(file);", file=file)
+
+            print("    pthread_mutex_unlock(&output_mutex);", file=file)
+
         print("}", file=file)
+
         print("", file=file)
-        
-        print("int main()", file=file)
+        print("void Reread()", file=file)
         print("{", file=file)
-
-        for swc in package.softwarecomponent_set.all():
-            for event in swc.timingevent_set.all():
-                if event.runnable is not None:
-                    print("    struct TimingEvent " + event.name + ";", file=file)
-                    print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
-                    print("    " + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
-                    print("    " + event.name + ".trigger = clock() + " + str(int(event.period * 1000)) + ";", file=file)
-                    print("", file=file)
-
-        print("    Boolean save = true;", file=file)
-        print("", file=file)
-
-        print("    while (1)", file=file)
-        print("    {", file=file)
 
         if input_data_elements:
-            print("        FILE* file;", file=file)
-            print("        file = fopen(\"inputs.txt\", \"r\");", file=file)
-            print("        fscanf(file, \"", end="", file=file)
+            print("    pthread_mutex_lock(&input_mutex);", file=file)
+
+            print("    FILE* file;", file=file)
+            print("    file = fopen(\"inputs.txt\", \"r\");", file=file)
+            print("    fscanf(file, \"", end="", file=file)
 
             first = True
 
@@ -253,53 +264,71 @@ class RunnableCompileFile:
                 first = False
 
             print(");", file=file)
-            print("        fclose(file);", file=file)
+            print("    fclose(file);", file=file)
+
+            print("    pthread_mutex_unlock(&input_mutex);", file=file)
+
+        print("}", file=file)
+
+        print("", file=file)
+        print("typedef void (*Runnable)();", file=file)
+        print("", file=file)
+
+        print("struct TimingEventArgs", file=file)
+        print("", file=file)
+        print("{", file=file)
+        print("    int period;", file=file)
+        print("    Runnable runnable;", file=file)
+        print("};", file=file)
+        print("", file=file)
+
+        print("void* Timeout(void* arguments)", file=file)
+        print("{", file=file)
+        print("    sleep(60);", file=file)
+        print("}", file=file)
+        print("", file=file)
+
+        print("void* TimerThread(void* arguments)", file=file)
+        print("{", file=file)
+        print("    struct TimingEventArgs* args = (struct TimingEventArgs*) arguments;", file=file)
+        print("    struct timespec ts;", file=file)
+        print("    ts.tv_sec = (*args).period / 1000;", file=file)
+        print("    ts.tv_nsec = ((*args).period % 1000) * 1000000;", file=file)
+        print("", file=file)
+        print("    while(1)", file=file)
+        print("    {", file=file)
+        print("        Reread();", file=file)
+        print("        nanosleep(&ts, NULL);", file=file)
+        print("        (*args).runnable();", file=file)
+        print("        Rewrite();", file=file)
+        print("    }", file=file)
+        print("}", file=file)
+        print("", file=file)
+
+        print("int main()", file=file)
+        print("{", file=file)
+
+        start = True
+
+        th = set()
 
         for swc in package.softwarecomponent_set.all():
             for event in swc.timingevent_set.all():
                 if event.runnable is not None:
-                    print("        if (Update(&" + event.name + "))", file=file)
-                    print("            save = true;", file=file)
+                    if not start:
+                        print("", file=file)
+                        start = False
 
-        print("", file=file)
+                    print("    struct TimingEventArgs " + event.name + ";", file=file)
+                    print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
+                    print("    " + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
+                    print("    pthread_t " + event.name + "_thread;", file=file)
+                    print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&" + event.name + ");", file=file)
 
-        print("        if (save)", file=file)
-        print("        {", file=file)
-
-        print("            FILE* file;", file=file)
-        print("            file = fopen(\"outputs.txt\", \"w+\");", file=file)
-
-        print("            fprintf(file, \"{\");", file=file)
-
-        start = True
-
-        for e in output_data_elements:
-            quote = r'"'
-            escaped_quote = r'\"'
-            s = r'\"%s\"'
-            f = r'\"%f\"'
-            d = r'\"%d\"'
-
-            if not start:
-                print("            fprintf(\",\")", file=file)
-
-            print("            printf(\"%d\", " + e.name + ");", file=file)
-
-            if e.type.type == "Boolean":
-                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + s + "\", " + e.name + " ? " + quote + "True" + quote + " : " + quote + "False" + quote + ");", file=file)
-            elif e.type.type == "Float":
-                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + f + "\", " + e.name + ");", file=file)
-            else:
-                print("            fprintf(file, \"" + escaped_quote + e.name + escaped_quote + " : " + d + "\", " + e.name + ");", file=file)
-
-            start = False
-
-        print("            fprintf(file, \"}\");", file=file)
-        print("            fclose(file);", file=file)
-        print("        }", file=file)
-        print("", file=file)
-        print("        save = false;", file=file)
-        print("    }", file=file)
+        print("    pthread_t timeout_thread;", file=file)
+        print("    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);")
+        print("    pthread_join(timeout_thread, NULL);")
+        
         print("}", file=file)
         
 

@@ -697,7 +697,6 @@ def get_input_output_list(request):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def start_simulation(request):
     d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
@@ -706,7 +705,7 @@ def start_simulation(request):
         user_values = set()
 
         for key in d:
-            user_values.add(int(key))
+            user_values.add(str(key))
 
         s = set()
 
@@ -718,7 +717,7 @@ def start_simulation(request):
                 for de_ref in port.dataelementref_set.all():
                     if port.type == "R-PORT-PROTOTYPE":
                         if not hasattr(port, 'connector') or port.connector is None: # Means that the port is not internally connected
-                            s.add(de_ref.data_element.id)
+                            s.add(de_ref.data_element.name)
 
         if s != user_values: # Validation
             return APIResponse(404, { 'error' : 'Some input values are missing' } )
@@ -770,5 +769,17 @@ def set_simulation_values(request):
         file.close()
 
         return HttpResponse("True")
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def get_simulation_values(request):
+    project = Project.objects.get(pk=request.POST['project_id'])
+
+    if request.user.is_staff or request.user == project.user:
+        file = open(project.directory.GetPath() + "/outputs.txt", 'r')
+        return HttpResponse(file)
 
     raise PermissionDenied
