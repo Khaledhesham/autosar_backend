@@ -300,6 +300,8 @@ class RunnableCompileFile:
 
         print("int main()", file=file)
         print("{", file=file)
+        
+        print("    pthread_mutex_init(&event_mutex, NULL);", file=file)
 
         start = True
 
@@ -321,7 +323,11 @@ class RunnableCompileFile:
         print("    pthread_t timeout_thread;", file=file)
         print("    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);", file=file)
         print("    pthread_join(timeout_thread, NULL);", file=file)
-        
+
+        print("", file=file)
+
+        print("    pthread_mutex_destroy(&event_mutex, NULL);", file=file)
+
         print("}", file=file)
         
 
