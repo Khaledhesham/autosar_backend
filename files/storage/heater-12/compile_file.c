@@ -6,8 +6,7 @@
 
 Boolean BlinkElement;
 
-void SetValue(char* var, Float f_value , Boolean b_value, int i_value)
-{
+void SetValue(char* var, Boolean Boolean_val, Float Float_val){
 }
 
 void Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(Boolean u)
@@ -57,6 +56,7 @@ void* TimerThread(void* arguments)
     ts.tv_nsec = ((*args).period % 1000) * 1000000;
 
     while(1)
+    {
         Reread();
         nanosleep(&ts, NULL);
         (*args).runnable();
@@ -72,4 +72,6 @@ int main()
     pthread_t TimingEvent_thread;
     pthread_create(&TimingEvent_thread, NULL, TimerThread, (void*)&TimingEvent);
     pthread_t timeout_thread;
+    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);
+    pthread_join(timeout_thread, NULL);
 }

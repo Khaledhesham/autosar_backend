@@ -150,17 +150,17 @@ class RunnableCompileFile:
 
         print("", file=file)
 
-        print("void SetValue(char* var, Float f_value , Boolean b_value, int i_value)", file=file)
+        print("void SetValue(char* var", end="", file=file)
+
+        for dt in package.datatype_set.all():
+            print(", " + dt.type + " " + dt.type + "_val", end="", file=file)
+
+        print(")", end="", file=file)
+
         print("{", file=file)
         for de in input_data_elements:
-                print("    if (var == \"" + de.name + "\")", file=file)
-
-                if de.type.type == "Boolean":
-                    print("        " + de.name + "= b_value;", file=file)
-                elif de.type.type == "Float":
-                    print("        " + de.name + "= f_value;", file=file)
-                else:
-                    print("        " + de.name + "= i_value;", file=file)
+            print("    if (var == \"" + de.name + "\")", file=file)
+            print("        " + de.name + " = " + de.type.type + "_val;", file=file)
 
         print("}", file=file)
 
@@ -326,8 +326,8 @@ class RunnableCompileFile:
                     print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&" + event.name + ");", file=file)
 
         print("    pthread_t timeout_thread;", file=file)
-        print("    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);")
-        print("    pthread_join(timeout_thread, NULL);")
+        print("    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);", file=file)
+        print("    pthread_join(timeout_thread, NULL);", file=file)
         
         print("}", file=file)
         
