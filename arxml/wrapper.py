@@ -228,8 +228,8 @@ class RunnableCompileFile:
 
         if input_data_elements:
             print("    FILE* file = NULL;", file=file)
-            print("")
-            print("    while(file == NULL)")
+            print("", file=file)
+            print("    while(file == NULL)", file=file)
             print("        file = fopen(\"inputs.txt\", \"r\");", file=file)
             print("", file=file)
             print("    fscanf(file, \"", end="", file=file)
