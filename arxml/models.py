@@ -12,6 +12,8 @@ import os
 import requests
 import json
 import subprocess
+import signal
+import psutil
 
 def GetUUID():
     return str(guid.uuid1())
@@ -21,6 +23,7 @@ class Package(models.Model):
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     subpackage_uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     interfaces_file = models.OneToOneField(File, on_delete=models.CASCADE)
+    proc_id = models.IntegerField(default=0)
 
     def Rewrite(self):
         for swc in self.softwarecomponent_set.all():
@@ -40,15 +43,25 @@ class Package(models.Model):
         for swc in self.softwarecomponent_set.all():
             gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
 
-        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name
+        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + " -lpthread"
 
-        errors = subprocess.call(gcc_str)
-        subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name, cwd=self.project.directory.GetPath())
+        if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
+            process = psutil.Process(self.proc_id)
+            process.kill()
+            self.proc_id = 0
 
-        if errors == '0':
+        gcc_proc = subprocess.Popen(gcc_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = gcc_proc.communicate()
+        exitcode = gcc_proc.returncode
+
+        proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name, cwd=self.project.directory.GetPath())
+        
+        if exitcode == 0 and proc is not None:
+            self.proc_id = proc.pid
+            self.save()
             return True
 
-        return False
+        return err
 
 
 class SoftwareComponent(models.Model):

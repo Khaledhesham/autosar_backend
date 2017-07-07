@@ -772,6 +772,7 @@ def set_simulation_values(request):
 
     raise PermissionDenied
 
+
 @api_view(['POST'])
 @access_error_wrapper
 def get_simulation_values(request):
