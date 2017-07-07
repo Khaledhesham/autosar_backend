@@ -182,8 +182,7 @@ class RunnableCompileFile:
 
                     print("", file=file)
 
-        print("pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
-        print("pthread_mutex_t output_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
+        print("pthread_mutex_t event_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
         print("", file=file)
 
         print("void Rewrite()", file=file)
@@ -192,8 +191,6 @@ class RunnableCompileFile:
         start = True
 
         if output_data_elements:
-            print("    pthread_mutex_lock(&output_mutex);", file=file)
-
             print("    FILE* file;", file=file)
             print("    file = fopen(\"outputs.txt\", \"w+\");", file=file)
             print("    fprintf(file, \"{\");", file=file)
@@ -223,8 +220,6 @@ class RunnableCompileFile:
             print("    fprintf(file, \"}\");", file=file)
             print("    fclose(file);", file=file)
 
-            print("    pthread_mutex_unlock(&output_mutex);", file=file)
-
         print("}", file=file)
 
         print("", file=file)
@@ -232,8 +227,6 @@ class RunnableCompileFile:
         print("{", file=file)
 
         if input_data_elements:
-            print("    pthread_mutex_lock(&input_mutex);", file=file)
-
             print("    FILE* file;", file=file)
             print("    file = fopen(\"inputs.txt\", \"r\");", file=file)
             print("    fscanf(file, \"", end="", file=file)
@@ -267,8 +260,6 @@ class RunnableCompileFile:
             print(");", file=file)
             print("    fclose(file);", file=file)
 
-            print("    pthread_mutex_unlock(&input_mutex);", file=file)
-
         print("}", file=file)
 
         print("", file=file)
@@ -297,10 +288,12 @@ class RunnableCompileFile:
         print("", file=file)
         print("    while(1)", file=file)
         print("    {", file=file)
+        print("        pthread_mutex_lock(&event_mutex);", file=file)
         print("        Reread();", file=file)
         print("        nanosleep(&ts, NULL);", file=file)
         print("        (*args).runnable();", file=file)
         print("        Rewrite();", file=file)
+        print("        pthread_mutex_unlock(&event_mutex);", file=file)
         print("    }", file=file)
         print("}", file=file)
         print("", file=file)
