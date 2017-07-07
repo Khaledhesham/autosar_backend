@@ -46,8 +46,12 @@ class Package(models.Model):
         gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + " -lpthread"
 
         if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
-            process = psutil.Process(self.proc_id)
-            process.kill()
+            try:
+                process = psutil.Process(self.proc_id)
+                process.kill()
+            except Exception:
+                pass
+
             self.proc_id = 0
 
         gcc_proc = subprocess.Popen(gcc_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -320,7 +320,7 @@ class RunnableCompileFile:
 
         print("", file=file)
 
-        print("    pthread_mutex_destroy(&event_mutex, NULL);", file=file)
+        print("    pthread_mutex_destroy(&event_mutex);", file=file)
 
         print("}", file=file)
         

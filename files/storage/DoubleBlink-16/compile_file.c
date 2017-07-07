@@ -4,9 +4,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
-Boolean Toggle;
 Boolean BottomLed;
 Boolean TopLed;
+Boolean Toggle;
 
 void SetValue(char* var, Boolean Boolean_val){
     if (var == "Toggle")
@@ -33,39 +33,35 @@ Boolean Rte_IRead_DoubleBlink_BottomRunnable_Switch_Toggle(void)
     return Toggle;
 }
 
-pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t output_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t event_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void Rewrite()
 {
-    pthread_mutex_lock(&output_mutex);
     FILE* file;
     file = fopen("outputs.txt", "w+");
     fprintf(file, "{");
-    printf("%d", TopLed);
+    printf("TopLed ");
+    printf("%d\n", TopLed);
     fprintf(file, "\"TopLed\" : \"%s\"", TopLed ? "True" : "False");
     fprintf(file, ",");
-    printf("%d", BottomLed);
+    printf("BottomLed ");
+    printf("%d\n", BottomLed);
     fprintf(file, "\"BottomLed\" : \"%s\"", BottomLed ? "True" : "False");
     fprintf(file, "}");
     fclose(file);
-    pthread_mutex_unlock(&output_mutex);
 }
 
 void Reread()
 {
-    pthread_mutex_lock(&input_mutex);
     FILE* file;
     file = fopen("inputs.txt", "r");
-    fscanf(file, "%d",&Toggle);
+    fscanf(file, "%d,",&Toggle);
     fclose(file);
-    pthread_mutex_unlock(&input_mutex);
 }
 
 typedef void (*Runnable)();
 
 struct TimingEventArgs
-
 {
     int period;
     Runnable runnable;
@@ -85,26 +81,33 @@ void* TimerThread(void* arguments)
 
     while(1)
     {
-        Reread();
         nanosleep(&ts, NULL);
+        pthread_mutex_lock(&event_mutex);
+        Reread();
         (*args).runnable();
         Rewrite();
+        pthread_mutex_unlock(&event_mutex);
     }
 }
 
 int main()
 {
+    pthread_mutex_init(&event_mutex, NULL);
     struct TimingEventArgs TopEvent;
     TopEvent.runnable = TopRunnable;
     TopEvent.period = 1000;
     pthread_t TopEvent_thread;
     pthread_create(&TopEvent_thread, NULL, TimerThread, (void*)&TopEvent);
+
     struct TimingEventArgs BottomEvent;
     BottomEvent.runnable = BottomRunnable;
     BottomEvent.period = 1000;
     pthread_t BottomEvent_thread;
     pthread_create(&BottomEvent_thread, NULL, TimerThread, (void*)&BottomEvent);
+
     pthread_t timeout_thread;
     pthread_create(&timeout_thread, NULL, Timeout, (void*)0);
     pthread_join(timeout_thread, NULL);
+
+    pthread_mutex_destroy(&event_mutex);
 }
