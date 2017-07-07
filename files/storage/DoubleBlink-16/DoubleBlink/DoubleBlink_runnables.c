@@ -25,6 +25,7 @@ void TopRunnable()
     Boolean toggle = Rte_IRead_DoubleBlink_TopRunnable_Switch_Toggle();
     if (toggle == false)
     {
+        printf("Top Runnable \n");
         blink = !blink;
         Rte_IWrite_DoubleBlink_TopRunnable_TopLed_TopLed(blink);
     }
@@ -35,6 +36,7 @@ void BottomRunnable()
     Boolean toggle = Rte_IRead_DoubleBlink_BottomRunnable_Switch_Toggle();
     if (toggle == true)
     {
+        printf("Bottom Runnable \n");
         blink = !blink;
         Rte_IWrite_DoubleBlink_BottomRunnable_BottomLed_BottomLed(blink);
     }
