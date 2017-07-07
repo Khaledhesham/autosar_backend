@@ -764,7 +764,12 @@ def set_simulation_values(request):
         file = open(project.directory.GetPath() + "/inputs.txt", 'w+')
 
         for i in s:
-            print(d[i], file=file)
+            out = d[i]
+            if out == "False":
+                out = 0
+            if out == "True":
+                out = 1
+            print(out, file=file)
 
         file.close()
 
