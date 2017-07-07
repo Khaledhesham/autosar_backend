@@ -789,6 +789,8 @@ def get_simulation_values(request):
 
     if request.user.is_staff or request.user == project.user:
         file = open(project.directory.GetPath() + "/outputs.txt", 'r')
-        return HttpResponse(file)
+        s = file.read()
+        file.close()
+        return HttpResponse(s)
 
     raise PermissionDenied
