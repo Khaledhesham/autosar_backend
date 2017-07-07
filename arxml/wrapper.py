@@ -275,7 +275,6 @@ class RunnableCompileFile:
         print("", file=file)
 
         print("struct TimingEventArgs", file=file)
-        print("", file=file)
         print("{", file=file)
         print("    int period;", file=file)
         print("    Runnable runnable;", file=file)
@@ -310,14 +309,13 @@ class RunnableCompileFile:
 
         start = True
 
-        th = set()
-
         for swc in package.softwarecomponent_set.all():
             for event in swc.timingevent_set.all():
                 if event.runnable is not None:
                     if not start:
                         print("", file=file)
-                        start = False
+
+                    start = False
 
                     print("    struct TimingEventArgs " + event.name + ";", file=file)
                     print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
@@ -325,6 +323,7 @@ class RunnableCompileFile:
                     print("    pthread_t " + event.name + "_thread;", file=file)
                     print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&" + event.name + ");", file=file)
 
+        print("", file=file)
         print("    pthread_t timeout_thread;", file=file)
         print("    pthread_create(&timeout_thread, NULL, Timeout, (void*)0);", file=file)
         print("    pthread_join(timeout_thread, NULL);", file=file)
