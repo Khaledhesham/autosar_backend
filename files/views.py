@@ -773,7 +773,7 @@ def set_simulation_values(request):
                 out = "0"
             if out == "True":
                 out = "1"
-            print(out, file=file)
+            print(out + ",", end="", file=file)
 
         file.close()
 

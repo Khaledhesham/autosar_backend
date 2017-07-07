@@ -234,20 +234,14 @@ class RunnableCompileFile:
             first = True
 
             for e in input_data_elements:
-                
-                if not first:
-                    print(", ", end="", file=file)
-
                 if e.type.type == "Boolean" or e.type.type != "Float":
                     print("%d", end="", file=file)
                 else:
                     print("%f", end="", file=file)
 
-                first = False
+                print(",", end="", file=file)
 
             print("\",", end="", file=file)
-
-            first = True
 
             for e in input_data_elements:
                 if not first:
@@ -300,7 +294,7 @@ class RunnableCompileFile:
 
         print("int main()", file=file)
         print("{", file=file)
-        
+
         print("    pthread_mutex_init(&event_mutex, NULL);", file=file)
 
         start = True
