@@ -1,0 +1,108 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/slider-15</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="cea4be0a-62bb-11e7-8ac3-b88687f772a2">
+      <SHORT_NAME>slider</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="cea4be0b-62bb-11e7-87e7-b88687f772a2">
+          <SHORT_NAME>slid1_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="dc9870cc-62bb-11e7-b682-b88687f772a2">
+              <SHORT_NAME>slid1</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <P-PORT-PROTOTYPE UUID="e7732c0c-62bb-11e7-9a00-b88687f772a2">
+                  <SHORT_NAME>p1</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/slider/Interfaces/I1/gyf</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/slid1_pkg/slid1_swc/I1</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="7c3cd868-62bc-11e7-b010-b88687f772a2">
+                  <SHORT_NAME>gfy</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/slider/Interfaces/dsa/sdds</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/slid1_pkg/slid1_swc/dsa</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="dc9870ce-62bb-11e7-a9a5-b88687f772a2">
+              <SHORT-NAME>slid1Behavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS>
+                <TIMING-EVENT UUID="b3078838-62bc-11e7-a70e-b88687f772a2">
+                  <SHORT-NAME>fds</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/slider/slid1_swc/slid1Behavior/tsy</START-ON-EVENT-REF>
+                <PERIOD>0.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="215b1900-62bc-11e7-8534-b88687f772a2">
+                  <SHORT-NAME>tsy</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>tsy</SYMBOL>
+                <DATA-READ-ACCESS />
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>gdsa</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/slider/slid1_swc/slid1/p1</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/slider/Interfaces/I1/gyf</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/slider/slid1_swc/slid1</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="dc9870cd-62bb-11e7-8e22-b88687f772a2">
+              <SHORT-NAME>slid1Implementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/slider/slid1_swc/slid1Behavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

@@ -39,8 +39,8 @@ int main()
 {
     struct TimingEvent TimingEvent;
     TimingEvent.runnable = BlinkerRunnable;
-    TimingEvent.period = 5000;
-    TimingEvent.trigger = clock() + 5000;
+    TimingEvent.period = 50;
+    TimingEvent.trigger = clock() + 50;
 
     Boolean save = true;
 

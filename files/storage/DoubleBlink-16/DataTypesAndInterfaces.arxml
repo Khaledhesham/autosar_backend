@@ -1,0 +1,83 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/DoubleBlink-16</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d2899114-632c-11e7-9f66-b88687f772a2">
+      <SHORT_NAME>DoubleBlink</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d2899115-632c-11e7-afe2-b88687f772a2">
+          <SHORT_NAME>DataTypes</SHORT_NAME>
+        <ELEMENTS>
+            <BOOLEAN-TYPE>
+              <SHORT-NAME>Boolean</SHORT-NAME>
+            </BOOLEAN-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      <AR-PACKAGE UUID="d2899115-632c-11e7-afe2-b88687f772a2">
+          <SHORT_NAME>Interfaces</SHORT_NAME>
+        <ELEMENTS>
+            <SENDER-RECEIVER-INTERFACE UUID="9ae3d69c-632f-11e7-9ba2-b88687f772a2">
+              <SHORT-NAME>Input</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="de5152cc-632f-11e7-9e69-b88687f772a2">
+                <SHORT-NAME>Toggle</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/DoubleBlink/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="a2de4c54-632f-11e7-86f4-b88687f772a2">
+              <SHORT-NAME>Top</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="e6f7f38c-632f-11e7-97b0-b88687f772a2">
+                <SHORT-NAME>TopLed</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/DoubleBlink/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="aa250b80-632f-11e7-be65-b88687f772a2">
+              <SHORT-NAME>Bottom</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="f3042bf4-632f-11e7-a889-b88687f772a2">
+                <SHORT-NAME>BottomLed</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/DoubleBlink/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
