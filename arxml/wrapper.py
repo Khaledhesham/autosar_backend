@@ -206,7 +206,7 @@ class RunnableCompileFile:
                 d = r'\"%d\"'
 
                 if not start:
-                    print("    fprintf(file, \",\")", file=file)
+                    print("    fprintf(file, \",\");", file=file)
 
                 print("    printf(\"%d\", " + e.name + ");", file=file)
 
