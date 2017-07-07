@@ -232,6 +232,15 @@ class RunnableCompileFile:
             print("    while(file == NULL)", file=file)
             print("        file = fopen(\"inputs.txt\", \"r\");", file=file)
             print("", file=file)
+
+            for e in input_data_elements:
+                if e.type.type == "Float":
+                    print("    float " + e.name + "_t;", file=file)
+                else:
+                    print("    int " + e.name + "_t;", file=file)
+
+            print("", file=file)
+
             print("    fscanf(file, \"", end="", file=file)
 
             first = True
@@ -250,11 +259,18 @@ class RunnableCompileFile:
                 if not first:
                     print(", ", end="", file=file)
 
-                print("&" + e.name, end="", file=file)
+                print("&" + e.name + "_t", end="", file=file)
 
                 first = False
 
             print(");", file=file)
+
+            print("", file=file)
+
+            for e in input_data_elements:
+                print("    " + e.name + " = " + e.name + "_t;", file=file)
+
+            print("", file=file)
             print("    fclose(file);", file=file)
 
         print("}", file=file)

@@ -53,9 +53,16 @@ void Rewrite()
 
 void Reread()
 {
-    FILE* file;
-    file = fopen("inputs.txt", "r");
-    fscanf(file, "%d,",&Toggle);
+    FILE* file = NULL;
+
+    while(file == NULL)
+        file = fopen("inputs.txt", "r");
+
+    int Toggle_t;
+
+    fscanf(file, "%d,",&Toggle_t);
+
+    Toggle = Toggle_t;
     fclose(file);
 }
 
