@@ -414,7 +414,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             # if type == "P-PORT-PROTOTYPE":
             req = ET.SubElement(port, "PROVIDED-COM-SPECS")
-            spec = "UNQUEUED-PROVIDER-COM-SPEC"
+            spec = "UNQUEUED-SENDER-COM-SPEC"
             interface_t_ref = "PROVIDED-INTERFACE-TREF"
 
             if type == "R-PORT-PROTOTYPE":
