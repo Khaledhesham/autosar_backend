@@ -99,5 +99,6 @@ urlpatterns = [
     url(r'^simulate/setvalues/?$',views.set_simulation_values),
     url(r'^simulate/getvalues/?$',views.get_simulation_values),
     url(r'^check_token/?$',reg_views.check),
+    url(r'^files/update/?$',views.update_c_file),
     url(r'^', include(router.urls)),
 ]

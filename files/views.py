@@ -794,3 +794,15 @@ def get_simulation_values(request):
         return HttpResponse(s)
 
     raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def update_c_file(request):
+    file = File.objects.get(pk=request.POST['file_id'])
+
+    if request.user.is_staff or request.user == file.directory.GetProject():
+        file.Write(request.POST['content'])
+        return HttpResponse("True")
+
+    raise PermissionDenied

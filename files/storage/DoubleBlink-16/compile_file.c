@@ -4,9 +4,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
-Boolean BottomLed;
 Boolean TopLed;
 Boolean Toggle;
+Boolean BottomLed;
 
 void SetValue(char* var, Boolean Boolean_val){
     if (var == "Toggle")
@@ -63,6 +63,7 @@ void Reread()
     fscanf(file, "%d,",&Toggle_t);
 
     Toggle = Toggle_t;
+
     fclose(file);
 }
 
@@ -102,13 +103,13 @@ int main()
     pthread_mutex_init(&event_mutex, NULL);
     struct TimingEventArgs TopEvent;
     TopEvent.runnable = TopRunnable;
-    TopEvent.period = 1000;
+    TopEvent.period = 2000;
     pthread_t TopEvent_thread;
     pthread_create(&TopEvent_thread, NULL, TimerThread, (void*)&TopEvent);
 
     struct TimingEventArgs BottomEvent;
     BottomEvent.runnable = BottomRunnable;
-    BottomEvent.period = 1000;
+    BottomEvent.period = 2000;
     pthread_t BottomEvent_thread;
     pthread_create(&BottomEvent_thread, NULL, TimerThread, (void*)&BottomEvent);
 
