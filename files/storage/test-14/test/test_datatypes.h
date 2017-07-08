@@ -13,6 +13,6 @@
    by the Software Component (test)
 */
 
-typedef boolean_T Boolean
+typedef boolean_T Boolean;
 
 #endif

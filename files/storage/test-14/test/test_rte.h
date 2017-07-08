@@ -6,24 +6,24 @@
 #ifndef RTE_HEADER_test_h_
 #define RTE_HEADER_test_h_
 
-#include "datatypes.h"
+#include "test_datatypes.h"
 
 /*
    This file contains prototypes for the runnables and data access points
    used by the Software Component (test)
 */
 
-void Rte_IWrite_test_dsasa_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_dsasa_dsadas_dsa(Boolean u);
 
-void Rte_IWrite_test_dsasa_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_dsasa_dsadas_dsa(Boolean u);
 
-void Rte_IWrite_test_dsasa_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_dsasa_dsadas_dsa(Boolean u);
 
-void Rte_IWrite_test_mh_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_mh_dsadas_dsa(Boolean u);
 
-void Rte_IWrite_test_mh_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_mh_dsadas_dsa(Boolean u);
 
-void Rte_IWrite_test_mh_dsadas_dsa(boolean_Tu);
+void Rte_IWrite_test_mh_dsadas_dsa(Boolean u);
 
 extern void dsasa(void);
 extern void mh(void);

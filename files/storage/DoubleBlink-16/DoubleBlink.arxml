@@ -84,7 +84,7 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/DoubleBlink/DoubleBlink_swc/DoubleBlinkBehavior/TopRunnable</START-ON-EVENT-REF>
-                <PERIOD>0.0</PERIOD>
+                <PERIOD>2.0</PERIOD>
                 </TIMING-EVENT>
               <TIMING-EVENT UUID="454251de-6332-11e7-8d38-b88687f772a2">
                   <SHORT-NAME>BottomEvent</SHORT-NAME>
@@ -93,8 +93,8 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/DoubleBlink/DoubleBlink_swc/DoubleBlinkBehavior/TopRunnable</START-ON-EVENT-REF>
-                <PERIOD>0.0</PERIOD>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/DoubleBlink/DoubleBlink_swc/DoubleBlinkBehavior/BottomRunnable</START-ON-EVENT-REF>
+                <PERIOD>2.0</PERIOD>
                 </TIMING-EVENT>
               </EVENTS>
             <RUNNABLES>
@@ -145,7 +145,7 @@
                   </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="5a35871f-632f-11e7-95e9-b88687f772a2">
               <SHORT-NAME>DoubleBlinkImplementation</SHORT-NAME>

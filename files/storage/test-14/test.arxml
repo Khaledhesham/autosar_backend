@@ -82,8 +82,7 @@
                   <SHORT-NAME>dsasa</SHORT-NAME>
                 <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
                 <SYMBOL>dsasa</SYMBOL>
-                <DATA-READ-ACCESSS />
-                <DATA-WRITE-ACCESSS>
+                <DATA-READ-ACCESS>
                     <DATA-WRITE-ACCESSS>
                       <SHORT-NAME>adsdsf</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
@@ -105,14 +104,14 @@
                       <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/test/Interfaces/dsa/dsa</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESSS>
-                  </DATA-WRITE-ACCESSS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS />
                 </RUNNABLE-ENTITY>
               <RUNNABLE-ENTITY UUID="d4c15054-61e1-11e7-8ad3-b88687f772a2">
                   <SHORT-NAME>mh</SHORT-NAME>
                 <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
                 <SYMBOL>mh</SYMBOL>
-                <DATA-READ-ACCESSS />
-                <DATA-WRITE-ACCESSS>
+                <DATA-READ-ACCESS>
                     <DATA-WRITE-ACCESSS>
                       <SHORT-NAME>bgfbg</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
@@ -134,10 +133,11 @@
                       <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/test/Interfaces/dsa/dsa</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESSS>
-                  </DATA-WRITE-ACCESSS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS />
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/test/test_swc/test</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/test/test_swc/test</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="6a517f37-61e1-11e7-89e0-b88687f772a2">
               <SHORT-NAME>testImplementation</SHORT-NAME>

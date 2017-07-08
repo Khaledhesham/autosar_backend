@@ -28,34 +28,35 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <DATA-ELEMENTS />
-            <DATA-ELEMENT-PROTOTYPE UUID="7f9c5722-61e1-11e7-acbd-b88687f772a2">
-                <SHORT-NAME>dsa</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="80f590a6-61e1-11e7-8ebd-b88687f772a2">
-                <SHORT-NAME>ds</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="836469f6-61e1-11e7-84a2-b88687f772a2">
-                <SHORT-NAME>fg</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENTS>
+                <DATA-ELEMENT-PROTOTYPE UUID="7f9c5722-61e1-11e7-acbd-b88687f772a2">
+                  <SHORT-NAME>dsa</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="80f590a6-61e1-11e7-8ebd-b88687f772a2">
+                  <SHORT-NAME>ds</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="836469f6-61e1-11e7-84a2-b88687f772a2">
+                  <SHORT-NAME>fg</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
           <SENDER-RECEIVER-INTERFACE UUID="7d4b18ca-61e1-11e7-b177-b88687f772a2">
               <SHORT-NAME>dsadsa</SHORT-NAME>
@@ -64,34 +65,35 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <DATA-ELEMENTS />
-            <DATA-ELEMENT-PROTOTYPE UUID="8663eadc-61e1-11e7-b4b5-b88687f772a2">
-                <SHORT-NAME>s</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="88ca8762-61e1-11e7-8b37-b88687f772a2">
-                <SHORT-NAME>d</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="8a089e06-61e1-11e7-b3b6-b88687f772a2">
-                <SHORT-NAME>f</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENTS>
+                <DATA-ELEMENT-PROTOTYPE UUID="8663eadc-61e1-11e7-b4b5-b88687f772a2">
+                  <SHORT-NAME>s</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="88ca8762-61e1-11e7-8b37-b88687f772a2">
+                  <SHORT-NAME>d</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="8a089e06-61e1-11e7-b3b6-b88687f772a2">
+                  <SHORT-NAME>f</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/test/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
           </ELEMENTS>
         </AR-PACKAGE>
