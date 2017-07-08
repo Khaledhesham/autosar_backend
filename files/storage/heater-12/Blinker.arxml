@@ -30,10 +30,6 @@
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
                     <UNQUEUED-PROVIDER-COM-SPEC>
-                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/blinkLed</DATA-ELEMENT-REF>
-                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  <UNQUEUED-PROVIDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
                     </UNQUEUED-PROVIDER-COM-SPEC>
@@ -49,25 +45,36 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <EVENTS />
+            <EVENTS>
+                <TIMING-EVENT UUID="9c923c46-61d6-11e7-ac94-b88687f772a2">
+                  <SHORT-NAME>TimingEvent</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/heater/Blinker_swc/BlinkerBehavior/BlinkerRunnable</START-ON-EVENT-REF>
+                <PERIOD>0.05</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
             <RUNNABLES>
                 <RUNNABLE-ENTITY UUID="1806ab88-61ca-11e7-acf4-b88687f772a2">
                   <SHORT-NAME>BlinkerRunnable</SHORT-NAME>
                 <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
                 <SYMBOL>BlinkerRunnable</SYMBOL>
-                <DATA-READ-ACCESSS />
-                <DATA-WRITE-ACCESSS>
-                    <DATA-WRITE-ACCESSS>
+                <DATA-READ-ACCESS />
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
                       <SHORT-NAME>BlinkerAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/heater/Blinker_swc/Blinker/Led</P-PORT-PROTOTYPE-REF>
                       <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
-                    </DATA-WRITE-ACCESSS>
-                  </DATA-WRITE-ACCESSS>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/heater/Blinker_swc/Blinker</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/heater/Blinker_swc/Blinker</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="1e50e9d5-61c6-11e7-bb46-b88687f772a2">
               <SHORT-NAME>BlinkerImplementation</SHORT-NAME>

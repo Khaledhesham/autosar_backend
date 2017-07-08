@@ -544,11 +544,11 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
         interfaces_pkg = ET.SubElement(sub, "AR-PACKAGE", UUID=package.subpackage_uid)
         ET.SubElement(interfaces_pkg, "SHORT_NAME").text = "Interfaces"
 
-        elements = ET.SubElement(interfaces_pkg, "ELEMENTS")
+        interface_elements = ET.SubElement(interfaces_pkg, "ELEMENTS")
 
         ### Interfaces
         for pkg_interface in package.interface_set.all():
-            interface = ET.SubElement(elements, "SENDER-RECEIVER-INTERFACE", UUID=pkg_interface.uid)
+            interface = ET.SubElement(interface_elements, "SENDER-RECEIVER-INTERFACE", UUID=pkg_interface.uid)
 
             ET.SubElement(interface, "SHORT-NAME").text = pkg_interface.name
 
@@ -557,7 +557,7 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
             data_elements = ET.SubElement(interface, "DATA-ELEMENTS")
 
             for data_ele in pkg_interface.dataelement_set.all():
-                data_element = ET.SubElement(interface, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
+                data_element = ET.SubElement(data_elements, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
 
                 ET.SubElement(data_element, "SHORT-NAME").text = data_ele.name
 

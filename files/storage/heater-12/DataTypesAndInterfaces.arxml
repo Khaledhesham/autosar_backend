@@ -10,7 +10,20 @@
     <AR-PACKAGE UUID="d5ac1926-61c5-11e7-825a-b88687f772a2">
       <SHORT_NAME>heater</SHORT_NAME>
     <SUB-PACKAGES>
-        <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2" />
+        <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
+          <SHORT_NAME>DataTypes</SHORT_NAME>
+        <ELEMENTS>
+            <BOOLEAN-TYPE>
+              <SHORT-NAME>Boolean</SHORT-NAME>
+            </BOOLEAN-TYPE>
+          <REAL-TYPE>
+              <SHORT-NAME>Float</SHORT-NAME>
+            <SW-DATA-DEF-PROPS />
+            <LOWER-LIMIT INTERVAL-TYPE="CLOSED" />
+            <UPPER-LIMIT INTERVAL-TYPE="CLOSED" />
+            </REAL-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
       <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
           <SHORT_NAME>Interfaces</SHORT_NAME>
         <ELEMENTS>
@@ -21,50 +34,30 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <DATA-ELEMENTS />
-            <DATA-ELEMENT-PROTOTYPE UUID="0a8c4552-61ca-11e7-b231-b88687f772a2">
-                <SHORT-NAME>blinkLed</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="b62fad30-61ca-11e7-aef0-b88687f772a2">
-                <SHORT-NAME>BlinkElement</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
-            <DATA-ELEMENT-PROTOTYPE UUID="b05024f6-61ce-11e7-8cc1-b88687f772a2">
-                <SHORT-NAME>fedsc</SHORT-NAME>
-              <ADMIN-DATA>
-                  <SDGS>
-                    <SDG GID="AutosarStudio::IdentifiableOptions" />
-                  </SDGS>
-                </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
-              </DATA-ELEMENT-PROTOTYPE>
+            <DATA-ELEMENTS>
+                <DATA-ELEMENT-PROTOTYPE UUID="b62fad30-61ca-11e7-aef0-b88687f772a2">
+                  <SHORT-NAME>BlinkElement</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="b05024f6-61ce-11e7-8cc1-b88687f772a2">
+                  <SHORT-NAME>fedsc</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
           </ELEMENTS>
         </AR-PACKAGE>
       </SUB-PACKAGES>
-    <SHORT_NAME>DataTypes</SHORT_NAME>
-    <ELEMENTS>
-        <BOOLEAN-TYPE>
-          <SHORT-NAME>Boolean</SHORT-NAME>
-        </BOOLEAN-TYPE>
-      <REAL-TYPE>
-          <SHORT-NAME>Float</SHORT-NAME>
-        <SW-DATA-DEF-PROPS />
-        <LOWER-LIMIT INTERVAL-TYPE="CLOSED" />
-        <UPPER-LIMIT INTERVAL-TYPE="CLOSED" />
-        </REAL-TYPE>
-      </ELEMENTS>
     </AR-PACKAGE>
   </TOP-LEVEL-PACKAGES>
 </AUTOSAR>
