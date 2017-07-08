@@ -60,7 +60,18 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <EVENTS />
+            <EVENTS>
+                <TIMING-EVENT UUID="21594c5e-6395-11e7-81c5-b88687f772a2">
+                  <SHORT-NAME>SeatSensorLeftUpdateTimer</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeftBehavior/SeatSensorRunnableLeft</START-ON-EVENT-REF>
+                <PERIOD>0.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
             <RUNNABLES>
                 <RUNNABLE-ENTITY UUID="a44b1892-6387-11e7-a327-b88687f772a2">
                   <SHORT-NAME>SeatSensorRunnableLeft</SHORT-NAME>

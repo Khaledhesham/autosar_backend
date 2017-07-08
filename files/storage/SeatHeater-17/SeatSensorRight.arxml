@@ -61,7 +61,15 @@
                 </SDGS>
               </ADMIN-DATA>
             <EVENTS />
-            <RUNNABLES />
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="dfe72ef6-6396-11e7-aa00-b88687f772a2">
+                  <SHORT-NAME>SeatSensorRunnableRight</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>SeatSensorRunnableRight</SYMBOL>
+                <DATA-READ-ACCESS />
+                <DATA-WRITE-ACCESS />
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
             <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight</COMPONTENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="74e45e8d-637a-11e7-a524-b88687f772a2">

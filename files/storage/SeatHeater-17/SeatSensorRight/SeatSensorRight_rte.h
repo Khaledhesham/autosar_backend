@@ -13,5 +13,6 @@
    used by the Software Component (SeatSensorRight)
 */
 
+extern void SeatSensorRunnableRight(void);
 
 #endif

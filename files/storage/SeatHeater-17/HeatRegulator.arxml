@@ -61,7 +61,31 @@
                 </SDGS>
               </ADMIN-DATA>
             <EVENTS />
-            <RUNNABLES />
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="362e4254-6395-11e7-a9a7-b88687f772a2">
+                  <SHORT-NAME>HeatRegulatorRunnable</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>HeatRegulatorRunnable</SYMBOL>
+                <DATA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
+                      <SHORT-NAME>HeatRegulatorIOAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorIO</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>HeatRegulatorPositionAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
             <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator</COMPONTENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="93404907-637a-11e7-8350-b88687f772a2">

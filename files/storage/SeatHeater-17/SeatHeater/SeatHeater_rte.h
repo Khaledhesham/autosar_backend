@@ -13,5 +13,10 @@
    used by the Software Component (SeatHeater)
 */
 
+Boolean Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_LeftHeatLevel(void);
+
+Boolean Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_RightHeatLevel(void);
+
+extern void SeatHeaterRunnable(void);
 
 #endif
