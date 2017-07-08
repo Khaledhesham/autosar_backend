@@ -13,6 +13,10 @@
    used by the Software Component (SeatSensorRight)
 */
 
+void Rte_IWrite_SeatSensorRight_SeatSensorRunnableRight_StatusRight_PassengerOnRightSeat(Boolean u);
+
+Boolean Rte_IRead_SeatSensorRight_SeatSensorRunnableRight_SensorRightIO_RightSensorValue(void);
+
 extern void SeatSensorRunnableRight(void);
 
 #endif

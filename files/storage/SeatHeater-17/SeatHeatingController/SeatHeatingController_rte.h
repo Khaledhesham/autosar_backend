@@ -13,11 +13,11 @@
    used by the Software Component (SeatHeatingController)
 */
 
-Boolean Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position(void);
+UInt32 Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position(void);
 
-Boolean Rte_IRead_SeatHeatingController_UpdateHeating_RightSeatStatus_PassengerOnRightSeat(void);
+void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(UInt32 u);
 
-Boolean Rte_IRead_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(void);
+void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(UInt32 u);
 
 Boolean Rte_IRead_SeatHeatingController_UpdateHeating_RightSeatStatus_PassengerOnRightSeat(void);
 

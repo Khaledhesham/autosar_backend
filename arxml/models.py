@@ -188,6 +188,9 @@ class DataType(models.Model):
     class Meta:
         unique_together = (('type', 'package'),)
 
+    def __str__(self):
+        return self.type
+
 
 class DataElement(models.Model):
     name = models.CharField(max_length=100, default='DataElement')

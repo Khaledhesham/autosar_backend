@@ -66,11 +66,27 @@
                   <SHORT-NAME>SeatSensorRunnableRight</SHORT-NAME>
                 <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
                 <SYMBOL>SeatSensorRunnableRight</SYMBOL>
-                <DATA-READ-ACCESS />
-                <DATA-WRITE-ACCESS />
+                <DATA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
+                      <SHORT-NAME>SeatSensorRightIOAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight/SensorRightIO</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RightSensorIOInterface/RightSensorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>SeatSensorRightStatusAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight/StatusRight</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="74e45e8d-637a-11e7-a524-b88687f772a2">
               <SHORT-NAME>SeatSensorRightImplementation</SHORT-NAME>

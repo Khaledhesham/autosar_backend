@@ -18,3 +18,8 @@
 
 /* WRITE YOUR CODE DOWN HERE */
 
+void SeatSensorRunnableRight()
+{
+    Boolean b = Rte_IRead_SeatSensorRight_SeatSensorRunnableRight_SensorRightIO_RightSensorValue();
+    Rte_IWrite_SeatSensorRight_SeatSensorRunnableRight_StatusRight_PassengerOnRightSeat(b);
+}

@@ -13,7 +13,7 @@
    used by the Software Component (HeatRegulator)
 */
 
-void Rte_IWrite_HeatRegulator_HeatRegulatorRunnable_RegulatorPosition_Position(Boolean u);
+void Rte_IWrite_HeatRegulator_HeatRegulatorRunnable_RegulatorPosition_Position(UInt32 u);
 
 UInt32 Rte_IRead_HeatRegulator_HeatRegulatorRunnable_RegulatorIO_RegulatorValue(void);
 

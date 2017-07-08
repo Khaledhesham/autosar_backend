@@ -42,7 +42,7 @@
                     <SDG GID="AutosarStudio::IdentifiableOptions" />
                   </SDGS>
                 </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
               </DATA-ELEMENT-PROTOTYPE>
             </SENDER-RECEIVER-INTERFACE>
           <SENDER-RECEIVER-INTERFACE UUID="5fe5c61e-637c-11e7-afe1-b88687f772a2">
@@ -60,7 +60,7 @@
                     <SDG GID="AutosarStudio::IdentifiableOptions" />
                   </SDGS>
                 </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
               </DATA-ELEMENT-PROTOTYPE>
             <DATA-ELEMENT-PROTOTYPE UUID="7e3a521e-637c-11e7-bee2-b88687f772a2">
                 <SHORT-NAME>RightHeatLevel</SHORT-NAME>
@@ -69,7 +69,7 @@
                     <SDG GID="AutosarStudio::IdentifiableOptions" />
                   </SDGS>
                 </ADMIN-DATA>
-              <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
               </DATA-ELEMENT-PROTOTYPE>
             </SENDER-RECEIVER-INTERFACE>
           <SENDER-RECEIVER-INTERFACE UUID="bd6e8bdc-637c-11e7-9bbe-b88687f772a2">

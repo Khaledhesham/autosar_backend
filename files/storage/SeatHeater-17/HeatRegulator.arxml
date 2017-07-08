@@ -86,7 +86,7 @@
                   </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="93404907-637a-11e7-8350-b88687f772a2">
               <SHORT-NAME>HeatRegulatorImplementation</SHORT-NAME>

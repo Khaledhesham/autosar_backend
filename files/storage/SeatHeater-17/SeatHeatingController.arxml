@@ -120,20 +120,6 @@
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   <DATA-READ-ACCESS>
-                      <SHORT-NAME>HeaterRightLevelAccess</SHORT-NAME>
-                    <DATA-ELEMENT-IREF>
-                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RightSeatStatus</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-PROTOTYPE-REF>
-                      </DATA-ELEMENT-IREF>
-                    </DATA-READ-ACCESS>
-                  <DATA-READ-ACCESS>
-                      <SHORT-NAME>HeaterLeftLevelAccess</SHORT-NAME>
-                    <DATA-ELEMENT-IREF>
-                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
-                      </DATA-ELEMENT-IREF>
-                    </DATA-READ-ACCESS>
-                  <DATA-READ-ACCESS>
                       <SHORT-NAME>RightSeatStatusAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RightSeatStatus</R-PORT-PROTOTYPE-REF>
@@ -148,10 +134,25 @@
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
-                <DATA-WRITE-ACCESS />
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>HeaterRightLevelAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>HeaterLeftLevelAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="192106d3-6377-11e7-8911-b88687f772a2">
               <SHORT-NAME>SeatHeatingControllerImplementation</SHORT-NAME>

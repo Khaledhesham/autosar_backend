@@ -18,3 +18,21 @@
 
 /* WRITE YOUR CODE DOWN HERE */
 
+void UpdateHeating()
+{
+    if (Rte_IRead_SeatHeatingController_UpdateHeating_RightSeatStatus_PassengerOnRightSeat())
+    {
+        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position() * 100;
+        Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(t);
+    }
+    else
+        Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(0);
+
+    if (Rte_IRead_SeatHeatingController_UpdateHeating_LeftSeatStatus_PassengerOnLeftSeat())
+    {
+        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position() * 100;
+        Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(t);
+    }
+    else
+        Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(0);
+}

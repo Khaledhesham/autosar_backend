@@ -486,7 +486,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 ET.SubElement(data_element, acc.data_element_ref.port.type + "-REF", DEST=acc.data_element_ref.port.type).text = prototype_ref
                 ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE-REF").text = data_element_ref
 
-        ET.SubElement(behavior, "COMPONTENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name
+        ET.SubElement(behavior, "COMPONENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name
         ###
 
         ### Implementation

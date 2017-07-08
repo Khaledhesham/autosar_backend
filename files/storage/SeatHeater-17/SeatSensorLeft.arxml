@@ -78,13 +78,13 @@
                 <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
                 <SYMBOL>SeatSensorRunnableLeft</SYMBOL>
                 <DATA-READ-ACCESS>
-                    <DARA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
                       <SHORT-NAME>SeatSensorLeftIOAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft/SensorLeftIO</R-PORT-PROTOTYPE-REF>
                       <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
-                    </DARA-READ-ACCESS>
+                    </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
                 <DATA-WRITE-ACCESS>
                     <DATA-WRITE-ACCESS>
@@ -97,7 +97,7 @@
                   </DATA-WRITE-ACCESS>
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
-            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft</COMPONTENT-REF>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft</COMPONENT-REF>
             </INTERNAL-BEHAVIOR>
           <SWC-IMPLEMENTATION uuid="5f322e5b-637a-11e7-907e-b88687f772a2">
               <SHORT-NAME>SeatSensorLeftImplementation</SHORT-NAME>

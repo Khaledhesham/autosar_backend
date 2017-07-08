@@ -18,3 +18,8 @@
 
 /* WRITE YOUR CODE DOWN HERE */
 
+void SeatSensorRunnableLeft()
+{
+    Boolean b = Rte_IRead_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue();
+    Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_StatusLeft_PassengerOnLeftSeat(b);
+}

@@ -15,7 +15,7 @@
 
 void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_StatusLeft_PassengerOnLeftSeat(Boolean u);
 
-void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue(Boolean u);
+Boolean Rte_IRead_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue(void);
 
 extern void SeatSensorRunnableLeft(void);
 
