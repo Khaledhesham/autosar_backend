@@ -1,0 +1,90 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d7072a92-6376-11e7-95ec-b88687f772a2">
+      <SHORT_NAME>SeatHeater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d7072a93-6376-11e7-8544-b88687f772a2">
+          <SHORT_NAME>SeatHeater_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="a4f54698-637a-11e7-bbd2-b88687f772a2">
+              <SHORT_NAME>SeatHeater</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="a43b9d10-637b-11e7-bfef-b88687f772a2">
+                  <SHORT_NAME>Levels</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater_pkg/SeatHeater_swc/HeaterLevel</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="ab64f834-637b-11e7-8bd9-b88687f772a2">
+                  <SHORT_NAME>LeftSeaterIO</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE" />
+                </P-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="aea8236c-637b-11e7-88a1-b88687f772a2">
+                  <SHORT_NAME>RightSeaterIO</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE" />
+                </P-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="a4f55a2c-637a-11e7-a95e-b88687f772a2">
+              <SHORT-NAME>SeatHeaterBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES />
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeater_swc/SeatHeater</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="a4f54699-637a-11e7-bef7-b88687f772a2">
+              <SHORT-NAME>SeatHeaterImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/SeatHeater/SeatHeater_swc/SeatHeaterBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

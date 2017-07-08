@@ -1,0 +1,76 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d7072a92-6376-11e7-95ec-b88687f772a2">
+      <SHORT_NAME>SeatHeater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d7072a93-6376-11e7-8544-b88687f772a2">
+          <SHORT_NAME>SeatSensorRight_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="74e45e8c-637a-11e7-b501-b88687f772a2">
+              <SHORT_NAME>SeatSensorRight</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="39b62f8c-637b-11e7-bcbf-b88687f772a2">
+                  <SHORT_NAME>SensorRightIO</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS />
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE" />
+                </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="407c594a-637b-11e7-b968-b88687f772a2">
+                  <SHORT_NAME>StatusRight</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatSensorRight_pkg/SeatSensorRight_swc/RightSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="74e45e8e-637a-11e7-b92e-b88687f772a2">
+              <SHORT-NAME>SeatSensorRightBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES />
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="74e45e8d-637a-11e7-a524-b88687f772a2">
+              <SHORT-NAME>SeatSensorRightImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/SeatHeater/SeatSensorRight_swc/SeatSensorRightBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

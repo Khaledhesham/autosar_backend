@@ -1,0 +1,170 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d7072a92-6376-11e7-95ec-b88687f772a2">
+      <SHORT_NAME>SeatHeater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d7072a93-6376-11e7-8544-b88687f772a2">
+          <SHORT_NAME>SeatHeatingController_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="192106d2-6377-11e7-b087-b88687f772a2">
+              <SHORT_NAME>SeatHeatingController</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="dd265562-6377-11e7-86f4-b88687f772a2">
+                  <SHORT_NAME>RegulatorPosition</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/RegulatorPosition</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE UUID="ee3ce27a-6377-11e7-91b8-b88687f772a2">
+                  <SHORT_NAME>HeaterLevels</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/HeaterLevel</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="2bbc4fd0-6378-11e7-a33e-b88687f772a2">
+                  <SHORT_NAME>LeftSeatStatus</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/LeftSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="3b628ad4-6378-11e7-ac46-b88687f772a2">
+                  <SHORT_NAME>RightSeatStatus</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-PROVIDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-PROVIDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/RightSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="192106d4-6377-11e7-b3e3-b88687f772a2">
+              <SHORT-NAME>SeatHeatingControllerBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS>
+                <TIMING-EVENT UUID="cec42eca-637e-11e7-829b-b88687f772a2">
+                  <SHORT-NAME>HeatingUpdateEvent</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatHeatingController_swc/SeatHeatingControllerBehavior/UpdateHeating</START-ON-EVENT-REF>
+                <PERIOD>0.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="51810036-637e-11e7-bd7a-b88687f772a2">
+                  <SHORT-NAME>UpdateHeating</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>UpdateHeating</SYMBOL>
+                <DATA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
+                      <SHORT-NAME>RegulatorPositionAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  <DATA-READ-ACCESS>
+                      <SHORT-NAME>HeaterRightLevelAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  <DATA-READ-ACCESS>
+                      <SHORT-NAME>HeaterLeftLevelAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  <DATA-READ-ACCESS>
+                      <SHORT-NAME>LeftSeatStatusAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  <DATA-READ-ACCESS>
+                      <SHORT-NAME>RightSeatStatusAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS />
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONTENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController</COMPONTENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="192106d3-6377-11e7-8911-b88687f772a2">
+              <SHORT-NAME>SeatHeatingControllerImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/SeatHeater/SeatHeatingController_swc/SeatHeatingControllerBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

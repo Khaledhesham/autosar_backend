@@ -419,6 +419,7 @@ def set_dataElement_type(request):
         for data_type in package.datatype_set.all():
             if data_type.type == request.POST['type']:
                 element.type = data_type
+                element.save()
                 element.interface.package.Rewrite()
                 return HttpResponse("True")
         
@@ -468,6 +469,7 @@ def set_runnable_concurrent(request):
     runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     if runnable.swc == swc:
         runnable.concurrent = bool(request.POST['concurrent'])
+        runnable.save()
         swc.Rewrite()
         return HttpResponse("True")
 
@@ -520,6 +522,7 @@ def set_timingEvent_runnable(request):
     runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
     if event.swc == swc and runnable.swc == swc:
         event.runnable = runnable
+        event.save()
         swc.Rewrite()   
         return HttpResponse("True")
 
@@ -533,6 +536,7 @@ def set_timingEvent_period(request):
     event = ArxmlModels.TimingEvent.objects.get(pk=request.POST['timingEvent_id'])
     if event.swc == swc:
         event.period = float(request.POST['period'])
+        event.save()
         swc.Rewrite()   
         return HttpResponse("True")
 
@@ -593,6 +597,7 @@ def set_dataAccess_element_ref(request):
     data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
     if access.runnable.swc == swc:
         access.data_element_ref = data_element_ref
+        access.save()
         swc.Rewrite()
         return HttpResponse("True")
 
