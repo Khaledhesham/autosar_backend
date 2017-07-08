@@ -4,14 +4,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
-Boolean TopLed;
-Boolean Toggle;
 Boolean BottomLed;
-
-void SetValue(char* var, Boolean Boolean_val){
-    if (var == "Toggle")
-        Toggle = Boolean_val;
-}
+Boolean Toggle;
+Boolean TopLed;
 
 Boolean Rte_IRead_DoubleBlink_TopRunnable_Switch_Toggle(void)
 {
@@ -40,13 +35,13 @@ void Rewrite()
     FILE* file;
     file = fopen("outputs.txt", "w+");
     fprintf(file, "{");
-    printf("TopLed ");
-    printf("%d\n", TopLed);
-    fprintf(file, "\"TopLed\" : \"%s\"", TopLed ? "True" : "False");
-    fprintf(file, ",");
     printf("BottomLed ");
     printf("%d\n", BottomLed);
     fprintf(file, "\"BottomLed\" : \"%s\"", BottomLed ? "True" : "False");
+    fprintf(file, ",");
+    printf("TopLed ");
+    printf("%d\n", TopLed);
+    fprintf(file, "\"TopLed\" : \"%s\"", TopLed ? "True" : "False");
     fprintf(file, "}");
     fclose(file);
 }
@@ -63,6 +58,7 @@ void Reread()
     fscanf(file, "%d,",&Toggle_t);
 
     Toggle = Toggle_t;
+    printf("%d\n",Toggle_t);
 
     fclose(file);
 }
@@ -101,6 +97,7 @@ void* TimerThread(void* arguments)
 int main()
 {
     pthread_mutex_init(&event_mutex, NULL);
+
     struct TimingEventArgs TopEvent;
     TopEvent.runnable = TopRunnable;
     TopEvent.period = 2000;

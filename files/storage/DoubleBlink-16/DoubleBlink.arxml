@@ -29,10 +29,10 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
                 <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Input</PROVIDED-INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
@@ -44,10 +44,10 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Top/TopLed</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
                 <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Top</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
@@ -59,10 +59,10 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Bottom/BottomLed</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
                 <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Bottom</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
