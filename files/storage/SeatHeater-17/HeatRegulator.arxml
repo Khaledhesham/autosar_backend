@@ -60,7 +60,18 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <EVENTS />
+            <EVENTS>
+                <TIMING-EVENT UUID="699ac846-6417-11e7-b779-b88687f772a2">
+                  <SHORT-NAME>HeatRegulatorEvent</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/HeatRegulator_swc/HeatRegulatorBehavior/HeatRegulatorRunnable</START-ON-EVENT-REF>
+                <PERIOD>1.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
             <RUNNABLES>
                 <RUNNABLE-ENTITY UUID="362e4254-6395-11e7-a9a7-b88687f772a2">
                   <SHORT-NAME>HeatRegulatorRunnable</SHORT-NAME>

@@ -69,7 +69,7 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeftBehavior/SeatSensorRunnableLeft</START-ON-EVENT-REF>
-                <PERIOD>0.0</PERIOD>
+                <PERIOD>1.0</PERIOD>
                 </TIMING-EVENT>
               </EVENTS>
             <RUNNABLES>

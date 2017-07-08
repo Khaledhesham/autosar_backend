@@ -8,40 +8,28 @@
 #include <unistd.h>
 #include <pthread.h>
 
-Boolean RightHeatLevel;
 Boolean LeftSensorValue;
-Boolean PassengerOnRightSeat;
-UInt32 RegulatorValue;
-Boolean Position;
-Boolean LeftHeatLevel;
 Boolean PassengerOnLeftSeat;
+Boolean PassengerOnRightSeat;
+Boolean RightSensorValue;
+UInt32 LeftHeatLevel;
+UInt32 LeftHeaterValue;
+UInt32 Position;
+UInt32 RegulatorValue;
+UInt32 RightHeatLevel;
+UInt32 RightHeaterValue;
 
-void SetValue(char* var, Boolean Boolean_val, UInt32 UInt32_val){
-    if (var == "Position")
-        Position = Boolean_val;
-    if (var == "LeftHeatLevel")
-        LeftHeatLevel = Boolean_val;
-    if (var == "RightHeatLevel")
-        RightHeatLevel = Boolean_val;
-    if (var == "PassengerOnLeftSeat")
-        PassengerOnLeftSeat = Boolean_val;
-    if (var == "PassengerOnRightSeat")
-        PassengerOnRightSeat = Boolean_val;
-    if (var == "RegulatorValue")
-        RegulatorValue = UInt32_val;
-}
-
-Boolean Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position(void)
+UInt32 Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position(void)
 {
     return Position;
 }
 
-void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(Boolean u)
+void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(UInt32 u)
 {
     RightHeatLevel = u;
 }
 
-void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(Boolean u)
+void Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(UInt32 u)
 {
     LeftHeatLevel = u;
 }
@@ -61,12 +49,22 @@ void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_StatusLeft_PassengerOnLeft
     PassengerOnLeftSeat = u;
 }
 
-void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue(Boolean u)
+Boolean Rte_IRead_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue(void)
 {
-    LeftSensorValue = u;
+    return LeftSensorValue;
 }
 
-void Rte_IWrite_HeatRegulator_HeatRegulatorRunnable_RegulatorPosition_Position(Boolean u)
+void Rte_IWrite_SeatSensorRight_SeatSensorRunnableRight_StatusRight_PassengerOnRightSeat(Boolean u)
+{
+    PassengerOnRightSeat = u;
+}
+
+Boolean Rte_IRead_SeatSensorRight_SeatSensorRunnableRight_SensorRightIO_RightSensorValue(void)
+{
+    return RightSensorValue;
+}
+
+void Rte_IWrite_HeatRegulator_HeatRegulatorRunnable_RegulatorPosition_Position(UInt32 u)
 {
     Position = u;
 }
@@ -76,14 +74,24 @@ UInt32 Rte_IRead_HeatRegulator_HeatRegulatorRunnable_RegulatorIO_RegulatorValue(
     return RegulatorValue;
 }
 
-Boolean Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_LeftHeatLevel(void)
+UInt32 Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_LeftHeatLevel(void)
 {
     return LeftHeatLevel;
 }
 
-Boolean Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_RightHeatLevel(void)
+UInt32 Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_RightHeatLevel(void)
 {
     return RightHeatLevel;
+}
+
+void Rte_IWrite_SeatHeater_SeatHeaterRunnable_LeftSeaterIO_LeftHeaterValue(UInt32 u)
+{
+    LeftHeaterValue = u;
+}
+
+void Rte_IWrite_SeatHeater_SeatHeaterRunnable_RightSeaterIO_RightHeaterValue(UInt32 u)
+{
+    RightHeaterValue = u;
 }
 
 pthread_mutex_t event_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -93,25 +101,13 @@ void Rewrite()
     FILE* file;
     file = fopen("outputs.txt", "w+");
     fprintf(file, "{");
-    printf("Position ");
-    printf("%d\n", Position);
-    fprintf(file, "\"Position\" : \"%s\"", Position ? "True" : "False");
+    printf("LeftHeaterValue ");
+    printf("%d\n", LeftHeaterValue);
+    fprintf(file, "\"LeftHeaterValue\" : \"%d\"", LeftHeaterValue);
     fprintf(file, ",");
-    printf("LeftHeatLevel ");
-    printf("%d\n", LeftHeatLevel);
-    fprintf(file, "\"LeftHeatLevel\" : \"%s\"", LeftHeatLevel ? "True" : "False");
-    fprintf(file, ",");
-    printf("RightHeatLevel ");
-    printf("%d\n", RightHeatLevel);
-    fprintf(file, "\"RightHeatLevel\" : \"%s\"", RightHeatLevel ? "True" : "False");
-    fprintf(file, ",");
-    printf("PassengerOnLeftSeat ");
-    printf("%d\n", PassengerOnLeftSeat);
-    fprintf(file, "\"PassengerOnLeftSeat\" : \"%s\"", PassengerOnLeftSeat ? "True" : "False");
-    fprintf(file, ",");
-    printf("LeftSensorValue ");
-    printf("%d\n", LeftSensorValue);
-    fprintf(file, "\"LeftSensorValue\" : \"%s\"", LeftSensorValue ? "True" : "False");
+    printf("RightHeaterValue ");
+    printf("%d\n", RightHeaterValue);
+    fprintf(file, "\"RightHeaterValue\" : \"%d\"", RightHeaterValue);
     fprintf(file, "}");
     fclose(file);
 }
@@ -123,21 +119,18 @@ void Reread()
     while(file == NULL)
         file = fopen("inputs.txt", "r");
 
-    int Position_t;
-    int LeftHeatLevel_t;
-    int RightHeatLevel_t;
-    int PassengerOnLeftSeat_t;
-    int PassengerOnRightSeat_t;
+    int LeftSensorValue_t;
     int RegulatorValue_t;
+    int RightSensorValue_t;
 
-    fscanf(file, "%d,%d,%d,%d,%d,%d,",&Position_t, &LeftHeatLevel_t, &RightHeatLevel_t, &PassengerOnLeftSeat_t, &PassengerOnRightSeat_t, &RegulatorValue_t);
+    fscanf(file, "%d,%d,%d,",&LeftSensorValue_t, &RegulatorValue_t, &RightSensorValue_t);
 
-    Position = Position_t;
-    LeftHeatLevel = LeftHeatLevel_t;
-    RightHeatLevel = RightHeatLevel_t;
-    PassengerOnLeftSeat = PassengerOnLeftSeat_t;
-    PassengerOnRightSeat = PassengerOnRightSeat_t;
+    LeftSensorValue = LeftSensorValue_t;
     RegulatorValue = RegulatorValue_t;
+    RightSensorValue = RightSensorValue_t;
+    printf("%d\n",LeftSensorValue_t);
+    printf("%d\n",RegulatorValue_t);
+    printf("%d\n",RightSensorValue_t);
 
     fclose(file);
 }
@@ -176,17 +169,36 @@ void* TimerThread(void* arguments)
 int main()
 {
     pthread_mutex_init(&event_mutex, NULL);
+
     struct TimingEventArgs HeatingUpdateEvent;
     HeatingUpdateEvent.runnable = UpdateHeating;
-    HeatingUpdateEvent.period = 0;
+    HeatingUpdateEvent.period = 1000;
     pthread_t HeatingUpdateEvent_thread;
     pthread_create(&HeatingUpdateEvent_thread, NULL, TimerThread, (void*)&HeatingUpdateEvent);
 
     struct TimingEventArgs SeatSensorLeftUpdateTimer;
     SeatSensorLeftUpdateTimer.runnable = SeatSensorRunnableLeft;
-    SeatSensorLeftUpdateTimer.period = 0;
+    SeatSensorLeftUpdateTimer.period = 1000;
     pthread_t SeatSensorLeftUpdateTimer_thread;
     pthread_create(&SeatSensorLeftUpdateTimer_thread, NULL, TimerThread, (void*)&SeatSensorLeftUpdateTimer);
+
+    struct TimingEventArgs SeatSensorRightEvent;
+    SeatSensorRightEvent.runnable = SeatSensorRunnableRight;
+    SeatSensorRightEvent.period = 1000;
+    pthread_t SeatSensorRightEvent_thread;
+    pthread_create(&SeatSensorRightEvent_thread, NULL, TimerThread, (void*)&SeatSensorRightEvent);
+
+    struct TimingEventArgs HeatRegulatorEvent;
+    HeatRegulatorEvent.runnable = HeatRegulatorRunnable;
+    HeatRegulatorEvent.period = 1000;
+    pthread_t HeatRegulatorEvent_thread;
+    pthread_create(&HeatRegulatorEvent_thread, NULL, TimerThread, (void*)&HeatRegulatorEvent);
+
+    struct TimingEventArgs SeatHeaterEvent;
+    SeatHeaterEvent.runnable = SeatHeaterRunnable;
+    SeatHeaterEvent.period = 1000;
+    pthread_t SeatHeaterEvent_thread;
+    pthread_create(&SeatHeaterEvent_thread, NULL, TimerThread, (void*)&SeatHeaterEvent);
 
     pthread_t timeout_thread;
     pthread_create(&timeout_thread, NULL, Timeout, (void*)0);

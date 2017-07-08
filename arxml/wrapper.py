@@ -140,29 +140,19 @@ class RunnableCompileFile:
                 for access in runnable.dataaccess_set.all():
                     data_elements_set.add(access.data_element_ref.data_element.type.type + " " + access.data_element_ref.data_element.name + ";")
 
-                    if access.type == "DATA-READ-ACCESS":
-                        input_data_elements.add(access.data_element_ref.data_element)
-                    else:
-                        output_data_elements.add(access.data_element_ref.data_element)
+                    if not hasattr(access.data_element_ref.port, "p_port_connector") \
+                            and not hasattr(access.data_element_ref.port, "r_port_connector"):
+                        if access.type == "DATA-READ-ACCESS":
+                            input_data_elements.add(access.data_element_ref.data_element)
+                        else:
+                            output_data_elements.add(access.data_element_ref.data_element)
+
+        data_elements_set = sorted(data_elements_set)
+        input_data_elements = sorted(input_data_elements)
+        output_data_elements = sorted(output_data_elements)
 
         for de in data_elements_set:
             print(de, file=file)
-
-        print("", file=file)
-
-        print("void SetValue(char* var", end="", file=file)
-
-        for dt in package.datatype_set.all():
-            print(", " + dt.type + " " + dt.type + "_val", end="", file=file)
-
-        print(")", end="", file=file)
-
-        print("{", file=file)
-        for de in input_data_elements:
-            print("    if (var == \"" + de.name + "\")", file=file)
-            print("        " + de.name + " = " + de.type.type + "_val;", file=file)
-
-        print("}", file=file)
 
         print("", file=file)
 
@@ -270,6 +260,9 @@ class RunnableCompileFile:
             for e in input_data_elements:
                 print("    " + e.name + " = " + e.name + "_t;", file=file)
 
+            for e in input_data_elements:
+                print("    printf(\"%d\\n\"," + e.name + "_t);", file=file)
+
             print("", file=file)
             print("    fclose(file);", file=file)
 
@@ -315,6 +308,7 @@ class RunnableCompileFile:
         print("{", file=file)
 
         print("    pthread_mutex_init(&event_mutex, NULL);", file=file)
+        print("", file=file)
 
         start = True
 

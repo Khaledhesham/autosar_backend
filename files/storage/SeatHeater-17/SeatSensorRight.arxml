@@ -60,7 +60,18 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <EVENTS />
+            <EVENTS>
+                <TIMING-EVENT UUID="68f46d88-6417-11e7-9c5b-b88687f772a2">
+                  <SHORT-NAME>SeatSensorRightEvent</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatSensorRight_swc/SeatSensorRightBehavior/SeatSensorRunnableRight</START-ON-EVENT-REF>
+                <PERIOD>1.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
             <RUNNABLES>
                 <RUNNABLE-ENTITY UUID="dfe72ef6-6396-11e7-aa00-b88687f772a2">
                   <SHORT-NAME>SeatSensorRunnableRight</SHORT-NAME>

@@ -103,7 +103,7 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatHeatingController_swc/SeatHeatingControllerBehavior/UpdateHeating</START-ON-EVENT-REF>
-                <PERIOD>0.0</PERIOD>
+                <PERIOD>1.0</PERIOD>
                 </TIMING-EVENT>
               </EVENTS>
             <RUNNABLES>
