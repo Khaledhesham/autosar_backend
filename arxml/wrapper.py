@@ -410,17 +410,21 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             interface_path = ""
             if swc_port.interface is not None:
-                interface_path = "/" + swc.name + "_pkg" + "/" + swc.name + "_swc/" + swc_port.interface.name
+                interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name
 
             # if type == "P-PORT-PROTOTYPE":
-            req = ET.SubElement(port, "PROVIDED-COM-SPECS")
-            spec = "UNQUEUED-SENDER-COM-SPEC"
-            interface_t_ref = "PROVIDED-INTERFACE-TREF"
+            req = ET.SubElement
+            spec = ""
+            interface_t_ref = ""
 
-            if type == "R-PORT-PROTOTYPE":
+            if swc_port.type == "R-PORT-PROTOTYPE":
                 req = ET.SubElement(port, "REQUIRED-COM-SPECS")
                 spec = "UNQUEUED-RECEIVER-COM-SPEC"
                 interface_t_ref = "REQUIRED_INTERFACE-TREF"
+            else:
+                req = ET.SubElement(port, "PROVIDED-COM-SPECS")
+                spec = "UNQUEUED-SENDER-COM-SPEC"
+                interface_t_ref = "PROVIDED-INTERFACE-TREF"
 
             for data_element_ref in swc_port.dataelementref_set.all():
                     ref = ET.SubElement(req, spec)

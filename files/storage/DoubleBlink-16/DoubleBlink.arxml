@@ -28,13 +28,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-SENDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-SENDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Input</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink/Interfaces/Input</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               <P-PORT-PROTOTYPE UUID="6ea4934a-632f-11e7-9015-b88687f772a2">
                   <SHORT_NAME>TopLed</SHORT_NAME>
@@ -49,7 +49,7 @@
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
                     </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Top</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink/Interfaces/Top</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               <P-PORT-PROTOTYPE UUID="73aa0bcc-632f-11e7-8850-b88687f772a2">
                   <SHORT_NAME>BottomLed</SHORT_NAME>
@@ -64,7 +64,7 @@
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
                     </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink_pkg/DoubleBlink_swc/Bottom</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/DoubleBlink/Interfaces/Bottom</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
