@@ -107,7 +107,7 @@
                       <SHORT-NAME>InputAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink/Switch</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -116,7 +116,7 @@
                       <SHORT-NAME>OutputAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink/TopLed</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/DoubleBlink/Interfaces/Top/TopLed</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Top/TopLed</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
@@ -130,7 +130,7 @@
                       <SHORT-NAME>InputLedAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink/Switch</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Input/Toggle</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -139,7 +139,7 @@
                       <SHORT-NAME>BottomAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink/BottomLed</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/DoubleBlink/Interfaces/Bottom/BottomLed</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/DoubleBlink/Interfaces/Bottom/BottomLed</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
