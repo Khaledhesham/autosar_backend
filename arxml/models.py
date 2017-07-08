@@ -216,6 +216,9 @@ class DataElementRef(models.Model):
     class Meta:
         unique_together = (('port', 'data_element'),)
 
+    def __str__(self):
+        return self.port.name + ": " + self.data_element.name
+
 
 class DataAccess(models.Model):
     name = models.CharField(max_length=100, default='DataAccess')
@@ -251,8 +254,11 @@ class Composition(models.Model):
 class Connector(models.Model):
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
-    p_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='p_port')
-    r_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='r_port')
+    p_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='p_port_connector')
+    r_port = models.OneToOneField(Port, on_delete=models.CASCADE, related_name='r_port_connector')
 
     class Meta:
         unique_together = (('p_port', 'composition'),('r_port', 'composition'),)
+
+    def __str__(self):
+        return self.p_port.name + " - " + self.r_port.name

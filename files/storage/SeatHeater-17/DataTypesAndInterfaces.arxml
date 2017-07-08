@@ -108,6 +108,96 @@
               <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
               </DATA-ELEMENT-PROTOTYPE>
             </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="5a1617da-6390-11e7-87da-b88687f772a2">
+              <SHORT-NAME>LeftSensorIOInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="72ab5914-6390-11e7-bed2-b88687f772a2">
+                <SHORT-NAME>LeftSensorValue</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="f8640438-6390-11e7-b1ac-b88687f772a2">
+              <SHORT-NAME>RegulatorIOInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="0316e77a-6391-11e7-b04e-b88687f772a2">
+                <SHORT-NAME>RegulatorValue</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="432fc4c0-6391-11e7-96ac-b88687f772a2">
+              <SHORT-NAME>RightSensorIOInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="4cd33736-6391-11e7-92c0-b88687f772a2">
+                <SHORT-NAME>RightSensorValue</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="BOOLEAN-TYPE">/SeatHeater/DataTypes/Boolean</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="906a4f68-6391-11e7-b3a1-b88687f772a2">
+              <SHORT-NAME>LeftSeatHeaterIOInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="9ff9d34c-6391-11e7-98b0-b88687f772a2">
+                <SHORT-NAME>LeftHeaterValue</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
+          <SENDER-RECEIVER-INTERFACE UUID="9708216e-6391-11e7-90dd-b88687f772a2">
+              <SHORT-NAME>RightSeatHeaterIOInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS />
+            <DATA-ELEMENT-PROTOTYPE UUID="a69d638c-6391-11e7-bff5-b88687f772a2">
+                <SHORT-NAME>RightHeaterValue</SHORT-NAME>
+              <ADMIN-DATA>
+                  <SDGS>
+                    <SDG GID="AutosarStudio::IdentifiableOptions" />
+                  </SDGS>
+                </ADMIN-DATA>
+              <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
+              </DATA-ELEMENT-PROTOTYPE>
+            </SENDER-RECEIVER-INTERFACE>
           </ELEMENTS>
         </AR-PACKAGE>
       </SUB-PACKAGES>

@@ -13,5 +13,10 @@
    used by the Software Component (SeatSensorLeft)
 */
 
+void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_StatusLeft_PassengerOnLeftSeat(Boolean u);
+
+void Rte_IWrite_SeatSensorLeft_SeatSensorRunnableLeft_SensorLeftIO_LeftSensorValue(Boolean u);
+
+extern void SeatSensorRunnableLeft(void);
 
 #endif
