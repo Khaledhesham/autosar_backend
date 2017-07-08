@@ -705,7 +705,8 @@ def get_input_output_list(request):
 def start_simulation(request):
     d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
-
+    project.package.Rewrite()
+    
     if request.user.is_staff or request.user == project.user:
         user_values = set()
 
@@ -721,7 +722,7 @@ def start_simulation(request):
             for port in swc.port_set.all():
                 for de_ref in port.dataelementref_set.all():
                     if port.type == "R-PORT-PROTOTYPE":
-                        if not hasattr(port, 'p_port_connector') or not hasattr(port, 'r_port_connector'):  # Means that the port is not internally connected
+                        if not hasattr(port, 'p_port_connector') and not hasattr(port, 'r_port_connector'):  # Means that the port is not internally connected
                             s.add(de_ref.data_element.name)
 
         if s != user_values: # Validation

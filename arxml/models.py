@@ -7,12 +7,7 @@ from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFil
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-import re
-import os
-import requests
-import json
 import subprocess
-import signal
 import psutil
 
 def GetUUID():
@@ -58,9 +53,9 @@ class Package(models.Model):
         out, err = gcc_proc.communicate()
         exitcode = gcc_proc.returncode
 
-        proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name, cwd=self.project.directory.GetPath())
-        
-        if exitcode == 0 and proc is not None:
+        if exitcode == 0:
+            proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name,
+                                    cwd=self.project.directory.GetPath())
             self.proc_id = proc.pid
             self.save()
             return True
