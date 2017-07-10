@@ -781,7 +781,13 @@ def get_simulation_values(request):
         file = open(project.directory.GetPath() + "/outputs.txt", 'r')
         s = file.read()
         file.close()
-        return HttpResponse(s)
+
+        file = open(project.directory.GetPath() + "/log.txt", 'r+')
+        l = file.readlines()
+        file.truncate()
+        file.close()
+
+        return JsonResponse( {"output" : s, "logging" : l} )
 
     raise PermissionDenied
 

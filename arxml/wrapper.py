@@ -130,6 +130,8 @@ class RunnableCompileFile:
         print("#include <pthread.h>", file=file)
         
         print("", file=file)
+        print("Boolean dataChanged = false;", file=file)
+        print("", file=file)
 
         data_elements_set = set()
         input_data_elements = set()
@@ -168,6 +170,11 @@ class RunnableCompileFile:
                         print("void " + "Rte_IWrite_" + runnable.swc.name + "_" + runnable.name + "_" + access.data_element_ref.port.name + "_" + access.data_element_ref.data_element.name + "(" + access.data_element_ref.data_element.type.type + " u)", file=file)
                         print("{", file=file)
                         print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
+                        print("    FILE* file;", file=file)
+                        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+                        print("    fprintf(file, \"DataElement " + access.data_element_ref.data_element.name + " changed.\");", file=file)
+                        print("    fclose(file);", file=file)
+                        print("    dataChanged = true;", file=file)
                         print("}", file=file)
 
                     print("", file=file)
@@ -177,6 +184,8 @@ class RunnableCompileFile:
 
         print("void Rewrite()", file=file)
         print("{", file=file)
+        print("    if (!dataChanged)", file=file)
+        print("        return;", file=file)
 
         start = True
 
@@ -276,6 +285,7 @@ class RunnableCompileFile:
         print("{", file=file)
         print("    int period;", file=file)
         print("    Runnable runnable;", file=file)
+        print("    char* runnable_name;", file=file)
         print("};", file=file)
         print("", file=file)
 
@@ -297,7 +307,12 @@ class RunnableCompileFile:
         print("        nanosleep(&ts, NULL);", file=file)
         print("        pthread_mutex_lock(&event_mutex);", file=file)
         print("        Reread();", file=file)
+        print("        FILE* file;", file=file)
+        print("        file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("        fprintf(file, \"Runnable %s is starting.\", (*args).runnable_name);", file=file)
         print("        (*args).runnable();", file=file)
+        print("        fprintf(file, \"Runnable %s executed.\", (*args).runnable_name);", file=file)
+        print("        fclose(file);", file=file)
         print("        Rewrite();", file=file)
         print("        pthread_mutex_unlock(&event_mutex);", file=file)
         print("    }", file=file)
@@ -306,7 +321,12 @@ class RunnableCompileFile:
 
         print("int main()", file=file)
         print("{", file=file)
+        print("    FILE* file;", file=file)
+        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("    fprintf(file, \"Compile successful, executable is running.\");", file=file)
+        print("    fclose(file);", file=file)
 
+        print("", file=file)
         print("    pthread_mutex_init(&event_mutex, NULL);", file=file)
         print("", file=file)
 
@@ -323,6 +343,7 @@ class RunnableCompileFile:
                     print("    struct TimingEventArgs " + event.name + ";", file=file)
                     print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
                     print("    " + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
+                    print("    " + event.name + ".runnable_name = \"" + event.runnable.name + "\";", file=file)
                     print("    pthread_t " + event.name + "_thread;", file=file)
                     print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&" + event.name + ");", file=file)
 
@@ -332,8 +353,13 @@ class RunnableCompileFile:
         print("    pthread_join(timeout_thread, NULL);", file=file)
 
         print("", file=file)
-
         print("    pthread_mutex_destroy(&event_mutex);", file=file)
+        print("", file=file)
+
+        print("    FILE* file;", file=file)
+        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("    fprintf(file, \"Simulation time ended.\");", file=file)
+        print("    fclose(file);", file=file)
 
         print("}", file=file)
         
