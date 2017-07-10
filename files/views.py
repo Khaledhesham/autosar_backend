@@ -784,7 +784,8 @@ def get_simulation_values(request):
 
         file = open(project.directory.GetPath() + "/log.txt", 'r+')
         l = file.readlines()
-        file.truncate()
+        file.close()
+        file = open(project.directory.GetPath() + "/log.txt", 'w+')
         file.close()
 
         return JsonResponse( {"output" : s, "logging" : l} )
