@@ -356,7 +356,7 @@ class RunnableCompileFile:
         print("    pthread_mutex_destroy(&event_mutex);", file=file)
         print("", file=file)
 
-        print("    FILE* file;", file=file)
+        print("    file;", file=file)
         print("    file = fopen(\"log.txt\", \"w+\");", file=file)
         print("    fprintf(file, \"Simulation time ended.\");", file=file)
         print("    fclose(file);", file=file)
