@@ -49,8 +49,7 @@ class Package(models.Model):
 
             self.proc_id = 0
 
-        file = open(project.directory.GetPath() + "/log.txt")
-        file.truncate()
+        file = open(self.project.directory.GetPath() + "/log.txt", 'w+')
         file.close()
 
         gcc_proc = subprocess.Popen(gcc_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
