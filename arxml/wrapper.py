@@ -171,7 +171,7 @@ class RunnableCompileFile:
                         print("{", file=file)
                         print("    " + access.data_element_ref.data_element.name + " = u;", file=file)
                         print("    FILE* file;", file=file)
-                        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+                        print("    file = fopen(\"log.txt\", \"a+\");", file=file)
                         print("    fprintf(file, \"DataElement " + access.data_element_ref.data_element.name + " changed.\");", file=file)
                         print("    fclose(file);", file=file)
                         print("    dataChanged = true;", file=file)
@@ -308,7 +308,7 @@ class RunnableCompileFile:
         print("        pthread_mutex_lock(&event_mutex);", file=file)
         print("        Reread();", file=file)
         print("        FILE* file;", file=file)
-        print("        file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("        file = fopen(\"log.txt\", \"a+\");", file=file)
         print("        fprintf(file, \"Runnable %s is starting.\", (*args).runnable_name);", file=file)
         print("        (*args).runnable();", file=file)
         print("        fprintf(file, \"Runnable %s executed.\", (*args).runnable_name);", file=file)
@@ -322,7 +322,7 @@ class RunnableCompileFile:
         print("int main()", file=file)
         print("{", file=file)
         print("    FILE* file;", file=file)
-        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("    file = fopen(\"log.txt\", \"a+\");", file=file)
         print("    fprintf(file, \"Compile successful, executable is running.\");", file=file)
         print("    fclose(file);", file=file)
 
@@ -357,7 +357,7 @@ class RunnableCompileFile:
         print("", file=file)
 
         print("    file;", file=file)
-        print("    file = fopen(\"log.txt\", \"w+\");", file=file)
+        print("    file = fopen(\"log.txt\", \"a+\");", file=file)
         print("    fprintf(file, \"Simulation time ended.\");", file=file)
         print("    fclose(file);", file=file)
 
