@@ -20,7 +20,7 @@
 
 void HeatRegulatorRunnable()
 {
-    UInt32 t = Rte_IRead_HeatRegulator_HeatRegulatorRunnable_RegulatorIO_RegulatorValue() / 100;
+    UInt32 t = Rte_IRead_HeatRegulator_HeatRegulatorRunnable_RegulatorIO_RegulatorValue();
     Rte_IWrite_HeatRegulator_HeatRegulatorRunnable_RegulatorPosition_Position(t);
     printf("Position: %d", t);
 }

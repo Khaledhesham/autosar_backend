@@ -28,17 +28,17 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  <UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater_pkg/SeatHeater_swc/HeaterLevel</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/HeaterLevel</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               <P-PORT-PROTOTYPE UUID="ab64f834-637b-11e7-8bd9-b88687f772a2">
                   <SHORT_NAME>LeftSeaterIO</SHORT_NAME>
@@ -48,12 +48,12 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatHeaterIOInterface/LeftHeaterValue</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater_pkg/SeatHeater_swc/LeftSeatHeaterIOInterface</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSeatHeaterIOInterface</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               <P-PORT-PROTOTYPE UUID="aea8236c-637b-11e7-88a1-b88687f772a2">
                   <SHORT_NAME>RightSeaterIO</SHORT_NAME>
@@ -63,12 +63,12 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatHeaterIOInterface/RightHeaterValue</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater_pkg/SeatHeater_swc/RightSeatHeaterIOInterface</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RightSeatHeaterIOInterface</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
@@ -101,14 +101,14 @@
                       <SHORT-NAME>SeatHeaterLeftLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeater_swc/SeatHeater/Levels</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   <DATA-READ-ACCESS>
                       <SHORT-NAME>SeatHeaterRightLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeater_swc/SeatHeater/Levels</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -117,14 +117,14 @@
                       <SHORT-NAME>SeatHeaterLeftIOAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeater_swc/SeatHeater/LeftSeaterIO</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/LeftSeatHeaterIOInterface/LeftHeaterValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatHeaterIOInterface/LeftHeaterValue</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   <DATA-WRITE-ACCESS>
                       <SHORT-NAME>SeatHeaterRightIOAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeater_swc/SeatHeater/RightSeaterIO</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RightSeatHeaterIOInterface/RightHeaterValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatHeaterIOInterface/RightHeaterValue</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>

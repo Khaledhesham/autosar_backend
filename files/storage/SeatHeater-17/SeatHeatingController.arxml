@@ -28,13 +28,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/RegulatorPosition</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RegulatorPosition</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               <P-PORT-PROTOTYPE UUID="ee3ce27a-6377-11e7-91b8-b88687f772a2">
                   <SHORT_NAME>HeaterLevels</SHORT_NAME>
@@ -44,16 +44,16 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  <UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
+                  <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/HeaterLevel</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/HeaterLevel</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               <R-PORT-PROTOTYPE UUID="2bbc4fd0-6378-11e7-a33e-b88687f772a2">
                   <SHORT_NAME>LeftSeatStatus</SHORT_NAME>
@@ -62,13 +62,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/LeftSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSeatStatusInterface</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               <R-PORT-PROTOTYPE UUID="3b628ad4-6378-11e7-ac46-b88687f772a2">
                   <SHORT_NAME>RightSeatStatus</SHORT_NAME>
@@ -77,13 +77,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeatingController_pkg/SeatHeatingController_swc/RightSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RightSeatStatusInterface</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
@@ -116,21 +116,21 @@
                       <SHORT-NAME>RegulatorPositionAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   <DATA-READ-ACCESS>
                       <SHORT-NAME>RightSeatStatusAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/RightSeatStatus</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatStatusInterface/PassengerOnRightSeat</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   <DATA-READ-ACCESS>
                       <SHORT-NAME>LeftSeatStatusAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/LeftSeatStatus</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -139,14 +139,14 @@
                       <SHORT-NAME>HeaterRightLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   <DATA-WRITE-ACCESS>
                       <SHORT-NAME>HeaterLeftLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>

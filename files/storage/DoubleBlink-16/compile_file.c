@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
+Boolean dataChanged = false;
+
 Boolean BottomLed;
 Boolean Toggle;
 Boolean TopLed;
@@ -16,11 +18,21 @@ Boolean Rte_IRead_DoubleBlink_TopRunnable_Switch_Toggle(void)
 void Rte_IWrite_DoubleBlink_TopRunnable_TopLed_TopLed(Boolean u)
 {
     TopLed = u;
+    FILE* file;
+    file = fopen("log.txt", "a+");
+    fprintf(file, "DataElement TopLed changed.\n");
+    fclose(file);
+    dataChanged = true;
 }
 
 void Rte_IWrite_DoubleBlink_BottomRunnable_BottomLed_BottomLed(Boolean u)
 {
     BottomLed = u;
+    FILE* file;
+    file = fopen("log.txt", "a+");
+    fprintf(file, "DataElement BottomLed changed.\n");
+    fclose(file);
+    dataChanged = true;
 }
 
 Boolean Rte_IRead_DoubleBlink_BottomRunnable_Switch_Toggle(void)
@@ -32,6 +44,8 @@ pthread_mutex_t event_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void Rewrite()
 {
+    if (!dataChanged)
+        return;
     FILE* file;
     file = fopen("outputs.txt", "w+");
     fprintf(file, "{");
@@ -69,6 +83,7 @@ struct TimingEventArgs
 {
     int period;
     Runnable runnable;
+    char* runnable_name;
 };
 
 void* Timeout(void* arguments)
@@ -88,7 +103,12 @@ void* TimerThread(void* arguments)
         nanosleep(&ts, NULL);
         pthread_mutex_lock(&event_mutex);
         Reread();
+        FILE* file;
+        file = fopen("log.txt", "a+");
+        fprintf(file, "Runnable %s is starting.\n", (*args).runnable_name);
         (*args).runnable();
+        fprintf(file, "Runnable %s executed.\n", (*args).runnable_name);
+        fclose(file);
         Rewrite();
         pthread_mutex_unlock(&event_mutex);
     }
@@ -96,17 +116,24 @@ void* TimerThread(void* arguments)
 
 int main()
 {
+    FILE* file;
+    file = fopen("log.txt", "a+");
+    fprintf(file, "Compile successful, executable is running.\n");
+    fclose(file);
+
     pthread_mutex_init(&event_mutex, NULL);
 
     struct TimingEventArgs TopEvent;
     TopEvent.runnable = TopRunnable;
     TopEvent.period = 2000;
+    TopEvent.runnable_name = "TopRunnable";
     pthread_t TopEvent_thread;
     pthread_create(&TopEvent_thread, NULL, TimerThread, (void*)&TopEvent);
 
     struct TimingEventArgs BottomEvent;
     BottomEvent.runnable = BottomRunnable;
     BottomEvent.period = 2000;
+    BottomEvent.runnable_name = "BottomRunnable";
     pthread_t BottomEvent_thread;
     pthread_create(&BottomEvent_thread, NULL, TimerThread, (void*)&BottomEvent);
 
@@ -115,4 +142,9 @@ int main()
     pthread_join(timeout_thread, NULL);
 
     pthread_mutex_destroy(&event_mutex);
+
+    file;
+    file = fopen("log.txt", "a+");
+    fprintf(file, "Simulation time ended.");
+    fclose(file);
 }

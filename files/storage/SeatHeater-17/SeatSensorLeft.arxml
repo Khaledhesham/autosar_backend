@@ -29,12 +29,12 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatSensorLeft_pkg/SeatSensorLeft_swc/LeftSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSeatStatusInterface</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               <R-PORT-PROTOTYPE UUID="31676e1e-637b-11e7-a072-b88687f772a2">
                   <SHORT_NAME>SensorLeftIO</SHORT_NAME>
@@ -43,13 +43,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatSensorLeft_pkg/SeatSensorLeft_swc/LeftSensorIOInterface</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSensorIOInterface</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
@@ -82,7 +82,7 @@
                       <SHORT-NAME>SeatSensorLeftIOAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft/SensorLeftIO</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -91,7 +91,7 @@
                       <SHORT-NAME>SeatSensorLeftStatusAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft/StatusLeft</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>

@@ -22,7 +22,7 @@ void UpdateHeating()
 {
     if (Rte_IRead_SeatHeatingController_UpdateHeating_RightSeatStatus_PassengerOnRightSeat())
     {
-        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position() * 100;
+        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position();
         Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_RightHeatLevel(t);
     }
     else
@@ -30,7 +30,7 @@ void UpdateHeating()
 
     if (Rte_IRead_SeatHeatingController_UpdateHeating_LeftSeatStatus_PassengerOnLeftSeat())
     {
-        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position() * 100;
+        UInt32 t = Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position();
         Rte_IWrite_SeatHeatingController_UpdateHeating_HeaterLevels_LeftHeatLevel(t);
     }
     else

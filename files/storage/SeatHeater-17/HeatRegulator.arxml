@@ -29,12 +29,12 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/HeatRegulator_pkg/HeatRegulator_swc/RegulatorPosition</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RegulatorPosition</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               <R-PORT-PROTOTYPE UUID="72542cac-637b-11e7-95dc-b88687f772a2">
                   <SHORT_NAME>RegulatorIO</SHORT_NAME>
@@ -43,13 +43,13 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
-                  </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/HeatRegulator_pkg/HeatRegulator_swc/RegulatorIOInterface</PROVIDED-INTERFACE-TREF>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RegulatorIOInterface</REQUIRED_INTERFACE-TREF>
                 </R-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
@@ -82,7 +82,7 @@
                       <SHORT-NAME>HeatRegulatorIOAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorIO</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-READ-ACCESS>
                   </DATA-READ-ACCESS>
@@ -91,7 +91,7 @@
                       <SHORT-NAME>HeatRegulatorPositionAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorPosition</R-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>

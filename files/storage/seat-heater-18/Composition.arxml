@@ -1,0 +1,26 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/seat-heater-18</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT_NAME>CrossControl</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT_NAME>SoftwareComponents</SHORT_NAME>
+        <ELEMENTS>
+            <COMPOSITION-TYPE>
+              <SHORT_NAME>seat-heaterComposition</SHORT_NAME>
+            <COMPONENTS />
+            <CONNECTORS />
+            </COMPOSITION-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

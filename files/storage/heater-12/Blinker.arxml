@@ -29,12 +29,12 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <PROVIDED-COM-SPECS>
-                    <UNQUEUED-PROVIDER-COM-SPEC>
+                    <UNQUEUED-SENDER-COM-SPEC>
                       <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-REF>
                     <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
-                    </UNQUEUED-PROVIDER-COM-SPEC>
+                    </UNQUEUED-SENDER-COM-SPEC>
                   </PROVIDED-COM-SPECS>
-                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/Blinker_pkg/Blinker_swc/blink</PROVIDED-INTERFACE-TREF>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/heater/Interfaces/blink</PROVIDED-INTERFACE-TREF>
                 </P-PORT-PROTOTYPE>
               </PORTS>
             </APPLICATION-SOFTWARE-COMPONENT-TYPE>
@@ -54,7 +54,7 @@
                     </SDGS>
                   </ADMIN-DATA>
                 <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/heater/Blinker_swc/BlinkerBehavior/BlinkerRunnable</START-ON-EVENT-REF>
-                <PERIOD>0.05</PERIOD>
+                <PERIOD>2.0</PERIOD>
                 </TIMING-EVENT>
               </EVENTS>
             <RUNNABLES>
@@ -68,7 +68,7 @@
                       <SHORT-NAME>BlinkerAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/heater/Blinker_swc/Blinker/Led</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE-REF">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/heater/Interfaces/blink/BlinkElement</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>

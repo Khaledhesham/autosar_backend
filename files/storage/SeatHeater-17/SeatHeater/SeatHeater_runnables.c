@@ -20,11 +20,11 @@
 
 void SeatHeaterRunnable()
 {
-    UInt32 t1 = Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_LeftHeatLevel() * 5;
+    UInt32 t1 = Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_LeftHeatLevel();
     Rte_IWrite_SeatHeater_SeatHeaterRunnable_LeftSeaterIO_LeftHeaterValue(t1);
     printf("LeftHeaterValue: %d", t1);
 
-    UInt32 t2 = Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_RightHeatLevel() * 5;
+    UInt32 t2 = Rte_IRead_SeatHeater_SeatHeaterRunnable_Levels_RightHeatLevel();
     Rte_IWrite_SeatHeater_SeatHeaterRunnable_RightSeaterIO_RightHeaterValue(t2);
     printf("RightHeaterValue: %d", t2);
 }

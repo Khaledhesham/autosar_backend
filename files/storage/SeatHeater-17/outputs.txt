@@ -1,1 +1,1 @@
-{"LeftHeaterValue" : "50000","RightHeaterValue" : "50000"}
+{"LeftHeaterValue" : "0","RightHeaterValue" : "20"}
