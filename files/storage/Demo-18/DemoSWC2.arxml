@@ -1,0 +1,61 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/Demo-18</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="e604a7d0-65cd-11e7-b32a-e4b7a99f0d8b">
+      <SHORT_NAME>Demo</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="e604cdda-65cd-11e7-98b9-e4b7a99f0d8b">
+          <SHORT_NAME>DemoSWC2_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="ffac0540-65cd-11e7-ac62-e4b7a99f0d8b">
+              <SHORT_NAME>DemoSWC2</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <R-PORT-PROTOTYPE UUID="08426c22-65ce-11e7-b51d-e4b7a99f0d8b">
+                  <SHORT_NAME>DemoRequester</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <REQUIRED-COM-SPECS />
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE" />
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="ffac0542-65cd-11e7-8e79-e4b7a99f0d8b">
+              <SHORT-NAME>DemoSWC2Behavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS />
+            <RUNNABLES />
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/Demo/DemoSWC2_swc/DemoSWC2</COMPONENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="ffac0541-65cd-11e7-b2a3-e4b7a99f0d8b">
+              <SHORT-NAME>DemoSWC2Implementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/Demo/DemoSWC2_swc/DemoSWC2Behavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

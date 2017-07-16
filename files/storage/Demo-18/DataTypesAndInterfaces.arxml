@@ -1,0 +1,54 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/Demo-18</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="e604a7d0-65cd-11e7-b32a-e4b7a99f0d8b">
+      <SHORT_NAME>Demo</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="e604cdda-65cd-11e7-98b9-e4b7a99f0d8b">
+          <SHORT_NAME>DataTypes</SHORT_NAME>
+        <ELEMENTS>
+            <BOOLEAN-TYPE>
+              <SHORT-NAME>Boolean</SHORT-NAME>
+            </BOOLEAN-TYPE>
+          <INTEGER-TYPE>
+              <SHORT-NAME>UInt8</SHORT-NAME>
+            <SW-DATA-DEF-PROPS />
+            <LOWER-LIMIT INTERVAL-TYPE="CLOSED">0</LOWER-LIMIT>
+            <UPPER-LIMIT INTERVAL-TYPE="CLOSED">255</UPPER-LIMIT>
+            </INTEGER-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      <AR-PACKAGE UUID="e604cdda-65cd-11e7-98b9-e4b7a99f0d8b">
+          <SHORT_NAME>Interfaces</SHORT_NAME>
+        <ELEMENTS>
+            <SENDER-RECEIVER-INTERFACE UUID="1beacaf4-65ce-11e7-bf81-e4b7a99f0d8b">
+              <SHORT-NAME>DemoInterface</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS>
+                <DATA-ELEMENT-PROTOTYPE UUID="1f8e02be-65ce-11e7-b53e-e4b7a99f0d8b">
+                  <SHORT-NAME>DemoDE</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="INTEGER-TYPE">/Demo/DataTypes/UInt8</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

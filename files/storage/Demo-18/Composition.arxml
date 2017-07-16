@@ -1,0 +1,47 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/Demo-18</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT_NAME>CrossControl</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT_NAME>SoftwareComponents</SHORT_NAME>
+        <ELEMENTS>
+            <COMPOSITION-TYPE>
+              <SHORT_NAME>DemoComposition</SHORT_NAME>
+            <COMPONENTS>
+                <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>DemoSWC</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/Demo/DemoSWC_swc/DemoSWC</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>DemoSWC2</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/Demo/DemoSWC2_swc/DemoSWC2</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              </COMPONENTS>
+            <CONNECTORS>
+                <ASSEMBLY-CONNECTOR-PROTOTYPE UUID="0c4a6338-65ce-11e7-aeb5-e4b7a99f0d8b">
+                  <SHORT_NAME>DemoPPortComposition</SHORT_NAME>
+                <PROVIDER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/DemoComposition/DemoSWC</COMPONENT-PROTOTYPE-REF>
+                  <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/DemoSWC_pkg/DemoSWC_swc/DemoSWC/DemoPPort</P-PORT-PROTOTYPE-REF>
+                  </PROVIDER-IREF>
+                <REQUESTER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/DemoComposition/DemoSWC2</COMPONENT-PROTOTYPE-REF>
+                  <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/DemoSWC2_pkg/DemoSWC2_swc/DemoSWC2/DemoRequester</R-PORT-PROTOTYPE-REF>
+                  </REQUESTER-IREF>
+                </ASSEMBLY-CONNECTOR-PROTOTYPE>
+              </CONNECTORS>
+            </COMPOSITION-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
