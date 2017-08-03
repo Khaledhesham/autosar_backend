@@ -38,7 +38,7 @@ class Package(models.Model):
         for swc in self.softwarecomponent_set.all():
             gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
 
-        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + " -lpthread"
+        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + ".o" + " -lpthread"
 
         if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
             try:
@@ -57,7 +57,7 @@ class Package(models.Model):
         exitcode = gcc_proc.returncode
 
         if exitcode == 0:
-            proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name,
+            proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name + ".o",
                                     cwd=self.project.directory.GetPath())
             self.proc_id = proc.pid
             self.save()
