@@ -58,7 +58,7 @@ class Package(models.Model):
 
         if exitcode == 0:
             proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name + ".o",
-                                    cwd=self.project.directory.GetPath())
+                                    cwd=self.project.directory.GetPath(), shell=True)
             self.proc_id = proc.pid
             self.save()
             return True
