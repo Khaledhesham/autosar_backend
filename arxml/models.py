@@ -40,7 +40,6 @@ class Package(models.Model):
             gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
 
         gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + ".o" + " -lpthread"
-
         if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
             try:
                 process = psutil.Process(self.proc_id)
@@ -60,6 +59,7 @@ class Package(models.Model):
         if exitcode == 0:
             os.chdir(self.project.directory.GetPath())
             proc = subprocess.Popen("./" + self.project.name + ".o", shell=True)
+            os.chdir("../../../")
             self.proc_id = proc.pid
             self.save()
             return True

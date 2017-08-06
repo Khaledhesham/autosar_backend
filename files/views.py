@@ -745,8 +745,6 @@ def set_values(project, d):
 @api_view(['POST'])
 def start_simulation(request):
     cwd = os.getcwd()  # Get the current working directory (cwd)
-    files = os.listdir(cwd)  # Get all the files in that directory
-    print("Files in '%s': %s" % (cwd, files))
     d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
     project.package.Rewrite()
@@ -777,8 +775,8 @@ def set_simulation_values(request):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def get_simulation_values(request):
+    cwd = os.getcwd()  # Get the current working directory (cwd)
     project = Project.objects.get(pk=request.POST['project_id'])
 
     if request.user.is_staff or request.user == project.user:
