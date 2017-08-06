@@ -9,6 +9,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import subprocess
 import psutil
+import os
 
 def GetUUID():
     return str(guid.uuid1())
@@ -57,8 +58,8 @@ class Package(models.Model):
         exitcode = gcc_proc.returncode
 
         if exitcode == 0:
-            proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name + ".o",
-                                    cwd=self.project.directory.GetPath(), shell=True)
+            os.chdir(self.project.directory.GetPath())
+            proc = subprocess.Popen("./" + self.project.name + ".o", shell=True)
             self.proc_id = proc.pid
             self.save()
             return True

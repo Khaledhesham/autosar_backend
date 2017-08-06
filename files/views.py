@@ -1,3 +1,4 @@
+
 from files.models import File,Directory,Project
 import arxml.models as ArxmlModels
 from django.http import HttpResponse, Http404, JsonResponse
@@ -743,6 +744,9 @@ def set_values(project, d):
 
 @api_view(['POST'])
 def start_simulation(request):
+    cwd = os.getcwd()  # Get the current working directory (cwd)
+    files = os.listdir(cwd)  # Get all the files in that directory
+    print("Files in '%s': %s" % (cwd, files))
     d = json.loads(request.POST['values'])
     project = Project.objects.get(pk=request.POST['project_id'])
     project.package.Rewrite()
