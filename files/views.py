@@ -1,19 +1,19 @@
-
-from files.models import File,Directory,Project
+import os
+import json
+import shutil
 import arxml.models as ArxmlModels
-from django.http import HttpResponse, Http404, JsonResponse
+from files.models import File,Directory,Project
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.http import HttpResponse, Http404, JsonResponse
+from django.utils.datastructures import MultiValueDictKeyError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
-from django.utils.datastructures import MultiValueDictKeyError
 from .serializers import ProjectSerializer
 from arxml.serializers import CompositionSerializer
-import shutil
-import os
 from arxml.wrapper import RunnableCFile
-import json
+
 
 def APIResponse(status, message={}):
     return JsonResponse(message, status=status)
@@ -776,7 +776,6 @@ def set_simulation_values(request):
 
 @api_view(['POST'])
 def get_simulation_values(request):
-    cwd = os.getcwd()  # Get the current working directory (cwd)
     project = Project.objects.get(pk=request.POST['project_id'])
 
     if request.user.is_staff or request.user == project.user:
