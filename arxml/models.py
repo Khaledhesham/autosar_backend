@@ -3,16 +3,19 @@ from __future__ import unicode_literals
 from django.db import models
 import uuid as guid
 from files.models import File, Project, Directory
-from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, RunnableCompileFile, DataTypesAndInterfacesARXML
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, DataTypesAndInterfacesARXML
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import subprocess
 import psutil
 import os
+from simulator.compile import RunnableCompileFile
+
 
 def GetUUID():
     return str(guid.uuid1())
+
 
 class Package(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
@@ -39,6 +42,7 @@ class Package(models.Model):
         for swc in self.softwarecomponent_set.all():
             gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
 
+        print(gcc_str)
         gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + ".o" + " -lpthread"
         if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
             try:
@@ -101,6 +105,7 @@ class SoftwareComponent(models.Model):
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
     swc.child_directory.delete()
+
 
 class Port(models.Model):
     name = models.CharField(max_length=100, default='Port')
