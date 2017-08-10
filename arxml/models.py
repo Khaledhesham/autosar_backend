@@ -11,7 +11,7 @@ import subprocess
 import psutil
 import os
 from simulator.compile import RunnableCompileFile
-
+import sys
 
 def GetUUID():
     return str(guid.uuid1())
@@ -69,7 +69,7 @@ class Package(models.Model):
             if os.name == 'nt':
                 proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name)
             else:
-                proc = subprocess.Popen("/" + self.project.directory.GetPath() + "/" + self.project.name + ".o", shell=True)
+                proc = subprocess.Popen("./" + self.project.name + ".o", cwd=self.project.directory.GetPath())
                 
             self.proc_id = proc.pid
             self.save()

@@ -1,1 +1,1 @@
-{"BottomLed" : "True","TopLed" : "True"}
+{"BottomLed" : "True","TopLed" : "False"}
