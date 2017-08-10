@@ -67,7 +67,7 @@ class Package(models.Model):
             proc = subprocess.Popen
 
             if os.name == 'nt':
-                proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name)
+                proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name, cwd=self.project.directory.GetPath())
             else:
                 proc = subprocess.Popen("./" + self.project.name + ".o", cwd=self.project.directory.GetPath())
                 
