@@ -42,8 +42,11 @@ class Package(models.Model):
         for swc in self.softwarecomponent_set.all():
             gcc_str = gcc_str + " " + self.project.directory.GetPath() + "/" + swc.name + "/" + swc.name + "_runnables.c"
 
-        print(gcc_str)
-        gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + ".o" + " -lpthread"
+        if os.name == 'nt':
+            gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + " -lpthread"
+        else:
+            gcc_str = gcc_str + " -o " + self.project.directory.GetPath() + "/" + self.project.name + ".o" + " -lpthread"
+
         if self.proc_id > 0 and psutil.pid_exists(self.proc_id):
             try:
                 process = psutil.Process(self.proc_id)
@@ -61,9 +64,13 @@ class Package(models.Model):
         exitcode = gcc_proc.returncode
 
         if exitcode == 0:
-            os.chdir(self.project.directory.GetPath())
-            proc = subprocess.Popen("./" + self.project.name + ".o", shell=True)
-            os.chdir("../../../")
+            proc = subprocess.Popen
+
+            if os.name == 'nt':
+                proc = subprocess.Popen(self.project.directory.GetPath() + "/" + self.project.name)
+            else:
+                proc = subprocess.Popen("/" + self.project.directory.GetPath() + "/" + self.project.name + ".o", shell=True)
+                
             self.proc_id = proc.pid
             self.save()
             return True
