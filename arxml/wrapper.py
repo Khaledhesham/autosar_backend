@@ -193,7 +193,6 @@ class SoftwareComponentARXML(ArxmlWrapper):
             if swc_port.interface is not None:
                 interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name
 
-            # if type == "P-PORT-PROTOTYPE":
             req = ET.SubElement
             spec = ""
             interface_t_ref = ""
@@ -326,28 +325,79 @@ class DataTypesAndInterfacesARXML(ArxmlWrapper):
         interface_elements = ET.SubElement(interfaces_pkg, "ELEMENTS")
 
         ### Interfaces
+
+        ### SenderReceiver
         for pkg_interface in package.interface_set.all():
-            interface = ET.SubElement(interface_elements, "SENDER-RECEIVER-INTERFACE", UUID=pkg_interface.uid)
+            if hasattr(pkg_interface, 'senderreceiverinterface') and pkg_interface.senderreceiverinterface is not None:
+                interface = ET.SubElement(interface_elements, "SENDER-RECEIVER-INTERFACE", UUID=pkg_interface.uid)
 
-            ET.SubElement(interface, "SHORT-NAME").text = pkg_interface.name
+                ET.SubElement(interface, "SHORT-NAME").text = pkg_interface.name
 
-            self.AddAdminData(interface)
+                self.AddAdminData(interface)
 
-            data_elements = ET.SubElement(interface, "DATA-ELEMENTS")
+                data_elements = ET.SubElement(interface, "DATA-ELEMENTS")
 
-            for data_ele in pkg_interface.dataelement_set.all():
-                data_element = ET.SubElement(data_elements, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
+                for data_ele in pkg_interface.senderreceiverinterface.dataelement_set.all():
+                    data_element = ET.SubElement(data_elements, "DATA-ELEMENT-PROTOTYPE", UUID=data_ele.uid)
 
-                ET.SubElement(data_element, "SHORT-NAME").text = data_ele.name
+                    ET.SubElement(data_element, "SHORT-NAME").text = data_ele.name
 
-                self.AddAdminData(data_element)
+                    self.AddAdminData(data_element)
 
-                if data_ele.type.type == "Boolean":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + package.project.name + "/DataTypes/" + data_ele.type.type
-                elif data_ele.type.type == "Float":
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
-                else:
-                    ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
+                    if data_ele.type.type == "Boolean":
+                        ET.SubElement(data_element, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + package.project.name + "/DataTypes/" + data_ele.type.type
+                    elif data_ele.type.type == "Float":
+                        ET.SubElement(data_element, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
+                    else:
+                        ET.SubElement(data_element, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + package.project.name + "/DataTypes/" + data_ele.type.type
+        ###
+
+        ### ClientServer
+        for pkg_interface in package.interface_set.all():
+            if hasattr(pkg_interface, 'clientserverinterface') and pkg_interface.clientserverinterface is not None:
+                interface = ET.SubElement(interface_elements, "CLIENT-SERVER-INTERFACE", UUID=pkg_interface.uid)
+
+                ET.SubElement(interface, "SHORT-NAME").text = pkg_interface.name
+
+                self.AddAdminData(interface)
+
+                operations = ET.SubElement(interface, "OPERATIONS")
+
+                for oper in pkg_interface.clientserverinterface.operation_set.all():
+                    operation = ET.SubElement(operations, "OPERATION-PROTOTYPE", UUID=oper.uid)
+
+                    ET.SubElement(operation, "SHORT-NAME").text = oper.name
+
+                    self.AddAdminData(operation)
+
+                    arguments = ET.SubElement(operation, "ARGUMENTS")
+
+                    for arg in oper.argument_set.all():
+                        argument = ET.SubElement(arguments, "ARGUMENT", UUID=arg.uid)
+
+                        ET.SubElement(argument, "SHORT-NAME").text = arg.name
+
+                        if arg.type.type == "Boolean":
+                            ET.SubElement(argument, "TYPE-TREF", DEST="BOOLEAN-TYPE").text = "/" + package.project.name + "/DataTypes/" + arg.type.type
+                        elif arg.type.type == "Float":
+                            ET.SubElement(argument, "TYPE-TREF", DEST="REAL-TYPE").text =  "/" + package.project.name + "/DataTypes/" + arg.type.type
+                        else:
+                            ET.SubElement(argument, "TYPE-TREF", DEST="INTEGER-TYPE").text =  "/" + package.project.name + "/DataTypes/" + arg.type.type
+
+                        ET.SubElement(argument, "DIRECTION").text = arg.direction
+
+                    errors = ET.SubElement(operation, "POSSIBLE-ERROR-REFS")
+
+                    for err in oper.possibleerror_set.all():
+                        error = ET.SubElement(errors, "POSSIBLE-ERROR-REF", DEST="APPLICATIONERROR").text = "/" + package.project.name + "/Interfaces/" + pkg_interface.name + "/" + err.name
+
+                errors = ET.SubElement(interface, "POSSIBLE-ERRORS")
+
+                for app_err in interface.clientserverinterface.applicationerror_set.all():
+                    error = ET.SubElement(errors, "APPLICATION-ERROR", UUID=app_err.uid)
+                    ET.SubElement(error, "SHORT-NAME").text = app_err.name
+                    ET.SubElement(error, "ERROR-CODE").text = app_err.error_code
+
         ###
 
         self.root = root

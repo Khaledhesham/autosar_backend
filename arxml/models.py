@@ -192,6 +192,74 @@ class Interface(models.Model):
         return self.name
 
 
+class SenderReceiverInterface(models.Model):
+    interface = models.OneToOneField(Interface, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.interface.name
+
+
+class ClientServerInterface(models.Model):
+    interface = models.OneToOneField(Interface, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.interface.name
+
+
+class Operation(models.Model):
+    name = models.CharField(max_length=100, default='Operation')
+    interface = models.ForeignKey(ClientServerInterface, on_delete=models.CASCADE)
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+
+    def validate_unique(self, exclude=None):
+        qs = Operation.objects.filter(name=self.name)
+        if qs.filter(interface__package=self.interface.package).exclude(pk=self.pk).exists():
+            raise ValidationError('Operation name must be unique per project')
+
+    def __str__(self):
+        return self.name
+
+
+class Argument(models.Model):
+    name = models.CharField(max_length=30, default='Arg')
+    type = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    direction = models.CharField(max_length=3, default='IN')
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+
+    class Meta:
+        unique_together = (('name', 'type'),)
+
+    def __str__(self):
+        return self.name
+
+
+class ApplicationError(models.Model):
+    name = models.CharField(max_length=100, default='Operation')
+    interface = models.ForeignKey(ClientServerInterface, on_delete=models.CASCADE)
+    error_code = models.CharField(max_length=10, default='-1')
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+
+    def validate_unique(self, exclude=None):
+        qs = ApplicationError.objects.filter(name=self.name)
+        if qs.filter(interface__package=self.interface.package).exclude(pk=self.pk).exists():
+            raise ValidationError('Application Error name must be unique per project')
+
+    def __str__(self):
+        return self.name
+
+
+class PossibleError(models.Model):
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    application_error = models.ForeignKey(ApplicationError, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('operation', 'application_error'),)
+
+    def __str__(self):
+        return self.operation.name + ": " + self.application_error.name
+
+
 class DataType(models.Model):
     type = models.CharField(max_length=10)
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
@@ -206,7 +274,7 @@ class DataType(models.Model):
 class DataElement(models.Model):
     name = models.CharField(max_length=100, default='DataElement')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
-    interface = models.ForeignKey(Interface, on_delete=models.CASCADE)
+    interface = models.ForeignKey(SenderReceiverInterface, on_delete=models.CASCADE)
     type = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
     def validate_unique(self, exclude=None):

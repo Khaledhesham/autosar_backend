@@ -169,6 +169,14 @@ def add_interface(request):
     package = project.package
     interface = ArxmlModels.Interface(name=request.POST['name'], package=package)
     interface.save()
+
+    if request.POST['type'] == "SR":
+        sender_receiver_if = ArxmlModels.SenderReceiverInterface(interface=interface)
+        sender_receiver_if.save()
+    else:
+        client_server_if = ArxmlModels.ClientServerInterface(interface=interface)
+        sender_receiver_if.save()
+
     package.Rewrite()
     return HttpResponse(interface.id)
 
@@ -285,6 +293,65 @@ def remove_datatype(request):
     raise PermissionDenied
 
 
+### Operation
+@api_view(['POST'])
+@access_error_wrapper
+def add_operation(request):
+    interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+
+    if interface is None or not hasattr(interface, 'clientserverinterface'):
+        return APIResponse(404, { 'error' : "Invalid Interface" })
+    if not request.user.is_staff or interface.package.project.user != request.user:
+        raise PermissionDenied
+
+    operation = ArxmlModels.DataElement(name=request.POST['name'], interface=interface.clientserverinterface)
+    operation.save()
+    interface.package.Rewrite()
+    return HttpResponse(operation.id)
+
+
+### Argument
+@api_view(['POST'])
+@access_error_wrapper
+def add_argument(request):
+    operation = ArxmlModels.Operation.objects.get(pk=request.POST['operation_id'])
+
+    if not request.user.is_staff or operation.interface.interface.package.project.user != request.user:
+        raise PermissionDenied
+
+    data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
+    if data_type is None:
+        return APIResponse(404, { 'error' : "Invalid Type" })
+    if not request.user.is_staff or data_type.package.project.user != request.user:
+        raise PermissionDenied
+
+    if request.POST['direction'] not in ['IN', 'OUT']:
+        return APIResponse(404, { 'error' : "Argument direction is not correct" })
+
+    argument = ArxmlModels.DataElement(name=request.POST['name'], interface=interface.clientserverinterface, type=data_type, direction=request.POST['name'])
+    argument.save()
+    operation.interface.interface.package.Rewrite()
+    return HttpResponse(argument.id)
+
+
+### Error
+@api_view(['POST'])
+@access_error_wrapper
+def add_application_error(request):
+    interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
+
+    if not request.user.is_staff or interface.package.project.user != request.user:
+        raise PermissionDenied
+
+    if not hasattr(interface, 'clientserverinterface'):
+        return APIResponse(404, { 'error' : "Invalid Interface" })
+
+    error = ArxmlModels.DataElement(name=request.POST['name'], error_code=request.POST['code'], type=data_type, interface=interface.clientserverinterface)
+    error.save()
+    interface.package.Rewrite()
+    return HttpResponse(error.id)
+
+
 ### data element
 
 
@@ -293,7 +360,7 @@ def remove_datatype(request):
 def add_dataelement(request):
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
 
-    if interface is None:
+    if interface is None or not hasattr(interface, 'senderreceiverinterface'):
         return APIResponse(404, { 'error' : "Invalid Interface" })
     if not request.user.is_staff or interface.package.project.user != request.user:
         raise PermissionDenied
@@ -307,7 +374,7 @@ def add_dataelement(request):
     if data_type.package != interface.package:
         return APIResponse(404, { 'error' : "DataType and Interface don't belong to the same Project" })
 
-    element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface, type=data_type)
+    element = ArxmlModels.DataElement(name=request.POST['name'], interface=interface.senderreceiverinterface, type=data_type)
     element.save()
     interface.package.Rewrite()
     return HttpResponse(element.id)
@@ -317,10 +384,10 @@ def add_dataelement(request):
 @access_error_wrapper
 def rename_dataelement(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    if request.user.is_staff or element.interface.package.project.user == request.user:
+    if request.user.is_staff or element.interface.interface.package.project.user == request.user:
         element.name = request.POST['name']
         element.save()
-        element.interface.package.Rewrite()
+        element.interface.interface.package.Rewrite()
         return HttpResponse("True")
 
     raise PermissionDenied
@@ -330,8 +397,8 @@ def rename_dataelement(request):
 @access_error_wrapper
 def remove_dataelement(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    if request.user.is_staff or element.interface.package.project.user == request.user:
-        package = element.interface.package
+    if request.user.is_staff or element.interface.interface.package.project.user == request.user:
+        package = element.interface.interface.package
         element.delete()
         package.Rewrite()
         return HttpResponse("True")
@@ -341,13 +408,13 @@ def remove_dataelement(request):
 @access_error_wrapper
 def set_dataelement_type(request):
     element = ArxmlModels.DataElement.objects.get(pk=request.POST['dataElement_id'])
-    package = element.interface.package
+    package = element.interface.interface.package
     if request.user.is_staff or request.user == package.project.user:
         for data_type in package.datatype_set.all():
             if data_type.type == request.POST['type']:
                 element.type = data_type
                 element.save()
-                element.interface.package.Rewrite()
+                element.interface.interface.package.Rewrite()
                 return HttpResponse("True")
         
         return APIResponse(404, { 'error' : "Datatype is not supported in the current project" })
