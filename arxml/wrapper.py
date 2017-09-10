@@ -200,26 +200,38 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 interface = swc_port.provided_interface
 
             if interface is not None:
-                if interface.type == "SENDER-RECEIVER-INTERFACE":
-                    req = ET.SubElement
-                    spec = ""
-                    interface_t_ref = ""
+                req = ET.SubElement
+                spec = ""
+                interface_t_ref = ""
 
-                    if swc_port.type == "R-PORT-PROTOTYPE":
-                        req = ET.SubElement(port, "REQUIRED-COM-SPECS")
+                if swc_port.type == "R-PORT-PROTOTYPE":
+                    req = ET.SubElement(port, "REQUIRED-COM-SPECS")
+
+                    if interface.type == "SENDER-RECEIVER-INTERFACE":
                         spec = "UNQUEUED-RECEIVER-COM-SPEC"
-                        interface_t_ref = "REQUIRED_INTERFACE-TREF"
                     else:
-                        req = ET.SubElement(port, "PROVIDED-COM-SPECS")
+                        spec = "CLIENT-COM-SPEC"
+
+                    interface_t_ref = "REQUIRED_INTERFACE-TREF"
+                else:
+                    req = ET.SubElement(port, "PROVIDED-COM-SPECS")
+
+                    if interface.type == "SENDER-RECEIVER-INTERFACE":
                         spec = "UNQUEUED-SENDER-COM-SPEC"
-                        interface_t_ref = "PROVIDED-INTERFACE-TREF"
+                    else:
+                        spec = "SERVER-COM-SPEC"
 
+                    interface_t_ref = "PROVIDED-INTERFACE-TREF"
+                
+                if interface.type == "SENDER-RECEIVER-INTERFACE":
                     for data_element_ref in swc_port.dataelementref_set.all():
-                            ref = ET.SubElement(req, spec)
-                            ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + interface.name + "/" + data_element_ref.data_element.name
-                            ET.SubElement(ref, "ALIVE-TIMEOUT").text = str(data_element_ref.timeout)
-                #elif interface.type == "CLIENT-SERVER-INTERFACE":
-
+                        ref = ET.SubElement(req, spec)
+                        ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + interface.name + "/" + data_element_ref.data_element.name
+                        ET.SubElement(ref, "ALIVE-TIMEOUT").text = str(data_element_ref.timeout)
+                elif interface.type == "CLIENT-SERVER-INTERFACE":
+                    for operation_ref in swc_port.operationref_set.all():
+                        ref = ET.SubElement(req, spec)
+                        ET.SubElement(ref, "OPERATION-REF", DEST="OPERATION-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + interface.name + "/" + operation_ref.operation.name
                 
                 ET.SubElement(port, interface_t_ref, DEST=interface.type).text = interface_path
         ###
@@ -238,7 +250,7 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
             self.AddAdminData(timing_event)
 
-            ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text =  "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
+            ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
             ET.SubElement(timing_event, "PERIOD").text = str(event.period)
 
         runnables = ET.SubElement(behavior, "RUNNABLES")
@@ -263,8 +275,8 @@ class SoftwareComponentARXML(ArxmlWrapper):
                 else:
                     node = data_read
 
-                prototype_ref =  "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "/" + acc.data_element_ref.port.name
-                data_element_ref =  "/" + swc.package.project.name + "/Interfaces/" + acc.data_element_ref.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
+                prototype_ref = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "/" + acc.data_element_ref.port.name
+                data_element_ref = "/" + swc.package.project.name + "/Interfaces/" + acc.data_element_ref.data_element.interface.name + "/" + acc.data_element_ref.data_element.name
 
                 access_node = ET.SubElement(node, acc.type)
                 ET.SubElement(access_node, "SHORT-NAME").text = acc.name
@@ -273,6 +285,26 @@ class SoftwareComponentARXML(ArxmlWrapper):
 
                 ET.SubElement(data_element, acc.data_element_ref.port.type + "-REF", DEST=acc.data_element_ref.port.type).text = prototype_ref
                 ET.SubElement(data_element, "DATA-ELEMENT-PROTOTYPE-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = data_element_ref
+
+            call_points = ET.SubElement(run, "SERVER-CALL-POINTS")
+
+            for point in runnable.servercallpoint_set.all():
+                call_point = ET.SubElement(call_points, "SYNCHRONOUS-SERVER-CALL-POINT")
+                ET.SubElement(call_point, "SHORT-NAME").text = point.name
+                irefs = ET.SubElement(call_point, "OPERATION-IREFS")
+                iref = ET.SubElement(irefs, "OPERATION-IREF")
+                ET.SubElement(iref, "R-PORT-PROTOTYPE-REF", DEST="R-PORT-PROTOTYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "/" + point.operation_ref.port.name
+                ET.SubElement(iref, "OPERATION-PROTOTYPE-REF", DEST="OPERATION-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + point.operation_ref.operation.interface.name + "/" + point.operation_ref.operation.name
+
+            written_refs = ET.SubElement(run, "WRITTEN-VARIABLE-REFS")
+            
+            for ref in runnable.writevariableref_set.all():
+                written_ref = ET.SubElement(written_refs, "WRITTEN-VARIABLE-REF", DEST="INTER-RUNNABLE-VARIABLE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + ref.variable.name
+
+            read_refs = ET.SubElement(run, "READ-VARIABLE-REFS")
+
+            for ref in runnable.readvariableref_set.all():
+                written_ref = ET.SubElement(read_refs, "READ-VARIABLE-REF", DEST="INTER-RUNNABLE-VARIABLE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + ref.variable.name
 
         ET.SubElement(behavior, "COMPONENT-REF", DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name
         ###

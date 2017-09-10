@@ -336,6 +336,14 @@ class DataElementRef(models.Model):
         return self.port.name + ": " + self.data_element.name
 
 
+class OperationRef(models.Model):
+    port = models.ForeignKey(Port, on_delete=models.CASCADE)
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.port.name + ": " + self.operation.name
+
+
 class DataAccess(models.Model):
     name = models.CharField(max_length=100, default='DataAccess')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
@@ -358,8 +366,9 @@ class DataAccess(models.Model):
 
 
 class ServerCallPoint(models.Model):
-    name = models.CharField(max_length=100, default='CallPoint')
-    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default='CallPoint', unique=True)
+    operation_ref = models.ForeignKey(OperationRef, on_delete=models.CASCADE)
+    runnable = models.ForeignKey(Runnable, on_delete=models.CASCADE)
 
 
 class Composition(models.Model):
