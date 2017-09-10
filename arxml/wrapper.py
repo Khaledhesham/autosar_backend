@@ -190,28 +190,38 @@ class SoftwareComponentARXML(ArxmlWrapper):
             self.AddAdminData(port)
 
             interface_path = ""
+            interface = None
+
             if swc_port.interface is not None:
                 interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name
+                interface = swc_port.interface
+            elif swc_port.provided_interface is not None:
+                interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.provided_interface.name
+                interface = swc_port.provided_interface
 
-            req = ET.SubElement
-            spec = ""
-            interface_t_ref = ""
+            if interface is not None:
+                if interface.type == "SENDER-RECEIVER-INTERFACE":
+                    req = ET.SubElement
+                    spec = ""
+                    interface_t_ref = ""
 
-            if swc_port.type == "R-PORT-PROTOTYPE":
-                req = ET.SubElement(port, "REQUIRED-COM-SPECS")
-                spec = "UNQUEUED-RECEIVER-COM-SPEC"
-                interface_t_ref = "REQUIRED_INTERFACE-TREF"
-            else:
-                req = ET.SubElement(port, "PROVIDED-COM-SPECS")
-                spec = "UNQUEUED-SENDER-COM-SPEC"
-                interface_t_ref = "PROVIDED-INTERFACE-TREF"
+                    if swc_port.type == "R-PORT-PROTOTYPE":
+                        req = ET.SubElement(port, "REQUIRED-COM-SPECS")
+                        spec = "UNQUEUED-RECEIVER-COM-SPEC"
+                        interface_t_ref = "REQUIRED_INTERFACE-TREF"
+                    else:
+                        req = ET.SubElement(port, "PROVIDED-COM-SPECS")
+                        spec = "UNQUEUED-SENDER-COM-SPEC"
+                        interface_t_ref = "PROVIDED-INTERFACE-TREF"
 
-            for data_element_ref in swc_port.dataelementref_set.all():
-                    ref = ET.SubElement(req, spec)
-                    ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name + "/" + data_element_ref.data_element.name
-                    ET.SubElement(ref, "ALIVE-TIMEOUT").text = str(data_element_ref.timeout)
+                    for data_element_ref in swc_port.dataelementref_set.all():
+                            ref = ET.SubElement(req, spec)
+                            ET.SubElement(ref, "DATA-ELEMENT-REF", DEST="DATA-ELEMENT-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + interface.name + "/" + data_element_ref.data_element.name
+                            ET.SubElement(ref, "ALIVE-TIMEOUT").text = str(data_element_ref.timeout)
+                #elif interface.type == "CLIENT-SERVER-INTERFACE":
 
-            ET.SubElement(port, interface_t_ref, DEST="SENDER-RECEIVER-INTERFACE").text = interface_path
+                
+                ET.SubElement(port, interface_t_ref, DEST=interface.type).text = interface_path
         ###
 
         ### Behavior

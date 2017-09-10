@@ -159,6 +159,20 @@ class TimingEvent(models.Model):
         return self.name
 
 
+class Variable(models.Model):
+    name = models.CharField(max_length=100, default='Variable')
+    type = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    comm = models.CharField(max_length=10, default="IMPLICIT")
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('swc', 'name'),)
+
+    def __str__(self):
+        return self.name
+
+
 class Runnable(models.Model):
     name = models.CharField(max_length=100, default='Runnable')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
@@ -179,11 +193,28 @@ class Runnable(models.Model):
         return self.name
 
 
+class WriteVariableRef(models.Model):
+    runnable = models.ForeignKey(Runnable, on_delete=models.CASCADE)
+    variable = models.ForeignKey(Variable, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.runnable.name + ": " + self.variable.name
+
+
+class ReadVariableRef(models.Model):
+    runnable = models.ForeignKey(Runnable, on_delete=models.CASCADE)
+    variable = models.ForeignKey(Variable, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.runnable.name + ": " + self.variable.name
+
+
 class Interface(models.Model):
     name = models.CharField(max_length=100, default='Interface')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, default='SENDER-RECEIVER-INTERFACE')
+    provider = models.OneToOneField(Port, on_delete=models.SET_NULL, null=True, related_name="provided_interface")
 
     class Meta:
         unique_together = (('name', 'package'),)
@@ -324,6 +355,11 @@ class DataAccess(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ServerCallPoint(models.Model):
+    name = models.CharField(max_length=100, default='CallPoint')
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
 
 
 class Composition(models.Model):

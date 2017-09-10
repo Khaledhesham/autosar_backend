@@ -174,8 +174,10 @@ def add_interface(request):
         sender_receiver_if = ArxmlModels.SenderReceiverInterface(interface=interface)
         sender_receiver_if.save()
     else:
+        interface.type = "CLIENT-SERVER-INTERFACE"
+        interface.save()
         client_server_if = ArxmlModels.ClientServerInterface(interface=interface)
-        sender_receiver_if.save()
+        client_server_if.save()
 
     package.Rewrite()
     return HttpResponse(interface.id)
@@ -194,7 +196,11 @@ def set_port_interface(request):
     if port is None or port.swc != swc:
         return APIResponse(404, {'error': "Invalid Port"})
 
-    port.interface = interface
+    if port.type = "P-PORT-PROTOTYPE":
+        port.provided_interface = interface
+    else:
+        port.interface = interface
+
     port.save()
     swc.Rewrite()
     return HttpResponse("True")
