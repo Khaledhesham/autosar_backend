@@ -269,6 +269,7 @@ def add_port_operation(request):
     ref.port.swc.Rewrite()
     return HttpResponse(ref.id)
 
+
 @api_view(['POST'])
 @access_error_wrapper
 def remove_port_operation(request):

@@ -15,6 +15,7 @@ class RunnableCompileFile:
         data_elements_set = set()
         input_data_elements = set()
         output_data_elements = set()
+        variable_set = set()
 
         for swc in package.softwarecomponent_set.all():
             for runnable in swc.runnable_set.all():
@@ -28,12 +29,23 @@ class RunnableCompileFile:
                         else:
                             output_data_elements.add(access.data_element_ref.data_element)
 
+                for writeRef in runnable.writevariableref_set.all():
+                    variable_set.add(writeRef.variable.type.type + " " + writeRef.variable.name + ";")
+
+                for readRef in runnable.readvariableref_set.all():
+                    variable_set.add(readRef.variable.type.type + " " + readRef.variable.name + ";")
+
         data_elements_set = sorted(data_elements_set)
         input_data_elements = sorted(input_data_elements)
         output_data_elements = sorted(output_data_elements)
 
         for de in data_elements_set:
             print(de, file=file)
+
+        print("", file=file)
+
+        for v in variable_set:
+            print(v, file=file)
 
         print("", file=file)
 
@@ -57,6 +69,62 @@ class RunnableCompileFile:
                         print("}", file=file)
 
                     print("", file=file)
+
+                for writeRef in runnable.writevariableref_set.all():
+                    print("void " + "Rte_IrvIWrite_" + swc.name + "_" + runnable.name + "_" + writeRef.variable.name + "(" + writeRef.variable.type.type + " u)", file=file)
+                    print("{", file=file)
+                    print("    " + writeRef.variable.name + " = u;", file=file)
+                    print("}", file=file)
+                    print("", file=file)
+
+                for readRef in runnable.readvariableref_set.all():
+                    print(readRef.variable.type.type + " Rte_IrvIRead_" + swc.name + "_" + runnable.name + "_" + readRef.variable.name + "(void);", file=file)
+                    print("{", file=file)
+                    print("    return " + readRef.variable.name + ";", file=file)
+                    print("{", file=file)
+                    print("", file=file)
+
+                for callPoint in runnable.servercallpoint_set.all():
+                    s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" callPoint.operation_ref.operation.name + "(", file=file)
+                    
+                    first = True
+
+                    for arg in callPoint.operation_ref.operation.argument_set:
+                        if not first:
+                            s += ", "
+                            first = False
+                        s += arg.type.type + " " + arg.name
+
+                    s += ")"
+
+                    print(s, file=file)
+                    print("{", file=file)
+
+                    invoked_runnable = callPoint.operation_ref.operationinvokedevent.runnable
+
+                    if invoked_runnable is not None:
+                        s = "    " + invoked_runnable.name + "("
+
+                        first = True
+
+                        for arg in callPoint.operation_ref.operation.argument_set:
+                            if not first:
+                                s += ", "
+                                first = False
+                            s += arg.name
+                        s += ");"
+
+                        print("    FILE* file;", file=file)
+                        print("    file = fopen(\"log.txt\", \"a+\");", file=file)
+                        print("    fprintf(file, \"Runnable " + invoked_runnable.name + " is invoked by " + runnable.name + ".\\n\");", file=file)
+                        print("    fprintf(file, \"Runnable " + invoked_runnable.name + " is starting.\\n\");", file=file)
+                        print(s, file=file)
+                        print("    fprintf(file, \"Runnable " + invoked_runnable.name + " executed.\\n\");", file=file)
+                        print("    fclose(file);", file=file)
+
+                    print("}", file=file)
+                    print("", file=file)
+
 
         print("pthread_mutex_t event_mutex = PTHREAD_MUTEX_INITIALIZER;", file=file)
         print("", file=file)

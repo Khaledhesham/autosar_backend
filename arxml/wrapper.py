@@ -55,6 +55,7 @@ class DataTypeHFile:
 
         file.close()
 
+
 class RteHFile:
     def __init__(self, file, swc):
         file.truncate()
@@ -84,13 +85,48 @@ class RteHFile:
  
                 print("", file=file)
 
+            for writeRef in runnable.writevariableref_set.all():
+                print("void " + "Rte_IrvIWrite_" + swc.name + "_" + runnable.name + "_" + writeRef.variable.name + "(" + writeRef.variable.type.type + " u);", file=file)
+                print("", file=file)
+
+            for readRef in runnable.readvariableref_set.all():
+                print(readRef.variable.type.type + " Rte_IrvIRead_" + swc.name + "_" + runnable.name + "_" + readRef.variable.name + "(void);", file=file)
+                print("", file=file)
+
         for runnable in swc.runnable_set.all():
-            print("extern void " + runnable.name + "(void);", file=file)
+            if runnable.operationinvokedevent is not None:
+                s = "extern void " + runnable.name + "("
+                first = True
+                for arg in runnable.operationinvokedevent.operation_ref.operation.argument_set:
+                    if not first:
+                        s += ", "
+                        first = False
+                    s += arg.type.type + " " + arg.name
+                s += ");"
+                print(s, file=file)
+            else:
+                print("extern void " + runnable.name + "(void);", file=file)
+                
+            print("", file=file)
+
+        for runnable in swc.runnables_set.all():
+            for callPoint in runnable.servercallpoint_set.all():
+                s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" callPoint.operation_ref.operation.name + "(", file=file)
+                first = True
+                for arg in callPoint.operation_ref.operation.argument_set:
+                    if not first:
+                        s += ", "
+                        first = False
+                    s += arg.type.type + " " + arg.name
+                s += ");"
+                print(s, file=file)
+                print("", file=file)
 
         print("", file=file)
         print("#endif", file=file)
 
         file.close()
+
 
 class RunnableCFile:
     def __init__(self, file, swc):
@@ -118,6 +154,7 @@ class RunnableCFile:
         print("", file=file)
 
         file.close()
+
 
 class ArxmlWrapper:
     root = ET.Element
@@ -148,6 +185,7 @@ class ArxmlWrapper:
     def __str__(self):
         ArxmlWrapper.Indent(self.root)
         return ET.tostring(self.root).decode("utf-8")
+
 
 class SoftwareComponentARXML(ArxmlWrapper):
     def __init__(self, swc, directory):

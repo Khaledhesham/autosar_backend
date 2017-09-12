@@ -162,8 +162,8 @@ class OperationInvokedEvent(models.Model):
     name = models.CharField(max_length=100, default='OperationInvokedEvent')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
-    runnable = models.ForeignKey('Runnable', on_delete=models.CASCADE)
-    operation_ref = models.ForeignKey('OperationRef', on_delete=models.CASCADE)
+    runnable = models.OneToOneField('Runnable', on_delete=models.CASCADE)
+    operation_ref = models.OneToOneField('OperationRef', on_delete=models.CASCADE)
 
     def validate_unique(self, exclude=None):
         qs = OperationInvokedEvent.objects.filter(name=self.name)
@@ -272,7 +272,7 @@ class Operation(models.Model):
 
 class Argument(models.Model):
     name = models.CharField(max_length=30, default='Arg')
-    type = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    type = models.ForeignKey('DataType', on_delete=models.CASCADE)
     operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
     direction = models.CharField(max_length=3, default='IN')
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
