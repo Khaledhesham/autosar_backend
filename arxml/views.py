@@ -246,6 +246,44 @@ def remove_port_dataelement(request):
 
 @api_view(['POST'])
 @access_error_wrapper
+def add_port_operation(request):
+    operation = ArxmlModels.Operation.objects.get(pk=request.POST['operation_id'])
+    if operation is None:
+        return APIResponse(404, {'error': "Invalid Operation" })
+    if operation.interface.package.project.user != request.user and not request.user.is_staff:
+        raise PermissionDenied
+
+    port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
+    if port is None:
+        return APIResponse(404, {'error': "Invalid Port"})
+    if port.swc.package.project.user != request.user and not request.user.is_staff:
+        raise PermissionDenied
+
+    interface = port.interface
+
+    if operation.interface != interface:
+        return APIResponse(404, {'error': "Operation Doesn't belong to the Port's Interface"})
+
+    ref = ArxmlModels.OperationRef(operation=operation, port=port)
+    ref.save()
+    ref.port.swc.Rewrite()
+    return HttpResponse(ref.id)
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_port_operation(request):
+    operation_ref = ArxmlModels.OperationRef.objects.get(pk=request.POST['operation_ref_id'])
+    if request.user.is_staff or operation_ref.port.swc.package.user == request.user:
+        swc = operation_ref.port.swc
+        operation_ref.delete()
+        swc.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
 def remove_interface(request):
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
     if request.user.is_staff or interface.package.project.user == request.user:
@@ -542,6 +580,65 @@ def set_timingEvent_period(request):
 
     raise PermissionDenied
 
+
+### Operation Invoked events
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_operationInvokedEvent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if runnable is None or runnable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Runnable" })
+
+    operationRef = ArxmlModels.OperationRef.objects.get(pk=request.POST['operation_ref_id'])
+    if operationRef is None or operationRef.port.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Operation Reference" })
+
+    event = ArxmlModels.OperationInvokedEvent(name=request.POST['name'], runnable=runnable, swc=swc, operation_ref=operationRef)
+    event.save()
+    swc.Rewrite()
+    return HttpResponse(event.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_operationInvokedEvent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.OperationInvokedEvent.objects.get(pk=request.POST['operationInvokedEvent_id'])
+    event.name = request.POST['name']
+    event.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_operationInvokedEvent(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.OperationInvokedEvent.objects.get(pk=request.POST['operationInvokedEvent_id'])
+    event.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_operationInvokedEvent_runnable(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    event = ArxmlModels.OperationInvokedEvent.objects.get(pk=request.POST['operationInvokedEvent_id'])
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if event.swc == swc and runnable.swc == swc:
+        event.runnable = runnable
+        event.save()
+        swc.Rewrite()   
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
 ### data access
 
 
@@ -600,6 +697,194 @@ def set_dataaccess_element_ref(request):
         access.save()
         swc.Rewrite()
         return HttpResponse("True")
+
+
+### Call Point
+@api_view(['POST'])
+@access_error_wrapper
+def add_callPoint(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if runnable is None or runnable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Runnable" })
+
+    operation_ref = ArxmlModels.OperationRef.objects.get(pk=request.POST['operation_ref_id'])
+    if operation_ref is None or operation_ref.port.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Operation Reference" })
+
+    callPoint = ArxmlModels.ServerCallPoint(name=request.POST['name'], runnable=runnable, operation_ref=operation_ref)
+    callPoint.save()
+    swc.Rewrite()
+    return HttpResponse(callPoint.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_callPoint(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    callPoint = ArxmlModels.ServerCallPoint.objects.get(pk=request.POST['callPoint_id'])
+    callPoint.name = request.POST['name']
+    callPoint.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_callPoint(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    callPoint = ArxmlModels.ServerCallPoint.objects.get(pk=request.POST['callPoint_id'])
+    callPoint.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### Variable
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_variable(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    
+    data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
+    if data_type is None:
+        return APIResponse(404, { 'error' : "Invalid Type" })
+    if not request.user.is_staff or data_type.package.project.user != request.user:
+        raise PermissionDenied
+
+    variable = ArxmlModels.Variable(name=request.POST['name'], swc=swc, type=data_type)
+    variable.save()
+    swc.package.Rewrite()
+    return HttpResponse(element.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_variable(request):
+    variable = ArxmlModels.Variable.objects.get(pk=request.POST['variable_id'])
+    if request.user.is_staff or variable.swc.package.project.user == request.user:
+        variable.name = request.POST['name']
+        variable.save()
+        variable.swc.package.Rewrite()
+        return HttpResponse("True")
+
+    raise PermissionDenied
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_variable(request):
+    variable = ArxmlModels.Variable.objects.get(pk=request.POST['variable_id'])
+    if request.user.is_staff or variable.swc.package.project.user == request.user:
+        package = variable.swc.package
+        variable.delete()
+        package.Rewrite()
+        return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def set_variable_type(request):
+    variable = ArxmlModels.DataElement.objects.get(pk=request.POST['variable_id'])
+    package = variable.swc.package
+    if request.user.is_staff or request.user == package.project.user:
+        for data_type in package.datatype_set.all():
+            if data_type.type == request.POST['type']:
+                variable.type = data_type
+                variable.save()
+                variable.swc.package.Rewrite()
+                return HttpResponse("True")
+        
+        return APIResponse(404, { 'error' : "Datatype is not supported in the current project" })
+
+    raise PermissionDenied
+
+### Variable Write Ref
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_writeRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if runnable is None or runnable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Runnable" })
+
+    variable = ArxmlModels.Variable.objects.get(pk=request.POST['variable_id'])
+    if variable is None or variable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Variable" })
+
+    ref = ArxmlModels.WriteVariableRef(name=request.POST['name'], runnable=runnable, variable=variable)
+    ref.save()
+    swc.Rewrite()
+    return HttpResponse(access.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_writeRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    ref = ArxmlModels.WriteVariableRef.objects.get(pk=request.POST['writeRef_id'])
+    ref.name = request.POST['name']
+    ref.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_writeRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    ref = ArxmlModels.WriteVariableRef.objects.get(pk=request.POST['writeRef_id'])
+    ref.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+### Variable Read Ref
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def add_readRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+
+    runnable = ArxmlModels.Runnable.objects.get(pk=request.POST['runnable_id'])
+    if runnable is None or runnable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Runnable" })
+
+    variable = ArxmlModels.Variable.objects.get(pk=request.POST['variable_id'])
+    if variable is None or variable.swc != swc:
+        return APIResponse(404, { 'error' : "Invalid Variable" })
+
+    ref = ArxmlModels.ReadVariableRef(name=request.POST['name'], runnable=runnable, variable=variable)
+    ref.save()
+    swc.Rewrite()
+    return HttpResponse(access.id)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def rename_readRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    ref = ArxmlModels.ReadVariableRef.objects.get(pk=request.POST['readRef_id'])
+    ref.name = request.POST['name']
+    ref.save()
+    swc.Rewrite()
+    return HttpResponse("True")
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def remove_readRef(request):
+    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
+    ref = ArxmlModels.ReadVariableRef.objects.get(pk=request.POST['readRef_id'])
+    ref.delete()
+    swc.Rewrite()
+    return HttpResponse("True")
 
 
 ### connector

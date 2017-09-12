@@ -180,7 +180,7 @@ class OperationInvokedEvent(models.Model):
 
 class Variable(models.Model):
     name = models.CharField(max_length=100, default='Variable')
-    type = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    type = models.ForeignKey('DataType', on_delete=models.CASCADE)
     comm = models.CharField(max_length=10, default="IMPLICIT")
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
