@@ -152,8 +152,27 @@ class TimingEvent(models.Model):
 
     def save(self, *args, **kwargs):
         self.validate_unique()
-
         super(TimingEvent, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class OperationInvokedEvent(models.Model):
+    name = models.CharField(max_length=100, default='OperationInvokedEvent')
+    uid = models.CharField(max_length=100, default=GetUUID, unique=True)
+    swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
+    runnable = models.ForeignKey('Runnable', on_delete=models.CASCADE)
+    operation_ref = models.ForeignKey('OperationRef', on_delete=models.CASCADE)
+
+    def validate_unique(self, exclude=None):
+        qs = OperationInvokedEvent.objects.filter(name=self.name)
+        if qs.filter(swc__composition=self.swc.composition).exclude(pk=self.pk).exists():
+            raise ValidationError('Event name must be unique per project')
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(OperationInvokedEvent, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

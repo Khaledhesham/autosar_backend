@@ -253,6 +253,18 @@ class SoftwareComponentARXML(ArxmlWrapper):
             ET.SubElement(timing_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
             ET.SubElement(timing_event, "PERIOD").text = str(event.period)
 
+        for event in swc.operationinvokedevent_set.all():
+            operationinvoked_event = ET.SubElement(events, "OPERATION-INVOKED-EVENT", UUID=event.uid)
+            ET.SubElement(operationinvoked_event, "SHORT-NAME").text = event.name
+
+            self.AddAdminData(operationinvoked_event)
+
+            ET.SubElement(operationinvoked_event, "START-ON-EVENT-REF", DEST="RUNNABLE-ENTITY").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "Behavior/" + event.runnable.name
+
+            iref = ET.SubElement(operationinvoked_event, "OPERATION-IREF")
+            ET.SubElement(iref, "P-PORT-PROTOTYPE-REF", DEST="P-PORT-PROTOTYPE").text = "/" + swc.package.project.name + "/" + swc.name + "_swc/" + swc.name + "/" + operationinvoked_event.operation_ref.port.name
+            ET.SubElement(iref, "OPERATION-PROTOTYPE-REF", DEST="OPERATION-PROTOTYPE").text = "/" + swc.package.project.name + "/Interfaces/" + operationinvoked_event.operation_ref.operation.interface.name + "/" + operationinvoked_event.operation_ref.operation.name
+
         runnables = ET.SubElement(behavior, "RUNNABLES")
 
         for runnable in swc.runnable_set.all():
