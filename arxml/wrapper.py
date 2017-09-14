@@ -111,7 +111,7 @@ class RteHFile:
 
         for runnable in swc.runnables_set.all():
             for callPoint in runnable.servercallpoint_set.all():
-                s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" callPoint.operation_ref.operation.name + "(", file=file)
+                s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" + callPoint.operation_ref.operation.name + "("
                 first = True
                 for arg in callPoint.operation_ref.operation.argument_set:
                     if not first:

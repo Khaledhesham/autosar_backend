@@ -85,7 +85,7 @@ class RunnableCompileFile:
                     print("", file=file)
 
                 for callPoint in runnable.servercallpoint_set.all():
-                    s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" callPoint.operation_ref.operation.name + "(", file=file)
+                    s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" + callPoint.operation_ref.operation.name + "("
                     
                     first = True
 

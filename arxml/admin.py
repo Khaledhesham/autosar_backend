@@ -56,6 +56,9 @@ class RunnableAdmin(admin.ModelAdmin):
 class DataElementRefInline(admin.TabularInline):
     model = DataElementRef
 
+class DataElementInline(admin.TabularInline):
+    model = DataElement
+
 class PortAdmin(admin.ModelAdmin):
     model = Port
     inlines = (DataElementRefInline,)
@@ -77,7 +80,7 @@ class ClientServerInterfaceAdmin(admin.ModelAdmin):
 
 class SenderReceiverInterfaceAdmin(admin.ModelAdmin):
     model = SenderReceiverInterface
-    inlines = (DataElement,)
+    inlines = (DataElementInline,)
 
 class OperationAdmin(admin.ModelAdmin):
     model = Operation
@@ -87,10 +90,10 @@ class OperationAdmin(admin.ModelAdmin):
 admin.site.register(Package, PackageAdmin)
 admin.site.register(SoftwareComponent, SoftwareComponentAdmin)
 admin.site.register(Port, PortAdmin)
-admin.site.register(SenderReceiverInterfaceAdmin)
-admin.site.register(ClientServerInterfaceAdmin)
-admin.site.register(InterfaceAdmin)
-admin.site.register(OperationAdmin)
+admin.site.register(SenderReceiverInterface, SenderReceiverInterfaceAdmin)
+admin.site.register(ClientServerInterface, ClientServerInterfaceAdmin)
+admin.site.register(Interface, InterfaceAdmin)
+admin.site.register(Operation, OperationAdmin)
 admin.site.register(Argument)
 admin.site.register(PossibleError)
 admin.site.register(DataElement)
