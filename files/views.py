@@ -9,9 +9,9 @@ from rest_framework.test import APIRequestFactory
 from .serializers import ProjectSerializer
 from arxml.serializers import CompositionSerializer
 from autosar_studio.helpers import APIResponse, access_error_wrapper, OwnsFile
-from files.models import File, Directory, Project
+from files.models import File, Project
 from django.core.exceptions import PermissionDenied
-from collections import OrderedDict
+from registration_system.models import MakeProject, CreateDefaultsForUser
 
 
 @api_view(['GET'])
@@ -27,7 +27,7 @@ def access_file(request, file_id):
 @access_error_wrapper
 def generate_project(request, project_name):
     req_user = request.user
-    project = Project.Make(project_name, req_user)
+    project = MakeProject(project_name, req_user)
     factory = APIRequestFactory()
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
