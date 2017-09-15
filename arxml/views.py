@@ -44,6 +44,7 @@ def GetSoftwareComponentIfOwns(user, id):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def add_software_component(request):
     project = Project.objects.get(id=request.POST['project_id'])
     file = File
@@ -759,7 +760,7 @@ def add_variable(request):
     variable = ArxmlModels.Variable(name=request.POST['name'], swc=swc, type=data_type)
     variable.save()
     swc.package.Rewrite()
-    return HttpResponse(element.id)
+    return HttpResponse(variable.id)
 
 
 @api_view(['POST'])
@@ -822,7 +823,7 @@ def add_writeRef(request):
     ref = ArxmlModels.WriteVariableRef(name=request.POST['name'], runnable=runnable, variable=variable)
     ref.save()
     swc.Rewrite()
-    return HttpResponse(access.id)
+    return HttpResponse(ref.id)
 
 
 @api_view(['POST'])
@@ -865,7 +866,7 @@ def add_readRef(request):
     ref = ArxmlModels.ReadVariableRef(name=request.POST['name'], runnable=runnable, variable=variable)
     ref.save()
     swc.Rewrite()
-    return HttpResponse(access.id)
+    return HttpResponse(ref.id)
 
 
 @api_view(['POST'])
@@ -893,6 +894,7 @@ def remove_readRef(request):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def add_connector(request):
     composition = GetCompositionIfOwns(request.user, request.POST['project_id'])
     p_port = ArxmlModels.Port.objects.get(pk=request.POST['p_port_id'])

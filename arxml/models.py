@@ -332,7 +332,7 @@ class DataElement(models.Model):
 
     def validate_unique(self, exclude=None):
         qs = DataElement.objects.filter(name=self.name)
-        if qs.filter(interface__package=self.interface.package).exclude(pk=self.pk).exists():
+        if qs.filter(interface__interface__package=self.interface.interface.package).exclude(pk=self.pk).exists():
             raise ValidationError('Data Element name must be unique per project')
 
     def save(self, *args, **kwargs):
