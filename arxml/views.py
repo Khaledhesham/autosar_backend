@@ -4,7 +4,7 @@ from files.models import File, Directory, Project
 from django.core.exceptions import PermissionDenied
 from rest_framework.decorators import api_view
 from django.http import HttpResponse,Http404
-
+from arxml.wrapper import RunnableCFile
 ### software component
 
 def GetProjectIfOwns(user, project_id):
@@ -43,7 +43,6 @@ def GetSoftwareComponentIfOwns(user, id):
 
 
 @api_view(['POST'])
-@access_error_wrapper
 def add_software_component(request):
     project = Project.objects.get(id=request.POST['project_id'])
     file = File
