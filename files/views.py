@@ -80,17 +80,20 @@ def serialize_project(request, project_id):
 
 
 @api_view(['GET'])
-@access_error_wrapper
 def download_project(request, project_id):
     project = Project.objects.get(pk=project_id)
     if request.user.is_staff or project.user == request.user:
-        shutil.make_archive("files/storage/"+project.name, 'zip', project.directory.GetPath())
-        zip = open("files/storage/"+project.name+".zip", 'rb')
+        ignore = shutil.ignore_patterns('*.exe', '*.o', '*.txt')
+        shutil.rmtree("files/tmp/" + project.name + "-" + project_id, ignore_errors=True)
+        shutil.copytree(project.directory.GetPath(),"files/tmp/" + project.name + "-" + project_id,ignore=ignore)
+        shutil.make_archive("files/tmp-zip/"+project.name + "-" + project_id, 'zip', "files/tmp/"+project.name + "-" + project_id)
+        zip = open("files/tmp-zip/" + project.name + "-" + project_id + ".zip", 'rb')
         response = HttpResponse(content=zip)
         response['Content-Type'] = 'application/zip, application/octet-stream'
         response['Content-Disposition'] = 'attachment; filename="%s.zip"' \
                                           % project.name
-        os.remove("files/storage/" + project.name + ".zip")
+        shutil.rmtree("files/tmp/" + project.name + "-" + project_id, ignore_errors=True)
+        os.remove("files/tmp-zip/" + project.name + "-" + project_id + ".zip")
         return response
     return APIResponse(550)
 

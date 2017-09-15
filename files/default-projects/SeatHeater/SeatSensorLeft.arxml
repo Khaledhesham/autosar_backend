@@ -1,0 +1,119 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d7072a92-6376-11e7-95ec-b88687f772a2">
+      <SHORT_NAME>SeatHeater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d7072a93-6376-11e7-8544-b88687f772a2">
+          <SHORT_NAME>SeatSensorLeft_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="5f322e5a-637a-11e7-9f7c-b88687f772a2">
+              <SHORT_NAME>SeatSensorLeft</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <P-PORT-PROTOTYPE UUID="227725ac-637b-11e7-b73f-b88687f772a2">
+                  <SHORT_NAME>StatusLeft</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-SENDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-SENDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSeatStatusInterface</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="31676e1e-637b-11e7-a072-b88687f772a2">
+                  <SHORT_NAME>SensorLeftIO</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/LeftSensorIOInterface</REQUIRED_INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="5f322e5c-637a-11e7-8406-b88687f772a2">
+              <SHORT-NAME>SeatSensorLeftBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS>
+                <TIMING-EVENT UUID="21594c5e-6395-11e7-81c5-b88687f772a2">
+                  <SHORT-NAME>SeatSensorLeftUpdateTimer</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeftBehavior/SeatSensorRunnableLeft</START-ON-EVENT-REF>
+                <PERIOD>1.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="a44b1892-6387-11e7-a327-b88687f772a2">
+                  <SHORT-NAME>SeatSensorRunnableLeft</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>SeatSensorRunnableLeft</SYMBOL>
+                <DATA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
+                      <SHORT-NAME>SeatSensorLeftIOAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft/SensorLeftIO</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSensorIOInterface/LeftSensorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>SeatSensorLeftStatusAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft/StatusLeft</P-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatStatusInterface/PassengerOnLeftSeat</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft</COMPONENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="5f322e5b-637a-11e7-907e-b88687f772a2">
+              <SHORT-NAME>SeatSensorLeftImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeftBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

@@ -1,0 +1,54 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/heater-12</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d5ac1926-61c5-11e7-825a-b88687f772a2">
+      <SHORT_NAME>Blink</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
+          <SHORT_NAME>DataTypes</SHORT_NAME>
+        <ELEMENTS>
+            <BOOLEAN-TYPE>
+              <SHORT-NAME>Boolean</SHORT-NAME>
+            </BOOLEAN-TYPE>
+          <REAL-TYPE>
+              <SHORT-NAME>Float</SHORT-NAME>
+            <SW-DATA-DEF-PROPS />
+            <LOWER-LIMIT INTERVAL-TYPE="CLOSED" />
+            <UPPER-LIMIT INTERVAL-TYPE="CLOSED" />
+            </REAL-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
+          <SHORT_NAME>Interfaces</SHORT_NAME>
+        <ELEMENTS>
+            <SENDER-RECEIVER-INTERFACE UUID="73303940-61c7-11e7-9e6c-b88687f772a2">
+              <SHORT-NAME>blink</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <DATA-ELEMENTS>
+                <DATA-ELEMENT-PROTOTYPE UUID="b62fad30-61ca-11e7-aef0-b88687f772a2">
+                  <SHORT-NAME>BlinkElement</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/Blink/DataTypes/Boolean</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>

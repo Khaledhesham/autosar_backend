@@ -1,0 +1,342 @@
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+DataElement RightHeaterValue changed.
+Runnable SeatHeaterRunnable is starting.
+Runnable SeatHeaterRunnable executed.
+DataElement Position changed.
+Runnable HeatRegulatorRunnable is starting.
+Runnable HeatRegulatorRunnable executed.
+DataElement PassengerOnLeftSeat changed.
+Runnable SeatSensorRunnableLeft is starting.
+Runnable SeatSensorRunnableLeft executed.
+DataElement RightHeatLevel changed.
+DataElement LeftHeatLevel changed.
+Runnable UpdateHeating is starting.
+Runnable UpdateHeating executed.
+DataElement PassengerOnRightSeat changed.
+Runnable SeatSensorRunnableRight is starting.
+Runnable SeatSensorRunnableRight executed.
+DataElement LeftHeaterValue changed.
+Simulation time ended.Runnable SeatHeaterRunnable is starting.

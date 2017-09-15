@@ -1,0 +1,119 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE UUID="d7072a92-6376-11e7-95ec-b88687f772a2">
+      <SHORT_NAME>SeatHeater</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE UUID="d7072a93-6376-11e7-8544-b88687f772a2">
+          <SHORT_NAME>HeatRegulator_swc</SHORT_NAME>
+        <ELEMENTS>
+            <APPLICATION-SOFTWARE-COMPONENT-TYPE UUID="93404906-637a-11e7-8ddc-b88687f772a2">
+              <SHORT_NAME>HeatRegulator</SHORT_NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <PORTS>
+                <P-PORT-PROTOTYPE UUID="6493e3d2-637b-11e7-9c44-b88687f772a2">
+                  <SHORT_NAME>Position</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <PROVIDED-COM-SPECS>
+                    <UNQUEUED-SENDER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-SENDER-COM-SPEC>
+                  </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RegulatorPosition</PROVIDED-INTERFACE-TREF>
+                </P-PORT-PROTOTYPE>
+              <R-PORT-PROTOTYPE UUID="72542cac-637b-11e7-95dc-b88687f772a2">
+                  <SHORT_NAME>RegulatorIO</SHORT_NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <REQUIRED-COM-SPECS>
+                    <UNQUEUED-RECEIVER-COM-SPEC>
+                      <DATA-ELEMENT-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-REF>
+                    <ALIVE-TIMEOUT>60.0</ALIVE-TIMEOUT>
+                    </UNQUEUED-RECEIVER-COM-SPEC>
+                  </REQUIRED-COM-SPECS>
+                <REQUIRED_INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/SeatHeater/Interfaces/RegulatorIOInterface</REQUIRED_INTERFACE-TREF>
+                </R-PORT-PROTOTYPE>
+              </PORTS>
+            </APPLICATION-SOFTWARE-COMPONENT-TYPE>
+          <INTERNAL-BEHAVIOR UUID="93404908-637a-11e7-8a31-b88687f772a2">
+              <SHORT-NAME>HeatRegulatorBehavior</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <EVENTS>
+                <TIMING-EVENT UUID="699ac846-6417-11e7-b779-b88687f772a2">
+                  <SHORT-NAME>HeatRegulatorEvent</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/SeatHeater/HeatRegulator_swc/HeatRegulatorBehavior/HeatRegulatorRunnable</START-ON-EVENT-REF>
+                <PERIOD>1.0</PERIOD>
+                </TIMING-EVENT>
+              </EVENTS>
+            <RUNNABLES>
+                <RUNNABLE-ENTITY UUID="362e4254-6395-11e7-a9a7-b88687f772a2">
+                  <SHORT-NAME>HeatRegulatorRunnable</SHORT-NAME>
+                <CAN-BE-INVOKED-CONCURRENTLY>true</CAN-BE-INVOKED-CONCURRENTLY>
+                <SYMBOL>HeatRegulatorRunnable</SYMBOL>
+                <DATA-READ-ACCESS>
+                    <DATA-READ-ACCESS>
+                      <SHORT-NAME>HeatRegulatorIOAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorIO</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorIOInterface/RegulatorValue</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-READ-ACCESS>
+                  </DATA-READ-ACCESS>
+                <DATA-WRITE-ACCESS>
+                    <DATA-WRITE-ACCESS>
+                      <SHORT-NAME>HeatRegulatorPositionAccess</SHORT-NAME>
+                    <DATA-ELEMENT-IREF>
+                        <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RegulatorPosition/Position</DATA-ELEMENT-PROTOTYPE-REF>
+                      </DATA-ELEMENT-IREF>
+                    </DATA-WRITE-ACCESS>
+                  </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
+                </RUNNABLE-ENTITY>
+              </RUNNABLES>
+            <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator</COMPONENT-REF>
+            </INTERNAL-BEHAVIOR>
+          <SWC-IMPLEMENTATION uuid="93404907-637a-11e7-8350-b88687f772a2">
+              <SHORT-NAME>HeatRegulatorImplementation</SHORT-NAME>
+            <ADMIN-DATA>
+                <SDGS>
+                  <SDG GID="AutosarStudio::IdentifiableOptions" />
+                </SDGS>
+              </ADMIN-DATA>
+            <BEHAVIOR-REF DEST="INTERNAL-BEHAVIOR">/SeatHeater/HeatRegulator_swc/HeatRegulatorBehavior</BEHAVIOR-REF>
+            </SWC-IMPLEMENTATION>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
