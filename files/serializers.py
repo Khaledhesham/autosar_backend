@@ -43,6 +43,5 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
         fields = ('name', 'id', 'directory')
-        ordering = ['-id']
         
     directory = DirectorySerializer()

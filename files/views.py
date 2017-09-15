@@ -11,6 +11,7 @@ from arxml.serializers import CompositionSerializer
 from autosar_studio.helpers import APIResponse, access_error_wrapper, OwnsFile
 from files.models import File, Directory, Project
 from django.core.exceptions import PermissionDenied
+from collections import OrderedDict
 
 
 @api_view(['GET'])
@@ -55,7 +56,8 @@ def generate_project(request, project_name):
 def get_user_projects(request):
     projects = Project.objects.filter(user=request.user)
     serializer = ProjectSerializer(projects, many=True, context={'request': request})
-    return Response(serializer.data)
+    res = [OrderedDict(reversed(serializer.data[0].items()))]
+    return Response(res)
 
 
 @api_view(['POST'])
