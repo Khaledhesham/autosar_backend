@@ -92,7 +92,8 @@ def file_post_delete_handler(sender, **kwargs):
         path = file_model.directory.GetPath()
         if os.path.isdir(path) is True:
             path = path + '/' + file_model.name + '.' + file_model.file_type
-            os.remove(path)
+            if os.path.isfile(path):
+                os.remove(path)
     except Directory.DoesNotExist:
         return
 

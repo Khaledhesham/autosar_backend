@@ -23,6 +23,7 @@ def access_file(request, file_id):
 
 
 @api_view(['POST'])
+@access_error_wrapper
 def generate_project(request, project_name):
     req_user = request.user
     project = Project(name=project_name , user=req_user)
@@ -44,7 +45,6 @@ def generate_project(request, project_name):
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })
     return Response(ser.data)
-    return HttpResponse("True")
 
 
 # project
