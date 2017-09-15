@@ -111,7 +111,10 @@ class SoftwareComponent(models.Model):
 @receiver(pre_delete, sender=SoftwareComponent)
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
-    swc.child_directory.delete()
+    try:
+        swc.child_directory.delete()
+    except Directory.DoesNotExist:
+        return
 
 
 class Port(models.Model):
@@ -233,7 +236,7 @@ class Interface(models.Model):
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, default='SENDER-RECEIVER-INTERFACE')
-    provider = models.OneToOneField(Port, on_delete=models.SET_NULL, null=True, related_name="provided_interface")
+    provider = models.OneToOneField(Port, on_delete=models.SET_NULL, null=True, blank=True, related_name="provided_interface")
 
     class Meta:
         unique_together = (('name', 'package'),)
