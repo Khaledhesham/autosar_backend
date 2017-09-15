@@ -1,0 +1,92 @@
+<AUTOSAR xmlns="http://autosar.org/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/3.2.1 autosar_3-2-1.xsd">
+  <ADMIN-DATA>
+    <SDGS>
+      <SDG GID="AutosarStudio::AutosarOptions">
+        <SD GID="GENDIR">files/storage/SeatHeater-17</SD>
+      </SDG>
+    </SDGS>
+  </ADMIN-DATA>
+<TOP-LEVEL-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT_NAME>CrossControl</SHORT_NAME>
+    <SUB-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT_NAME>SoftwareComponents</SHORT_NAME>
+        <ELEMENTS>
+            <COMPOSITION-TYPE>
+              <SHORT_NAME>SeatHeaterComposition</SHORT_NAME>
+            <COMPONENTS>
+                <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>SeatHeatingController</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>SeatSensorLeft</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>SeatSensorRight</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorRight_swc/SeatSensorRight</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>HeatRegulator</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/HeatRegulator_swc/HeatRegulator</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              <COMPONENT-PROTOTYPE>
+                  <SHORT_NAME>SeatHeater</SHORT_NAME>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeater_swc/SeatHeater</TYPE-TREF>
+                </COMPONENT-PROTOTYPE>
+              </COMPONENTS>
+            <CONNECTORS>
+                <ASSEMBLY-CONNECTOR-PROTOTYPE UUID="f4dfff8a-637b-11e7-bdb5-b88687f772a2">
+                  <SHORT_NAME>PositionComposition</SHORT_NAME>
+                <PROVIDER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/HeatRegulator</COMPONENT-PROTOTYPE-REF>
+                  <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/HeatRegulator_pkg/HeatRegulator_swc/HeatRegulator/Position</P-PORT-PROTOTYPE-REF>
+                  </PROVIDER-IREF>
+                <REQUESTER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatHeatingController</COMPONENT-PROTOTYPE-REF>
+                  <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeatingController_pkg/SeatHeatingController_swc/SeatHeatingController/RegulatorPosition</R-PORT-PROTOTYPE-REF>
+                  </REQUESTER-IREF>
+                </ASSEMBLY-CONNECTOR-PROTOTYPE>
+              <ASSEMBLY-CONNECTOR-PROTOTYPE UUID="f704e00c-637b-11e7-967d-b88687f772a2">
+                  <SHORT_NAME>StatusLeftComposition</SHORT_NAME>
+                <PROVIDER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatSensorLeft</COMPONENT-PROTOTYPE-REF>
+                  <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatSensorLeft_pkg/SeatSensorLeft_swc/SeatSensorLeft/StatusLeft</P-PORT-PROTOTYPE-REF>
+                  </PROVIDER-IREF>
+                <REQUESTER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatHeatingController</COMPONENT-PROTOTYPE-REF>
+                  <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeatingController_pkg/SeatHeatingController_swc/SeatHeatingController/LeftSeatStatus</R-PORT-PROTOTYPE-REF>
+                  </REQUESTER-IREF>
+                </ASSEMBLY-CONNECTOR-PROTOTYPE>
+              <ASSEMBLY-CONNECTOR-PROTOTYPE UUID="fdca36b6-637b-11e7-bc10-b88687f772a2">
+                  <SHORT_NAME>LevelsComposition</SHORT_NAME>
+                <PROVIDER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatHeater</COMPONENT-PROTOTYPE-REF>
+                  <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater_pkg/SeatHeater_swc/SeatHeater/Levels</P-PORT-PROTOTYPE-REF>
+                  </PROVIDER-IREF>
+                <REQUESTER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatHeatingController</COMPONENT-PROTOTYPE-REF>
+                  <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeatingController_pkg/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</R-PORT-PROTOTYPE-REF>
+                  </REQUESTER-IREF>
+                </ASSEMBLY-CONNECTOR-PROTOTYPE>
+              <ASSEMBLY-CONNECTOR-PROTOTYPE UUID="ff62b54a-637b-11e7-bb2d-b88687f772a2">
+                  <SHORT_NAME>StatusRightComposition</SHORT_NAME>
+                <PROVIDER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatSensorRight</COMPONENT-PROTOTYPE-REF>
+                  <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatSensorRight_pkg/SeatSensorRight_swc/SeatSensorRight/StatusRight</P-PORT-PROTOTYPE-REF>
+                  </PROVIDER-IREF>
+                <REQUESTER-IREF>
+                    <COMPONENT-PROTOTYPE-REF DEST="COMPONENT-PROTOTYPE">/CrossControl/SoftwareComponents/SeatHeaterComposition/SeatHeatingController</COMPONENT-PROTOTYPE-REF>
+                  <R-PORT-PROTOTYPE-REF DEST="R-PORT-PROTOTYPE">/SeatHeatingController_pkg/SeatHeatingController_swc/SeatHeatingController/RightSeatStatus</R-PORT-PROTOTYPE-REF>
+                  </REQUESTER-IREF>
+                </ASSEMBLY-CONNECTOR-PROTOTYPE>
+              </CONNECTORS>
+            </COMPOSITION-TYPE>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </SUB-PACKAGES>
+    </AR-PACKAGE>
+  </TOP-LEVEL-PACKAGES>
+</AUTOSAR>
