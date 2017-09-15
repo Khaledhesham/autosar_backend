@@ -107,5 +107,6 @@ urlpatterns = [
     url(r'^simulate/getvalues/?$', simulator_views.get_simulation_values),
     url(r'^check_token/?$', reg_views.check),
     url(r'^files/update/?$', file_views.update_c_file),
+    url(r'^userInfo/?$', reg_views.userInfo),
     url(r'^', include(router.urls)),
 ]

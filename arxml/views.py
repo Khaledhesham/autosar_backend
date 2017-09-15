@@ -1,9 +1,9 @@
 from autosar_studio.helpers import APIResponse, access_error_wrapper, OwnsFile
 import arxml.models as ArxmlModels
 from files.models import File, Directory, Project
-from django.core.exceptions import PermissionDenied, Http404
+from django.core.exceptions import PermissionDenied
 from rest_framework.decorators import api_view
-from django.http import HttpResponse
+from django.http import HttpResponse,Http404
 
 ### software component
 
