@@ -98,6 +98,28 @@ class SoftwareComponent(models.Model):
     x = models.FloatField(default=0.0)
     y = models.FloatField(default=0.0)
 
+    def Make(project, name, x, y):
+        file = File(directory=project.directory, file_type="arxml", name=name)
+        file.save()
+        swc_directory = Directory(name=name, parent=project.directory)
+        swc_directory.save()
+        rte_types = File(directory=swc_directory, file_type="h", name='rtetypes')
+        rte_types.save()
+        rte_types.Write(open("files/default_datatypes.orig").read())
+        datatypes = File(directory=swc_directory, file_type="h", name=name + '_datatypes')
+        datatypes.save()
+        rte = File(directory=swc_directory, file_type="h", name=name + '_rte')
+        rte.save()
+        runnables_file = File(directory=swc_directory, file_type="c", name=name + '_runnables')
+        runnables_file.save()
+        swc = ArxmlModels.SoftwareComponent(name=name, composition=project.composition, file=file, x=x, y=y, \
+                rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file, package=project.package)
+        swc.save()
+        swc.Rewrite()
+        RunnableCFile(runnables_file.Open('w+'), swc)
+        project.composition.Rewrite()
+        return swc
+
     def Rewrite(self):
         arxml = SoftwareComponentARXML(self, self.file.directory.GetPath())
         DataTypeHFile(self.datatypes_file.Open('w+'), self)

@@ -27,21 +27,7 @@ def access_file(request, file_id):
 @access_error_wrapper
 def generate_project(request, project_name):
     req_user = request.user
-    project = Project(name=project_name , user=req_user)
-    project.save()
-    directory_name = project_name + str("-") + str(project.id)
-    main_directory = Directory(name=directory_name, project=project)
-    main_directory.save()
-    arxml_file = File(name="Composition", file_type="arxml", directory=main_directory)
-    arxml_file.save()
-    interfaces_file = File(name="DataTypesAndInterfaces", file_type="arxml", directory=main_directory)
-    interfaces_file.save()
-    package = ArxmlModels.Package(project=project, interfaces_file=interfaces_file)
-    package.save()
-    package.Rewrite()
-    composition = ArxmlModels.Composition(file=arxml_file, project=project)
-    composition.save()
-    composition.Rewrite()
+    project = Project.Make(project_name, req_user)
     factory = APIRequestFactory()
     request = factory.get('/')
     ser = ProjectSerializer(instance=project, context={ 'request': Request(request) })

@@ -50,25 +50,7 @@ def add_software_component(request):
     file = File
     try:
         if project is not None and project.user == request.user:
-            file = File(directory=project.directory, file_type="arxml", name=request.POST['name'])
-            file.save()
-            swc_directory = Directory(name=request.POST['name'], parent=project.directory)
-            swc_directory.save()
-            rte_types = File(directory=swc_directory, file_type="h", name='rtetypes')
-            rte_types.save()
-            rte_types.Write(open("files/default_datatypes.orig").read())
-            datatypes = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_datatypes')
-            datatypes.save()
-            rte = File(directory=swc_directory, file_type="h", name=request.POST['name'] + '_rte')
-            rte.save()
-            runnables_file = File(directory=swc_directory, file_type="c", name=request.POST['name'] + '_runnables')
-            runnables_file.save()
-            swc = ArxmlModels.SoftwareComponent(name=request.POST['name'], composition=project.composition, file=file, x=request.POST['x'], y=request.POST['y'], \
-                    rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file, package=project.package)
-            swc.save()
-            swc.Rewrite()
-            RunnableCFile(runnables_file.Open('w+'), swc)
-            project.composition.Rewrite()
+            swc = SoftwareComponent.Make(project, request.POST['name'], request.POST['x'], request.POST['y'])
             return HttpResponse(swc.id)
         return APIResponse(550)
     except Exception as e:
