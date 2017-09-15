@@ -171,7 +171,7 @@ class InterfaceSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_dataElements(self,obj):
         items = []
-        for item_dataelement in DataElement.objects.filter(interface=obj.interface):
+        for item_dataelement in DataElement.objects.filter(interface=obj.senderreceiverinterface):
             items.append(dataElementSerializer(instance=item_dataelement).data)
         return items
 

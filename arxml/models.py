@@ -246,14 +246,14 @@ class Interface(models.Model):
 
 
 class SenderReceiverInterface(models.Model):
-    interface = models.OneToOneField(Interface, on_delete=models.CASCADE, related_name="interface")
+    interface = models.OneToOneField(Interface, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.interface.name
 
 
 class ClientServerInterface(models.Model):
-    interface = models.OneToOneField(Interface, on_delete=models.CASCADE, related_name="interface")
+    interface = models.OneToOneField(Interface, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.interface.name
