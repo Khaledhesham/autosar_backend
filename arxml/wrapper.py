@@ -94,7 +94,7 @@ class RteHFile:
                 print("", file=file)
 
         for runnable in swc.runnable_set.all():
-            if runnable.operationinvokedevent is not None:
+            if hasattr(runnable, 'operationinvokedevent') and runnable.operationinvokedevent is not None:
                 s = "extern void " + runnable.name + "("
                 first = True
                 for arg in runnable.operationinvokedevent.operation_ref.operation.argument_set:
@@ -230,10 +230,10 @@ class SoftwareComponentARXML(ArxmlWrapper):
             interface_path = ""
             interface = None
 
-            if swc_port.interface is not None:
+            if hasattr(swc_port, 'interface') and swc_port.interface is not None:
                 interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.interface.name
                 interface = swc_port.interface
-            elif swc_port.provided_interface is not None:
+            elif hasattr(swc_port, 'provided_interface') and swc_port.provided_interface is not None:
                 interface_path = "/" + swc.package.project.name + "/Interfaces/" + swc_port.provided_interface.name
                 interface = swc_port.provided_interface
 
