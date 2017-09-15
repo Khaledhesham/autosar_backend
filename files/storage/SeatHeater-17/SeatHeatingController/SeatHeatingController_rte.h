@@ -25,4 +25,5 @@ Boolean Rte_IRead_SeatHeatingController_UpdateHeating_LeftSeatStatus_PassengerOn
 
 extern void UpdateHeating(void);
 
+
 #endif

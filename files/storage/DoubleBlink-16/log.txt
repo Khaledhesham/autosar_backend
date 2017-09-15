@@ -1,0 +1,106 @@
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+DataElement BottomLed changed.
+Runnable BottomRunnable is starting.
+Runnable BottomRunnable executed.
+Runnable TopRunnable is starting.
+Runnable TopRunnable executed.
+Simulation time ended.

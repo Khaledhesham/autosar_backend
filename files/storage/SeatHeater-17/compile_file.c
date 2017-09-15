@@ -21,6 +21,7 @@ UInt32 RegulatorValue;
 UInt32 RightHeatLevel;
 UInt32 RightHeaterValue;
 
+
 UInt32 Rte_IRead_SeatHeatingController_UpdateHeating_RegulatorPosition_Position(void)
 {
     return Position;

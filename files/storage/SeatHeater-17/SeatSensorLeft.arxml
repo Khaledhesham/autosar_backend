@@ -95,6 +95,9 @@
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
             <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatSensorLeft_swc/SeatSensorLeft</COMPONENT-REF>

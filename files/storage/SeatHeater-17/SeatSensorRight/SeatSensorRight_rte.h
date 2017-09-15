@@ -19,4 +19,5 @@ Boolean Rte_IRead_SeatSensorRight_SeatSensorRunnableRight_SensorRightIO_RightSen
 
 extern void SeatSensorRunnableRight(void);
 
+
 #endif

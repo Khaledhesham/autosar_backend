@@ -22,6 +22,8 @@ void Rte_IWrite_DoubleBlink_BottomRunnable_BottomLed_BottomLed(Boolean u);
 Boolean Rte_IRead_DoubleBlink_BottomRunnable_Switch_Toggle(void);
 
 extern void TopRunnable(void);
+
 extern void BottomRunnable(void);
+
 
 #endif

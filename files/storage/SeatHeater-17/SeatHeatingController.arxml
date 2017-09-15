@@ -139,17 +139,20 @@
                       <SHORT-NAME>HeaterRightLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/RightSeatHeaterIOInterface/RightHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   <DATA-WRITE-ACCESS>
                       <SHORT-NAME>HeaterLeftLevelAccess</SHORT-NAME>
                     <DATA-ELEMENT-IREF>
                         <P-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController/HeaterLevels</P-PORT-PROTOTYPE-REF>
-                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/HeaterLevel/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
+                      <DATA-ELEMENT-PROTOTYPE-REF DEST="DATA-ELEMENT-PROTOTYPE">/SeatHeater/Interfaces/LeftSeatHeaterIOInterface/LeftHeatLevel</DATA-ELEMENT-PROTOTYPE-REF>
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
             <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/SeatHeater/SeatHeatingController_swc/SeatHeatingController</COMPONENT-REF>

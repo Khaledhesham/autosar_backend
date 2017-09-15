@@ -14,11 +14,11 @@
           <SHORT_NAME>SoftwareComponents</SHORT_NAME>
         <ELEMENTS>
             <COMPOSITION-TYPE>
-              <SHORT_NAME>heaterComposition</SHORT_NAME>
+              <SHORT_NAME>BlinkComposition</SHORT_NAME>
             <COMPONENTS>
                 <COMPONENT-PROTOTYPE>
                   <SHORT_NAME>Blinker</SHORT_NAME>
-                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/heater/Blinker_swc/Blinker</TYPE-TREF>
+                <TYPE-TREF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/Blink/Blinker_swc/Blinker</TYPE-TREF>
                 </COMPONENT-PROTOTYPE>
               </COMPONENTS>
             <CONNECTORS />

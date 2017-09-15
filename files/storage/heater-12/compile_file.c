@@ -8,6 +8,7 @@ Boolean dataChanged = false;
 
 Boolean BlinkElement;
 
+
 void Rte_IWrite_Blinker_BlinkerRunnable_Led_BlinkElement(Boolean u)
 {
     BlinkElement = u;

@@ -53,26 +53,7 @@
                   <SDG GID="AutosarStudio::IdentifiableOptions" />
                 </SDGS>
               </ADMIN-DATA>
-            <DATA-ELEMENTS>
-                <DATA-ELEMENT-PROTOTYPE UUID="712d3830-637c-11e7-bc82-b88687f772a2">
-                  <SHORT-NAME>LeftHeatLevel</SHORT-NAME>
-                <ADMIN-DATA>
-                    <SDGS>
-                      <SDG GID="AutosarStudio::IdentifiableOptions" />
-                    </SDGS>
-                  </ADMIN-DATA>
-                <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
-                </DATA-ELEMENT-PROTOTYPE>
-              <DATA-ELEMENT-PROTOTYPE UUID="7e3a521e-637c-11e7-bee2-b88687f772a2">
-                  <SHORT-NAME>RightHeatLevel</SHORT-NAME>
-                <ADMIN-DATA>
-                    <SDGS>
-                      <SDG GID="AutosarStudio::IdentifiableOptions" />
-                    </SDGS>
-                  </ADMIN-DATA>
-                <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
-                </DATA-ELEMENT-PROTOTYPE>
-              </DATA-ELEMENTS>
+            <DATA-ELEMENTS />
             </SENDER-RECEIVER-INTERFACE>
           <SENDER-RECEIVER-INTERFACE UUID="bd6e8bdc-637c-11e7-9bbe-b88687f772a2">
               <SHORT-NAME>LeftSeatStatusInterface</SHORT-NAME>
@@ -177,7 +158,16 @@
                 </SDGS>
               </ADMIN-DATA>
             <DATA-ELEMENTS>
-                <DATA-ELEMENT-PROTOTYPE UUID="9ff9d34c-6391-11e7-98b0-b88687f772a2">
+                <DATA-ELEMENT-PROTOTYPE UUID="712d3830-637c-11e7-bc82-b88687f772a2">
+                  <SHORT-NAME>LeftHeatLevel</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="9ff9d34c-6391-11e7-98b0-b88687f772a2">
                   <SHORT-NAME>LeftHeaterValue</SHORT-NAME>
                 <ADMIN-DATA>
                     <SDGS>
@@ -196,7 +186,16 @@
                 </SDGS>
               </ADMIN-DATA>
             <DATA-ELEMENTS>
-                <DATA-ELEMENT-PROTOTYPE UUID="a69d638c-6391-11e7-bff5-b88687f772a2">
+                <DATA-ELEMENT-PROTOTYPE UUID="7e3a521e-637c-11e7-bee2-b88687f772a2">
+                  <SHORT-NAME>RightHeatLevel</SHORT-NAME>
+                <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="AutosarStudio::IdentifiableOptions" />
+                    </SDGS>
+                  </ADMIN-DATA>
+                <TYPE-TREF DEST="INTEGER-TYPE">/SeatHeater/DataTypes/UInt32</TYPE-TREF>
+                </DATA-ELEMENT-PROTOTYPE>
+              <DATA-ELEMENT-PROTOTYPE UUID="a69d638c-6391-11e7-bff5-b88687f772a2">
                   <SHORT-NAME>RightHeaterValue</SHORT-NAME>
                 <ADMIN-DATA>
                     <SDGS>

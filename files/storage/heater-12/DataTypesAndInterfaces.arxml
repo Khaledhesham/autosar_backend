@@ -8,7 +8,7 @@
   </ADMIN-DATA>
 <TOP-LEVEL-PACKAGES>
     <AR-PACKAGE UUID="d5ac1926-61c5-11e7-825a-b88687f772a2">
-      <SHORT_NAME>heater</SHORT_NAME>
+      <SHORT_NAME>Blink</SHORT_NAME>
     <SUB-PACKAGES>
         <AR-PACKAGE UUID="d5ac1927-61c5-11e7-9805-b88687f772a2">
           <SHORT_NAME>DataTypes</SHORT_NAME>
@@ -42,16 +42,7 @@
                       <SDG GID="AutosarStudio::IdentifiableOptions" />
                     </SDGS>
                   </ADMIN-DATA>
-                <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
-                </DATA-ELEMENT-PROTOTYPE>
-              <DATA-ELEMENT-PROTOTYPE UUID="b05024f6-61ce-11e7-8cc1-b88687f772a2">
-                  <SHORT-NAME>fedsc</SHORT-NAME>
-                <ADMIN-DATA>
-                    <SDGS>
-                      <SDG GID="AutosarStudio::IdentifiableOptions" />
-                    </SDGS>
-                  </ADMIN-DATA>
-                <TYPE-TREF DEST="BOOLEAN-TYPE">/heater/DataTypes/Boolean</TYPE-TREF>
+                <TYPE-TREF DEST="BOOLEAN-TYPE">/Blink/DataTypes/Boolean</TYPE-TREF>
                 </DATA-ELEMENT-PROTOTYPE>
               </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>

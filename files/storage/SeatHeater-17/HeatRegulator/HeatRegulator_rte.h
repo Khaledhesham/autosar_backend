@@ -19,4 +19,5 @@ UInt32 Rte_IRead_HeatRegulator_HeatRegulatorRunnable_RegulatorIO_RegulatorValue(
 
 extern void HeatRegulatorRunnable(void);
 
+
 #endif

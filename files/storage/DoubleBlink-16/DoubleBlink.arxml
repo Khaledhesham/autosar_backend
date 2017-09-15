@@ -120,6 +120,9 @@
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
                 </RUNNABLE-ENTITY>
               <RUNNABLE-ENTITY UUID="37cb8f7e-6332-11e7-9183-b88687f772a2">
                   <SHORT-NAME>BottomRunnable</SHORT-NAME>
@@ -143,6 +146,9 @@
                       </DATA-ELEMENT-IREF>
                     </DATA-WRITE-ACCESS>
                   </DATA-WRITE-ACCESS>
+                <SERVER-CALL-POINTS />
+                <WRITTEN-VARIABLE-REFS />
+                <READ-VARIABLE-REFS />
                 </RUNNABLE-ENTITY>
               </RUNNABLES>
             <COMPONENT-REF DEST="APPLICATION-SOFTWARE-COMPONENT-TYPE">/DoubleBlink/DoubleBlink_swc/DoubleBlink</COMPONENT-REF>
