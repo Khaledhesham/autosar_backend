@@ -1,7 +1,7 @@
 from autosar_studio.helpers import APIResponse, access_error_wrapper, OwnsFile
 import arxml.models as ArxmlModels
 from files.models import File, Directory, Project
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, Http404
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
 
@@ -374,7 +374,7 @@ def add_argument(request):
     if request.POST['direction'] not in ['IN', 'OUT']:
         return APIResponse(404, { 'error' : "Argument direction is not correct" })
 
-    argument = ArxmlModels.DataElement(name=request.POST['name'], interface=interface.clientserverinterface, type=data_type, direction=request.POST['name'])
+    argument = ArxmlModels.DataElement(name=request.POST['name'], interface=operation.interface.clientserverinterface, type=data_type, direction=request.POST['name'])
     argument.save()
     operation.interface.interface.package.Rewrite()
     return HttpResponse(argument.id)
@@ -392,7 +392,7 @@ def add_application_error(request):
     if not hasattr(interface, 'clientserverinterface'):
         return APIResponse(404, { 'error' : "Invalid Interface" })
 
-    error = ArxmlModels.DataElement(name=request.POST['name'], error_code=request.POST['code'], type=data_type, interface=interface.clientserverinterface)
+    error = ArxmlModels.ApplicationError(name=request.POST['name'], error_code=request.POST['code'], interface=interface.clientserverinterface)
     error.save()
     interface.package.Rewrite()
     return HttpResponse(error.id)
