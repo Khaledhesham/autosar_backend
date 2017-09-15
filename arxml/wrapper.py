@@ -109,7 +109,7 @@ class RteHFile:
                 
             print("", file=file)
 
-        for runnable in swc.runnables_set.all():
+        for runnable in swc.runnable_set.all():
             for callPoint in runnable.servercallpoint_set.all():
                 s = "void Rte_Call_" + swc.name + "_" + callPoint.operation_ref.port.name + "_" + callPoint.operation_ref.operation.name + "("
                 first = True

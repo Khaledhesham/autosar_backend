@@ -54,10 +54,9 @@ def generate_project(request, project_name):
 @api_view(['GET'])
 @access_error_wrapper
 def get_user_projects(request):
-    projects = Project.objects.filter(user=request.user)
+    projects = Project.objects.filter(user=request.user).order_by('-id')
     serializer = ProjectSerializer(projects, many=True, context={'request': request})
-    res = [OrderedDict(reversed(serializer.data[0].items()))]
-    return Response(res)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
