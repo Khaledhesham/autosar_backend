@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 import uuid as guid
 from files.models import File, Project, Directory
-from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, DataTypesAndInterfacesARXML
+from arxml.wrapper import CompositionARXML, SoftwareComponentARXML, DataTypeHFile, RteHFile, DataTypesAndInterfacesARXML, RunnableCFile
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -112,7 +112,7 @@ class SoftwareComponent(models.Model):
         rte.save()
         runnables_file = File(directory=swc_directory, file_type="c", name=name + '_runnables')
         runnables_file.save()
-        swc = ArxmlModels.SoftwareComponent(name=name, composition=project.composition, file=file, x=x, y=y, \
+        swc = SoftwareComponent(name=name, composition=project.composition, file=file, x=x, y=y, \
                 rte_datatypes_file=rte_types, datatypes_file=datatypes, rte_file=rte, child_directory=swc_directory, runnables_file=runnables_file, package=project.package)
         swc.save()
         swc.Rewrite()

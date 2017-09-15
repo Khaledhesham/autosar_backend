@@ -9,7 +9,6 @@ from django.db.models.signals import post_delete, pre_delete, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 import os
-from arxml.models import SoftwareComponent, TimingEvent, Runnable, Port, SenderReceiverInterface, Interface, DataElement, DataAccess, DataElementRef, DataType
 
 # Create your models here.
 
@@ -20,54 +19,6 @@ class Project(models.Model):
 
     class Meta:
         unique_together = (('name', 'user'),)
-
-    def Make(project_name, req_user):
-        project = Project(name=project_name, user=req_user)
-        project.save()
-        directory_name = project_name + str("-") + str(project.id)
-        main_directory = Directory(name=directory_name, project=project)
-        main_directory.save()
-        arxml_file = File(name="Composition", file_type="arxml", directory=main_directory)
-        arxml_file.save()
-        interfaces_file = File(name="DataTypesAndInterfaces", file_type="arxml", directory=main_directory)
-        interfaces_file.save()
-        package = ArxmlModels.Package(project=project, interfaces_file=interfaces_file)
-        package.save()
-        package.Rewrite()
-        composition = ArxmlModels.Composition(file=arxml_file, project=project)
-        composition.save()
-        composition.Rewrite()
-        return project
-
-
-    def CreateDefaultsForUser(user):
-        ### Blink
-        project = Project.Make("Blinker", user)
-        swc = SoftwareComponent.Make(project, "Blinker", 33.4, 40.57)
-        runnable = Runnable(name="BlinkerRunnable", concurrent=True, swc=swc)
-        runnable.save()
-        event = TimingEvent(name="TimingEvent", runnable=runnable, period=1)
-        event.save()
-        interface = Interface(name="Blink", package=project.package, type="SENDER-RECEIVER-INTERFACE")
-        interface.save()
-        blinker_interface = SenderReceiverInterface(interface=interface)
-        blinker_interface.save()
-        led_port = Port(name="Led", swc=swc, type="P-PORT-PROTOTYPE", interface=blinker_interface, x=18.5, y=2.4)
-        led_port.save()
-        type = DataType(package=project.package, type="Boolean")
-        type.save()
-        blink_element = DataElement(name="BlinkElement", interface=blinker_interface, type=type)
-        blink_element.save()
-        ref = DataElementRef(port=led_port, data_element=blink_element)
-        ref.save()
-        acc = DataAccess(name="BlinkerAccess", runnable=runnable, data_element_ref=ref, type="DATA-WRITE-ACCESS")
-        acc.save()
-        project.package.Rewrite()
-        project.package.composition.Rewrite()
-        swc.runnables_file.Write(open("files/default_projects/Blinker/Blinker/Blinker_runnables.c").read())
-
-        ###
-
 
     def __str__(self):
         return self.name
