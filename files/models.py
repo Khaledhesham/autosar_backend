@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 import os
 from arxml.models import SoftwareComponent, TimingEvent, Runnable, Port, SenderReceiverInterface, Interface, DataElement, DataAccess, DataElementRef, DataType
+import shutil
 
 # Create your models here.
 
@@ -176,6 +177,4 @@ def directory_pre_delete_handler(sender, **kwargs):
     for file in directory.file_set.all():
         file.delete()
 
-    path = directory.GetPath()
-    if os.path.isdir(path) is True:
-        os.rmdir(path)
+    shutil.rmtree(directory.GetPath(), ignore_errors=True)
