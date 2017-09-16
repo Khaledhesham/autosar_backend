@@ -41,15 +41,15 @@ def CreateDefaultsForUser(user):
 
     with transaction.atomic():
         ### Blink
-        blink_project = MakeProject("Blinkerrrrrrr", user)
+        blink_project = MakeProject("Blinker", user)
         blinker_swc = SoftwareComponent.Make(blink_project, "Blinker", 33.4, 40.57)
 
         ### Double Blink
-        double_blinker_project = MakeProject("DoubleBlinkerrrrrrr", user)
+        double_blinker_project = MakeProject("DoubleBlinker", user)
         double_blinker_swc = SoftwareComponent.Make(double_blinker_project, "DoubleBlinker", 51.56, 40.2)
 
         ### Seat Heater
-        seat_heater_project = MakeProject("SeatHeaterrrrrrr", user)
+        seat_heater_project = MakeProject("SeatHeater", user)
         seat_heating_controller_swc = SoftwareComponent.Make(seat_heater_project, "SeatHeatingController", 45.613, 31.477)
         seat_sensor_left_swc = SoftwareComponent.Make(seat_heater_project, "SeatSensorLeft", 16.06, 48.32)
         seat_sensor_Right_swc = SoftwareComponent.Make(seat_heater_project, "SeatSensorRight", 76.06, 47.75)
