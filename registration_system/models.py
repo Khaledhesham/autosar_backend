@@ -408,3 +408,22 @@ def CreateDefaultsForUser(user):
     connectors.append(connector3)
     connector4 = Connector(composition=seat_heater_project.composition, p_port=levels_port, r_port=heater_levels_port)
     connectors.append(connector4)
+
+    Connector.objects.bulk_create(connectors)
+
+    blink_project.package.Rewrite()
+    blink_project.composition.Rewrite()
+    blinker_swc.runnables_file.Write(open("files/default-projects/Blinker/Blinker/Blinker_runnables.c").read())
+
+    double_blinker_project.package.Rewrite()
+    double_blinker_project.composition.Rewrite()
+    double_blinker_swc.runnables_file.Write(open("files/default-projects/DoubleBlinker/DoubleBlinker/DoubleBlinker_runnables.c").read())
+
+    seat_heater_project.package.Rewrite()
+    seat_heater_project.composition.Rewrite()
+    seat_heating_controller_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatHeatingController/SeatHeatingController_runnables.c").read())
+    seat_sensor_left_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatSensorLeft/SeatSensorLeft_runnables.c").read())
+    seat_sensor_Right_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatSensorRight/SeatSensorRight_runnables.c").read())
+    heat_regulator_swc.runnables_file.Write(open("files/default-projects/SeatHeater/HeatRegulator/HeatRegulator_runnables.c").read())
+    seat_heater_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatHeater/SeatHeater_runnables.c").read())
+    
