@@ -6,14 +6,6 @@ from django.conf import settings
 from files.models import File, Project, Directory
 from arxml.models import Package, Composition, SoftwareComponent, TimingEvent, Runnable, Port, SenderReceiverInterface, Interface, DataElement, DataAccess, DataElementRef, DataType, Connector
 
-def create_user_defaults(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
-        CreateDefaultsForUser(instance)
-
-signals.post_save.connect(create_user_defaults, sender=User)
-
-
 # Create your models here.
 
 def MakeProject(project_name, req_user):
@@ -431,3 +423,10 @@ def CreateDefaultsForUser(user):
         heat_regulator_swc.runnables_file.Write(open("files/default-projects/SeatHeater/HeatRegulator/HeatRegulator_runnables.c").read())
         seat_heater_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatHeater/SeatHeater_runnables.c").read())
     
+    
+def create_user_defaults(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+        CreateDefaultsForUser(instance)
+
+post_save.connect(create_user_defaults, sender=User)
