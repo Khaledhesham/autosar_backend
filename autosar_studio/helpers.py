@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.http import Http404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-
+from django.db import IntegrityError, transaction
 
 def APIResponse(status, message={}):
     return JsonResponse(message, status=status)
@@ -11,7 +11,8 @@ def APIResponse(status, message={}):
 def access_error_wrapper(func):
     def func_wrapper(request, *args, **kwargs):
         try:
-            return func(request, *args, **kwargs)
+            with transaction.atomic():
+                return func(request, *args, **kwargs)
         except Http404:
             return APIResponse(404)
         except ObjectDoesNotExist:
@@ -20,6 +21,8 @@ def access_error_wrapper(func):
             return APIResponse(550)
         except MultiValueDictKeyError:
             return APIResponse(404, {'error' : 'Missing Parameter'})
+        except IntegrityError:
+            return APIResponse(500, {'error' : 'Integrity Error'})
         except Exception as exc:
             return APIResponse(500, {'error' : str(type(exc))})
     return func_wrapper

@@ -95,6 +95,8 @@ def update_c_file(request):
 
     raise PermissionDenied
 
+
+### Debug
 @api_view(['POST'])
 def create_defaults(request):
     CreateDefaultsForUser(request.user)
