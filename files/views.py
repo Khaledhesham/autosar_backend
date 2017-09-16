@@ -94,3 +94,8 @@ def update_c_file(request):
         return HttpResponse("True")
 
     raise PermissionDenied
+
+@api_view(['POST'])
+def create_defaults(request):
+    CreateDefaultsForUser(request.user)
+    return HttpResponse("True")

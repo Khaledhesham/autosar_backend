@@ -108,5 +108,6 @@ urlpatterns = [
     url(r'^check_token/?$', reg_views.check),
     url(r'^files/update/?$', file_views.update_c_file),
     url(r'^userInfo/?$', reg_views.userInfo),
+    url(r'^files/defaults/?$', file_views.create_defaults),
     url(r'^', include(router.urls)),
 ]
