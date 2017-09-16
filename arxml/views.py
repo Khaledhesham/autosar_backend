@@ -50,7 +50,7 @@ def add_software_component(request):
     file = File
     try:
         if project is not None and project.user == request.user:
-            swc = SoftwareComponent.Make(project, request.POST['name'], request.POST['x'], request.POST['y'])
+            swc = ArxmlModels.SoftwareComponent.Make(project, request.POST['name'], request.POST['x'], request.POST['y'])
             return HttpResponse(swc.id)
         return APIResponse(550)
     except Exception as e:
