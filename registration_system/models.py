@@ -33,7 +33,7 @@ def MakeProject(project_name, req_user):
 
 def CreateDefaultsForUser(user):
     ### Blink
-    project = MakeProject("Blinker", user)
+    project = MakeProject("Blinkerrr", user)
     swc = SoftwareComponent.Make(project, "Blinker", 33.4, 40.57)
     runnable = Runnable(name="BlinkerRunnable", concurrent=True, swc=swc)
     runnable.save()
@@ -58,7 +58,7 @@ def CreateDefaultsForUser(user):
     swc.runnables_file.Write(open("files/default-projects/Blinker/Blinker/Blinker_runnables.c").read())
 
     ### Double Blink
-    project = MakeProject("DoubleBlinker", user)
+    project = MakeProject("DoubleBlinkerrr", user)
     swc = SoftwareComponent.Make(project, "DoubleBlinker", 51.56, 40.2)
     top = Runnable(name="TopRunnable", concurrent=True, swc=swc)
     top.save()
@@ -80,11 +80,11 @@ def CreateDefaultsForUser(user):
     top_interface.save()
     top_sr_interface = SenderReceiverInterface(interface=top_interface)
     top_sr_interface.save()
-    switch_port = Port(name="Switch", swc=swc, type="R-PORT-PROTOTYPE", interface=input_sr_interface, x=-1.5, y=2.08)
+    switch_port = Port(name="Switch", swc=swc, type="R-PORT-PROTOTYPE", interface=input_interface, x=-1.5, y=2.08)
     switch_port.save()
-    top_led_port = Port(name="TopLed", swc=swc, type="P-PORT-PROTOTYPE", interface=top_sr_interface, x=18.5, y=2.4)
+    top_led_port = Port(name="TopLed", swc=swc, type="P-PORT-PROTOTYPE", interface=top_interface, x=18.5, y=2.4)
     top_led_port.save()
-    bottom_led_port = Port(name="BottomLed", swc=swc, type="P-PORT-PROTOTYPE", interface=bottom_sr_interface, x=18.5, y=7.8)
+    bottom_led_port = Port(name="BottomLed", swc=swc, type="P-PORT-PROTOTYPE", interface=bottom_interface, x=18.5, y=7.8)
     bottom_led_port.save()
     type = DataType(package=project.package, type="Boolean")
     type.save()
@@ -113,7 +113,7 @@ def CreateDefaultsForUser(user):
     swc.runnables_file.Write(open("files/default-projects/DoubleBlinker/DoubleBlinker/DoubleBlinker_runnables.c").read())
 
     ### Seat Heater
-    project = MakeProject("SeatHeater", user)
+    project = MakeProject("SeatHeaterrr", user)
 
     seat_heating_controller_swc = SoftwareComponent.Make(project, "SeatHeatingController", 45.613, 31.477)
     seat_sensor_left_swc = SoftwareComponent.Make(project, "SeatSensorLeft", 16.06, 48.32)
@@ -136,7 +136,7 @@ def CreateDefaultsForUser(user):
     heating_update_event.save()
     seat_sensor_left_update_timer = TimingEvent(name="SeatSensorLeftUpdateTimer", runnable=seat_sensor_runnable_left, period=1, swc=seat_sensor_left_swc)
     seat_sensor_left_update_timer.save()
-    seat_sensor_right_update_timer = TimingEvent(name="SeatSensorRightUpdateTimer", runnable=seat_sensor_runnable_right, period=1, swc=seat_sensor_right_swc)
+    seat_sensor_right_update_timer = TimingEvent(name="SeatSensorRightUpdateTimer", runnable=seat_sensor_runnable_right, period=1, swc=seat_sensor_Right_swc)
     seat_sensor_right_update_timer.save()
     heat_regulator_event = TimingEvent(name="HeatRegulatorEvent", runnable=heat_regulator_runnable, period=1, swc=heat_regulator_swc)
     heat_regulator_event.save()
@@ -202,7 +202,7 @@ def CreateDefaultsForUser(user):
     status_right_port.save()
     sensor_left_io_port = Port(name="SensorLeftIO", swc=seat_sensor_left_swc, type="R-PORT-PROTOTYPE", interface=left_sensor_io_interface, x=-1.5, y=3.58)
     sensor_left_io_port.save()
-    sensor_right_io_port = Port(name="SensorRightIO", swc=seat_sensor_right_swc, type="R-PORT-PROTOTYPE", interface=right_sensor_io_interface, x=18.5, y=2.42)
+    sensor_right_io_port = Port(name="SensorRightIO", swc=seat_sensor_Right_swc, type="R-PORT-PROTOTYPE", interface=right_sensor_io_interface, x=18.5, y=2.42)
     sensor_right_io_port.save()
     position_port = Port(name="Position", swc=heat_regulator_swc, type="P-PORT-PROTOTYPE", interface=regulator_position_interface, x=18.5, y=2.89)
     position_port.save()
@@ -255,8 +255,8 @@ def CreateDefaultsForUser(user):
     position_to_position_ref.save()
     status_left_to_passenger_on_left_seat_ref = DataElementRef(port=status_left_port, data_element=passenger_on_left_seat_de)
     status_left_to_passenger_on_left_seat_ref.save()
-    status_right_to_passenger_on_left_seat_ref = DataElementRef(port=status_right_port, data_element=passenger_on_right_seat_de)
-    status_right_to_passenger_on_left_seat_ref.save()
+    status_right_to_passenger_on_right_seat_ref = DataElementRef(port=status_right_port, data_element=passenger_on_right_seat_de)
+    status_right_to_passenger_on_right_seat_ref.save()
     levels_to_left_heat_level_ref = DataElementRef(port=levels_port, data_element=left_heat_level_de)
     levels_to_left_heat_level_ref.save()
     levels_to_right_heat_level_ref = DataElementRef(port=levels_port, data_element=right_heat_level_de)
@@ -269,8 +269,8 @@ def CreateDefaultsForUser(user):
     regulator_io_to_regulator_value_ref.save()
     left_seater_io_to_left_heater_value_ref = DataElementRef(port=left_seater_io_port, data_element=left_heater_value_de)
     left_seater_io_to_left_heater_value_ref.save()
-    right_seater_io_to_left_heater_value_ref = DataElementRef(port=right_seater_io_port, data_element=right_heater_value_de)
-    right_seater_io_to_left_heater_value_ref.save()
+    right_seater_io_to_right_heater_value_ref = DataElementRef(port=right_seater_io_port, data_element=right_heater_value_de)
+    right_seater_io_to_right_heater_value_ref.save()
 
     regulator_position_access = DataAccess(name="RegulatorPositionAccess", runnable=update_heating_runnable, data_element_ref=regulator_position_to_position_ref, type="DATA-READ-ACCESS")
     regulator_position_access.save()
@@ -288,6 +288,8 @@ def CreateDefaultsForUser(user):
     seat_sensor_right_status_access.save()
     heat_regulator_position_access = DataAccess(name="HeatRegulatorPositionAccess", runnable=heat_regulator_runnable, data_element_ref=regulator_position_to_position_ref, type="DATA-WRITE-ACCESS")
     heat_regulator_position_access.save()
+    heat_regulator_IO_access = DataAccess(name="HeatRegulatorIOAccess", runnable=heat_regulator_runnable, data_element_ref=regulator_io_to_regulator_value_ref, type="DATA-READ-ACCESS")
+    heat_regulator_IO_access.save()
     seat_heater_left_level_access = DataAccess(name="SeatHeaterLeftLevelAccess", runnable=seat_heater_runnable, data_element_ref=levels_to_left_heat_level_ref, type="DATA-READ-ACCESS")
     seat_heater_left_level_access.save()
     seat_heater_right_level_access = DataAccess(name="SeatHeaterRightLevelAccess", runnable=seat_heater_runnable, data_element_ref=levels_to_right_heat_level_ref, type="DATA-READ-ACCESS")

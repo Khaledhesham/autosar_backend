@@ -14,7 +14,7 @@
    function headers
 */
 
-#include "DoubleBlink_rte.h"
+#include "DoubleBlinker_rte.h"
 
 /* WRITE YOUR CODE DOWN HERE */
 
@@ -22,22 +22,22 @@ Boolean blink = false;
 
 void TopRunnable()
 {
-    Boolean toggle = Rte_IRead_DoubleBlink_TopRunnable_Switch_Toggle();
+    Boolean toggle = Rte_IRead_DoubleBlinker_TopRunnable_Switch_Toggle();
     if (toggle == false)
     {
         printf("Top Runnable \n");
         blink = !blink;
-        Rte_IWrite_DoubleBlink_TopRunnable_TopLed_TopLed(blink);
+        Rte_IWrite_DoubleBlinker_TopRunnable_TopLed_TopLed(blink);
     }
 }
 
 void BottomRunnable()
 {
-    Boolean toggle = Rte_IRead_DoubleBlink_BottomRunnable_Switch_Toggle();
+    Boolean toggle = Rte_IRead_DoubleBlinker_BottomRunnable_Switch_Toggle();
     if (toggle == true)
     {
         printf("Bottom Runnable \n");
         blink = !blink;
-        Rte_IWrite_DoubleBlink_BottomRunnable_BottomLed_BottomLed(blink);
+        Rte_IWrite_DoubleBlinker_BottomRunnable_BottomLed_BottomLed(blink);
     }
 }
