@@ -895,3 +895,4 @@ def remove_connector(request):
     conn = ArxmlModels.Connector.objects.get(pk=request.POST['connection_id'])
     conn.delete()
     composition.Rewrite()
+    return HttpResponse("True")
