@@ -153,15 +153,16 @@ def add_interface(request):
     interface = ArxmlModels.Interface(name=request.POST['name'], package=package)
     interface.save()
 
-    if request.POST['type'] and request.POST['type'] == "CS":
+    if 'type' in request.POST and request.POST['type'] == "CS":
         interface.type = "CLIENT-SERVER-INTERFACE"
-        sender_receiver_if = ArxmlModels.SenderReceiverInterface(interface=interface)
-        sender_receiver_if.save()
-    else:
-        interface.type = "SENDER-RECEIVER-INTERFACE"
         interface.save()
         client_server_if = ArxmlModels.ClientServerInterface(interface=interface)
         client_server_if.save()
+    else:
+        interface.type = "SENDER-RECEIVER-INTERFACE"
+        interface.save()
+        sender_receiver_if = ArxmlModels.SenderReceiverInterface(interface=interface)
+        sender_receiver_if.save()
 
     package.Rewrite()
     return HttpResponse(interface.id)
