@@ -102,7 +102,7 @@ def add_port(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
 
     type = "R-PORT-PROTOTYPE"
-    if request.POST['type'] == "P":
+    if request.POST['type'] == "P-PORT-PROTOTYPE":
         type = "P-PORT-PROTOTYPE"
 
     port = ArxmlModels.Port(name=request.POST['name'], x=request.POST['x'], y=request.POST['y'], swc=swc, type=type)
