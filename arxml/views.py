@@ -197,7 +197,7 @@ def add_port_dataelement(request):
     data_element = ArxmlModels.DataElement.objects.get(pk=request.POST['data_element_id'])
     if data_element is None:
         return APIResponse(404, {'error': "Invalid Data Element" })
-    if data_element.interface.package.project.user != request.user and not request.user.is_staff:
+    if data_element.interface.interface.package.project.user != request.user and not request.user.is_staff:
         raise PermissionDenied
 
     port = ArxmlModels.Port.objects.get(pk=request.POST['port_id'])
@@ -208,7 +208,7 @@ def add_port_dataelement(request):
 
     interface = port.interface
 
-    if data_element.interface != interface:
+    if data_element.interface.interface != interface:
         return APIResponse(404, {'error': "Data Element Doesn't belong to the Port's Interface"})
 
     ref = ArxmlModels.DataElementRef(data_element=data_element, port=port)
