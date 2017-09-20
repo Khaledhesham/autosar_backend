@@ -89,7 +89,7 @@ def download_project(request, project_id):
 def update_c_file(request):
     file = File.objects.get(pk=request.POST['file_id'])
 
-    if request.user.is_staff or request.user == file.directory.GetProject():
+    if request.user.is_staff or request.user == file.directory.GetProject().user:
         file.Write(request.POST['content'])
         return HttpResponse("True")
 
