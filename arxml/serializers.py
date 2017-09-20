@@ -278,4 +278,4 @@ class DataElementRefSerializer(serializers.HyperlinkedModelSerializer):
         return obj.data_element.name
 
     def get_element_ref_id(self,obj):
-        return obj.data_element.id
+        return obj.id
