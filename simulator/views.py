@@ -88,7 +88,11 @@ def start_simulation(request):
     if request.user.is_staff or request.user == project.user:
         reply = set_values(project, d)
         if reply is True:
-            return HttpResponse(project.package.Compile())
+            response = project.package.Compile()
+            if response == True:
+                return HttpResponse(True)
+            else:
+                return APIResponse(400, {'error': response.decode("utf-8").splitlines() })
         else:
             return HttpResponse(reply)
 
