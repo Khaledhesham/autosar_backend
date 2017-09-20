@@ -334,7 +334,7 @@ def add_operation(request):
 
     if interface is None or not hasattr(interface, 'clientserverinterface'):
         return APIResponse(404, { 'error' : "Invalid Interface" })
-    if not request.user.is_staff or interface.package.project.user != request.user:
+    if not request.user.is_staff and interface.package.project.user != request.user:
         raise PermissionDenied
 
     operation = ArxmlModels.DataElement(name=request.POST['name'], interface=interface.clientserverinterface)
@@ -349,13 +349,13 @@ def add_operation(request):
 def add_argument(request):
     operation = ArxmlModels.Operation.objects.get(pk=request.POST['operation_id'])
 
-    if not request.user.is_staff or operation.interface.interface.package.project.user != request.user:
+    if not request.user.is_staff and operation.interface.interface.package.project.user != request.user:
         raise PermissionDenied
 
     data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
     if data_type is None:
         return APIResponse(404, { 'error' : "Invalid Type" })
-    if not request.user.is_staff or data_type.package.project.user != request.user:
+    if not request.user.is_staff and data_type.package.project.user != request.user:
         raise PermissionDenied
 
     if request.POST['direction'] not in ['IN', 'OUT']:
@@ -373,7 +373,7 @@ def add_argument(request):
 def add_application_error(request):
     interface = ArxmlModels.Interface.objects.get(pk=request.POST['interface_id'])
 
-    if not request.user.is_staff or interface.package.project.user != request.user:
+    if not request.user.is_staff and interface.package.project.user != request.user:
         raise PermissionDenied
 
     if not hasattr(interface, 'clientserverinterface'):
@@ -395,13 +395,13 @@ def add_dataelement(request):
 
     if interface is None or not hasattr(interface, 'senderreceiverinterface'):
         return APIResponse(404, { 'error' : "Invalid Interface" })
-    if not request.user.is_staff or interface.package.project.user != request.user:
+    if not request.user.is_staff and interface.package.project.user != request.user:
         raise PermissionDenied
     
     data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
     if data_type is None:
         return APIResponse(404, { 'error' : "Invalid Type" })
-    if not request.user.is_staff or data_type.package.project.user != request.user:
+    if not request.user.is_staff and data_type.package.project.user != request.user:
         raise PermissionDenied
 
     if data_type.package != interface.package:
@@ -740,7 +740,7 @@ def add_variable(request):
     data_type = ArxmlModels.DataType.objects.get(pk=request.POST['datatype_id'])
     if data_type is None:
         return APIResponse(404, { 'error' : "Invalid Type" })
-    if not request.user.is_staff or data_type.package.project.user != request.user:
+    if not request.user.is_staff and data_type.package.project.user != request.user:
         raise PermissionDenied
 
     variable = ArxmlModels.Variable(name=request.POST['name'], swc=swc, type=data_type)
