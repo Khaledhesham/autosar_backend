@@ -26,6 +26,7 @@ SECRET_KEY = 't%(qv6*dvg=ed$q(yxsg=n=++wcdkdk!%u+wl)6vh-re*gr&ip'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'autosarstudio.com',
     '207.154.251.242',
     'autosar-studio-backend.herokuapp.com',
     'localhost',
