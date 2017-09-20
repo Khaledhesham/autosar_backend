@@ -205,11 +205,8 @@ class TimedEventSerializer(serializers.HyperlinkedModelSerializer):
         model = TimingEvent
         fields =('TimedEventId','TimedEventName','Period', 'runnableId')
 
-
     def get_TimedEventId(self,obj):
-        for index, item in enumerate(TimingEvent.objects.filter(swc=obj.swc)):
-            if item == obj:
-                return index
+        return obj.id
 
     def get_TimedEventName(self,obj):
         return obj.name
