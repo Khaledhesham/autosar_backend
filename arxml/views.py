@@ -181,10 +181,11 @@ def set_port_interface(request):
     if port is None or port.swc != swc:
         return APIResponse(404, {'error': "Invalid Port"})
 
-    # if port.type == "P-PORT-PROTOTYPE":
-    #     port.provided_interface = interface
-    # else:
-    #     port.interface = interface
+    if port.type == "P-PORT-PROTOTYPE":
+        if hasattr(interface, 'provider') and interface.provider is not None:
+            interface.provider.interface = None
+        
+        port.provided_interface = interface
 
     port.interface = interface
 
