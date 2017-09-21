@@ -271,9 +271,9 @@ def CreateDefaultsForUser(user):
         ### Seat Heater
         position_de = DataElement(id=data_element_pk + 5, name="Position", interface=regulator_position_sr_interface, type=uint32_type)
         data_elements.append(position_de)
-        left_heat_level_de = DataElement(id=data_element_pk + 6, name="LeftHeatLevel", interface=left_seat_heater_io_sr_interface, type=uint32_type)
+        left_heat_level_de = DataElement(id=data_element_pk + 6, name="LeftHeatLevel", interface=heater_level_sr_interface, type=uint32_type)
         data_elements.append(left_heat_level_de)
-        right_heat_level_de = DataElement(id=data_element_pk + 7, name="RightHeatLevel", interface=right_seat_heater_io_sr_interface, type=uint32_type)
+        right_heat_level_de = DataElement(id=data_element_pk + 7, name="RightHeatLevel", interface=heater_level_sr_interface, type=uint32_type)
         data_elements.append(right_heat_level_de)
         passenger_on_left_seat_de = DataElement(id=data_element_pk + 8, name="PassengerOnLeftSeat", interface=left_seat_status_sr_interface, type=boolean_type)
         data_elements.append(passenger_on_left_seat_de)
