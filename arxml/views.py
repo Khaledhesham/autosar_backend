@@ -7,7 +7,6 @@ from rest_framework.decorators import api_view
 from django.http import HttpResponse,Http404
 import json
 from arxml.wrapper import RunnableCFile
-from django.db import models, transaction
 
 ### software component
 
@@ -914,25 +913,3 @@ def remove_connector(request):
     conn.delete()
     composition.Rewrite()
     return HttpResponse("True")
-
-
-
-def fix_broken_seat_heaters():
-    with transaction.atomic():
-        for de in ArxmlModels.DataElement.objects.filter(name="LeftHeatLevel"):
-            for interface in de.interface.interface.package.interface_set.all():
-                if interface.name == "HeaterLevel":
-                    de.interface = interface.senderreceiverinterface
-                    de.save()
-                    break
-
-        for de in ArxmlModels.DataElement.objects.filter(name="RightHeatLevel"):
-            for interface in de.interface.interface.package.interface_set.all():
-                if interface.name == "HeaterLevel":
-                    de.interface = interface.senderreceiverinterface
-                    de.save()
-                    interface.package.Rewrite()
-                    interface.package.project.composition.Rewrite()
-                    break
-
-        return HttpResponse("True")
