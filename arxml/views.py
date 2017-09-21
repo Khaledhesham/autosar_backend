@@ -84,12 +84,9 @@ def rename_softwareComponent(request):
 @access_error_wrapper
 def move_softwareComponent(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    composition = swc.composition
     swc.x = request.POST['x']
     swc.y = request.POST['y']
     swc.save()
-    swc.Rewrite()
-    composition.Rewrite()
     return HttpResponse("True")
 
 
