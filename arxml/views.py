@@ -81,7 +81,7 @@ def rename_softwareComponent(request):
     return HttpResponse("True")
 
 @api_view(['POST'])
-@access_error_wrapper
+# @access_error_wrapper
 def move_softwareComponent(request):
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     composition = swc.composition
