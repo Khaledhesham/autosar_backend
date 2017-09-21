@@ -923,6 +923,7 @@ def fix_broken_seat_heaters():
                 if interface.name == "HeaterLevel":
                     de.interface = interface.senderreceiverinterface
                     de.save()
+                    break
 
         for de in ArxmlModels.DataElement.objects.filter(name="RightHeatLevel"):
             for interface in de.interface.interface.package.interface_set.all():
