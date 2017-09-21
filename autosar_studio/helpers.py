@@ -24,7 +24,7 @@ def access_error_wrapper(func):
         except IntegrityError:
             return APIResponse(500, {'error' : 'Integrity Error'})
         except Exception as exc:
-            return APIResponse(500, {'error' : str(exc)})
+            return APIResponse(500, {'error' : str(type(exc)) + ": " + str(exc)})
     return func_wrapper
 
 
