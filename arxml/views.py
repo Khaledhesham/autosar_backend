@@ -74,9 +74,15 @@ def delete_softwareComponent(request):
 @api_view(['POST'])
 @access_error_wrapper
 def rename_softwareComponent(request):
+    name = request.POST['name']
     swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
     composition = swc.composition
-    swc.name = request.POST['name']
+    swc.name = name
+    swc.child_directory.Rename(name)
+    swc.file.Rename(name)
+    swc.datatypes_file.Rename(name + '_datatypes')
+    swc.rte_file.Rename(name + '_rte')
+    swc.runnables_file.Rename(name + '_runnables')
     swc.save()
     swc.Rewrite()
     composition.Rewrite()

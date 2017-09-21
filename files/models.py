@@ -39,6 +39,27 @@ class Directory(models.Model):
     created_at = models.DateTimeField('Date Created', default=timezone.now)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
 
+    def Rename(self, newName):
+        path = ''
+
+        if self.parent:
+            path = self.parent.GetPath() + "/" + newName
+        else:
+            path = "files/storage/" + newName
+
+        try:
+            if os.path.isdir(self.GetPath()):
+                os.rename(self.GetPath(), path)
+            else:
+                os.makedirs(path)
+
+            self.name = newName
+            self.save()
+            return True
+        except:
+            return False
+            
+
     class Meta:
         verbose_name_plural = "Directories"
 
@@ -62,6 +83,20 @@ class File(models.Model):
     file_type = models.CharField(max_length=20)
     name = models.CharField(max_length=100, default='File')
     created_at = models.DateTimeField('Date Created', default=timezone.now)
+
+    def Rename(self, newName):
+        path = self.directory.GetPath() + '/'
+        old_name = path + self.name + '.' + self.file_type
+        new_name = path + newName + '.' + self.file_type
+        if old_name != new_name:
+            try:
+                os.rename(old_name, new_name)
+                self.name = newName
+                self.save()
+                return True
+            except Directory.DoesNotExist:
+                return False
+        return True
 
     class Meta:
         unique_together = (('name', 'file_type', 'directory'),)
@@ -101,15 +136,7 @@ def file_post_delete_handler(sender, **kwargs):
 @receiver(post_save, sender=File)
 def file_post_save_handler(sender, **kwargs):
     file_model = kwargs['instance']
-    old_model = File.objects.get(pk=file_model.id)
-    if old_model and os.path.isfile(old_model.GetPath()):
-        path = file_model.directory.GetPath() + '/'
-        old_name = path + old_model.name + '.' + old_model.file_type
-        new_name = path + file_model.name + '.' + file_model.file_type
-        if old_name != new_name:
-            os.rename(old_name, new_name)
-    else:
-        file_model.Write('')
+    file_model.Write('')
 
 @receiver(post_save, sender=Directory)
 def directory_post_save_handler(sender, **kwargs):
