@@ -59,6 +59,9 @@ class Package(models.Model):
         file = open(self.project.directory.GetPath() + "/log.txt", 'w+')
         file.close()
 
+        file = open(self.project.directory.GetPath() + "/output.txt", 'w+')
+        file.close()
+
         gcc_proc = subprocess.Popen(gcc_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         out, err = gcc_proc.communicate()
         exitcode = gcc_proc.returncode
