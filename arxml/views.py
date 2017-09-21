@@ -87,7 +87,7 @@ def rename_softwareComponent(request):
 @access_error_wrapper
 def move_softwareComponent(request):
     l = json.loads(request.POST['move_list'])
-    for key, val in l.iteritems():
+    for key, val in l.items():
         swc = GetSoftwareComponentIfOwns(request.user, key)
         swc.x = val['x']
         swc.y = val['y']
