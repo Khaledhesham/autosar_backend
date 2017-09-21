@@ -80,13 +80,16 @@ def rename_softwareComponent(request):
     composition.Rewrite()
     return HttpResponse("True")
 
+
 @api_view(['POST'])
 @access_error_wrapper
 def move_softwareComponent(request):
-    swc = GetSoftwareComponentIfOwns(request.user, request.POST['swc_id'])
-    swc.x = request.POST['x']
-    swc.y = request.POST['y']
-    swc.save()
+    l = json.loads(request.POST['move_list'])
+    for key, val in l.iteritems():
+        swc = GetSoftwareComponentIfOwns(request.user, key)
+        swc.x = val['x']
+        swc.y = val['y']
+        swc.save()
     return HttpResponse("True")
 
 
