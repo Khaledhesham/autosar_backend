@@ -913,3 +913,25 @@ def remove_connector(request):
     conn.delete()
     composition.Rewrite()
     return HttpResponse("True")
+
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def fix_broken_seat_heaters(request):
+    for de in ArxmlModels.DataElement.objects.filter(name="LeftHeatLevel"):
+        for interface in de.interface.interface.package.interface_set.all():
+            if interface.name == "HeaterLevel":
+                de.interface = interface.senderreceiverinterface
+                de.save()
+
+    for de in ArxmlModels.DataElement.objects.filter(name="RightHeatLevel"):
+        for interface in de.interface.interface.package.interface_set.all():
+            if interface.name == "HeaterLevel":
+                de.interface = interface.senderreceiverinterface
+                de.save()
+                interface.package.Rewrite()
+                interface.package.project.composition.Rewrite()
+                break
+
+    return HttpResponse("True")

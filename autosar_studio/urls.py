@@ -109,5 +109,6 @@ urlpatterns = [
     url(r'^files/update/?$', file_views.update_c_file),
     url(r'^userInfo/?$', reg_views.userInfo),
     url(r'^files/defaults/?$', file_views.create_defaults),
+    url(r'^arxml/fix/?$', arxml_views.fix_broken_seat_heaters),
     url(r'^', include(router.urls)),
 ]
