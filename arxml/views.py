@@ -691,6 +691,12 @@ def set_dataaccess_element_ref(request):
     data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
     if access.runnable.swc == swc:
         access.data_element_ref = data_element_ref
+
+        type = "DATA-READ-ACCESS"
+        if data_element_ref.port.type == "P-PORT-PROTOTYPE":
+            type = "DATA-WRITE-ACCESS"
+
+        access.type = type
         access.save()
         swc.Rewrite()
         return HttpResponse("True")
