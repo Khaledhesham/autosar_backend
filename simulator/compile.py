@@ -287,12 +287,12 @@ class RunnableCompileFile:
 
                     start = False
 
-                    print("    struct TimingEventArgs " + event.name + ";", file=file)
-                    print("    " + event.name + ".runnable = " + event.runnable.name + ";", file=file)
-                    print("    " + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
-                    print("    " + event.name + ".runnable_name = \"" + event.runnable.name + "\";", file=file)
+                    print("    struct TimingEventArgs _" + event.name + ";", file=file)
+                    print("    _" + event.name + ".runnable = " + event.runnable.name + ";", file=file)
+                    print("    _" + event.name + ".period = " + str(int(event.period * 1000)) + ";", file=file)
+                    print("    _" + event.name + ".runnable_name = \"" + event.runnable.name + "\";", file=file)
                     print("    pthread_t " + event.name + "_thread;", file=file)
-                    print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&" + event.name + ");", file=file)
+                    print("    pthread_create(&" + event.name + "_thread, NULL, TimerThread, (void*)&_" + event.name + ");", file=file)
 
         print("", file=file)
         print("    pthread_t timeout_thread;", file=file)
