@@ -121,7 +121,7 @@ class File(models.Model):
     def Read(self):
         return self.Open().read()
 
-#@receiver(post_delete, sender=File)
+@receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
     file_model = kwargs['instance']
     try:
@@ -133,19 +133,19 @@ def file_post_delete_handler(sender, **kwargs):
     except Directory.DoesNotExist:
         return
 
-#@receiver(post_save, sender=File)
+@receiver(post_save, sender=File)
 def file_post_save_handler(sender, **kwargs):
     file_model = kwargs['instance']
     file_model.Write('')
 
-#@receiver(post_save, sender=Directory)
+@receiver(post_save, sender=Directory)
 def directory_post_save_handler(sender, **kwargs):
     directory = kwargs['instance']
     path = directory.GetPath()
     if os.path.isdir(path) is not True:
         os.makedirs(path)
 
-#@receiver(pre_delete, sender=Directory)
+@receiver(pre_delete, sender=Directory)
 def directory_pre_delete_handler(sender, **kwargs):
     directory = kwargs['instance']
 

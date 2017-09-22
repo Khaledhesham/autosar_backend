@@ -430,4 +430,4 @@ def create_user_defaults(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
         CreateDefaultsForUser(instance)
 
-#post_save.connect(create_user_defaults, sender=User)
+post_save.connect(create_user_defaults, sender=User)

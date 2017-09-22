@@ -133,7 +133,7 @@ class SoftwareComponent(models.Model):
         return self.name
 
 
-#@receiver(pre_delete, sender=SoftwareComponent)
+@receiver(pre_delete, sender=SoftwareComponent)
 def swc_pre_delete_handler(sender, **kwargs):
     swc = kwargs['instance']
     try:
