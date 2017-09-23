@@ -1,6 +1,6 @@
 from django.db import models, transaction
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.conf import settings
@@ -424,7 +424,20 @@ def CreateDefaultsForUser(user):
         heat_regulator_swc.runnables_file.Write(open("files/default-projects/SeatHeater/HeatRegulator/HeatRegulator_runnables.c").read())
         seat_heater_swc.runnables_file.Write(open("files/default-projects/SeatHeater/SeatHeater/SeatHeater_runnables.c").read())
     
-    
+
+def user_pre_save(sender, **kwargs):
+    email = kwargs['instance'].email
+    username = kwargs['instance'].username
+
+    if not email:
+        raise ValidationError("Email required")
+
+    if sender.objects.filter(email=email).exclude(username=username).count():
+        raise ValidationError("This email is already registered")
+
+pre_save.connect(user_pre_save, sender=User)
+
+
 def create_user_defaults(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
