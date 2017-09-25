@@ -56,6 +56,7 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     url(r'^files/storage/(?P<file_id>[0-9]+)/?$', file_views.access_file),
+    url(r'^files/getmultiple/?$', file_views.get_multiple_files),
     url(r'^admin/?', admin.site.urls),
     url(r'^users/token/?$', auth_views.obtain_auth_token),
     url(r'^api-auth/?', include('rest_framework.urls', namespace='rest_framework')),

@@ -1,7 +1,7 @@
 import os
 import shutil
 import arxml.models as ArxmlModels
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
@@ -12,6 +12,7 @@ from autosar_studio.helpers import APIResponse, access_error_wrapper, OwnsFile
 from files.models import File, Project
 from django.core.exceptions import PermissionDenied
 from registration_system.models import MakeProject, CreateDefaultsForUser
+import json
 
 
 @api_view(['GET'])
@@ -21,6 +22,20 @@ def access_file(request, file_id):
     if OwnsFile(file, request.user) is True:
         return HttpResponse(file.Read())
     return APIResponse(550)
+
+
+@api_view(['POST'])
+@access_error_wrapper
+def get_multiple_files(request):
+    l = json.loads(request.POST['file_ids'])
+    d = dict()
+
+    for f in l.items:
+        file = File.objects.get(id=f)
+        if OwnsFile(file, request.user) is True:
+            d[f] = file.Read()
+
+    return JsonResponse(d)
 
 
 @api_view(['POST'])
