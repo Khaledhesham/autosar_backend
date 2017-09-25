@@ -30,7 +30,7 @@ def get_multiple_files(request):
     l = json.loads(request.POST['file_ids'])
     d = dict()
 
-    for f in l.items:
+    for f in l:
         file = File.objects.get(id=f)
         if OwnsFile(file, request.user) is True:
             d[f] = file.Read()
