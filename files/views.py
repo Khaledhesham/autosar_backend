@@ -33,7 +33,7 @@ def get_multiple_files(request):
     for f in l:
         file = File.objects.get(id=f)
         if OwnsFile(file, request.user) is True:
-            d[f] = file.Read()
+            d[f] = str(file.Read())
 
     return JsonResponse(d)
 
