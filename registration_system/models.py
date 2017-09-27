@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from files.models import File, Project, Directory
 from arxml.models import Package, Composition, SoftwareComponent, TimingEvent, Runnable, Port, SenderReceiverInterface, Interface, DataElement, DataAccess, DataElementRef, DataType, Connector
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
