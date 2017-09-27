@@ -430,7 +430,7 @@ def user_pre_save(sender, **kwargs):
     email = kwargs['instance'].email
     username = kwargs['instance'].username
 
-    if sebder.objects.filter(pk=kwargs['instance'].pk).count():
+    if sender.objects.filter(pk=kwargs['instance'].pk).count():
         return
 
     if not email:
