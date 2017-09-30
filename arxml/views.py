@@ -233,7 +233,7 @@ def add_port_dataelement(request):
 @access_error_wrapper
 def remove_port_dataelement(request):
     data_element_ref = ArxmlModels.DataElementRef.objects.get(pk=request.POST['element_ref_id'])
-    if request.user.is_staff or data_element_ref.port.swc.package.user == request.user:
+    if request.user.is_staff or data_element_ref.port.swc.package.project.user == request.user:
         swc = data_element_ref.port.swc
         data_element_ref.delete()
         swc.Rewrite()
