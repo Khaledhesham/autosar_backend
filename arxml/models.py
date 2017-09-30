@@ -147,7 +147,7 @@ class Port(models.Model):
     uid = models.CharField(max_length=100, default=GetUUID, unique=True)
     swc = models.ForeignKey(SoftwareComponent, on_delete=models.CASCADE)
     type = models.CharField(max_length=40)
-    interface = models.ForeignKey('Interface', on_delete=models.DO_NOTHING, blank=True, null=True)
+    interface = models.ForeignKey('Interface', on_delete=models.SET_NULL, blank=True, null=True)
 
     x = models.FloatField(default=0.0)
     y = models.FloatField(default=0.0)
