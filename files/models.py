@@ -121,6 +121,9 @@ class File(models.Model):
     def Read(self):
         return self.Open().read()
 
+    def Copy(self):
+        return self.Open(mode='r').read()
+
 @receiver(post_delete, sender=File)
 def file_post_delete_handler(sender, **kwargs):
     file_model = kwargs['instance']
